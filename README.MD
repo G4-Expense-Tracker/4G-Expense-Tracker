@@ -11,3 +11,4 @@ cd into `canopy-FRONTEND`
 cd into `BACKEND`
 `npm i` to install
 `npm run start` to start server (watch enabled)
+Homepage Branch
