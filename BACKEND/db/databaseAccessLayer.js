@@ -1,6 +1,10 @@
-const database = include("/databaseConnection");
-const bcrypt = require("bcrypt");
+import database from "./databaseConnection";
+import bcrypt from "bcrypt";
 const saltRounds = 12;
+
+// const database = include("/databaseConnection");
+// const bcrypt = require("bcrypt");
+// const saltRounds = 12;
 
 // async function getAllUsers() {
 //   let sqlQuery = `
