@@ -1,10 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import MainPage from "./components/MainPage";
-import Onboarding from './components/onboarding/Onboarding'
+import Onboarding from "./components/onboarding/Onboarding";
 
 function App() {
-
   return (
     <BrowserRouter>
       <Routes>
@@ -12,7 +11,7 @@ function App() {
         <Route path="/main" element={<MainPage />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
