@@ -34,4 +34,4 @@ router.post('/:goalId/delete', (req, res) => {
 
 })
 
-module.exports = router;
+export default router;

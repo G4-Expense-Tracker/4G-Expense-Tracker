@@ -9,9 +9,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-import usersRouter from './routers/usersRouter';
-import goalsRouter from './routers/goalsRouter';
-import budgetsRouter from './routers/budgetsRouter';
+import usersRouter from './routers/usersRouter.js';
+import goalsRouter from './routers/goalsRouter.js';
+import budgetsRouter from './routers/budgetsRouter.js';
 
 app.use('/users', usersRouter)
 app.use('/goals', goalsRouter)
