@@ -74,7 +74,7 @@ export default function LoadingPage() {
         }}
       >
         <IconButton aria-label="fingerprint" color="secondary">
-            <Fingerprint sx={{ fontSize: 60, color: white }} />
+            <Fingerprint sx={{ fontSize: 60, color: black, pt: 3 }} />
         </IconButton>
     </Box>
     </Box>
