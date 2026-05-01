@@ -6,7 +6,7 @@ import LoginPage from "./components/LoginPage";
 import SignupPage from "./components/SignupPage";
 import LoadingPage from "./components/LoadingPage";
 
-function App() {
+
 
 function App() {
   return (
