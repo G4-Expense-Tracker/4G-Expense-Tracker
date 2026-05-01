@@ -1,17 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
-import MainPage from './components/MainPage'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import MainPage from "./components/MainPage";
+import Onboarding from "./components/onboarding/Onboarding";
+import LoginPage from "./components/LoginPage";
+import SignupPage from "./components/SignupPage";
+import LoadingPage from "./components/LoadingPage";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    
-    <MainPage />
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path ="/" element={<LoadingPage />}/>
+        <Route path="/main" element={<MainPage />}/>
+        <Route path="/login" element={<LoginPage />}/>
+        <Route path="/signup" element={<SignupPage />}/>
+        <Route path="/onboarding" element={<Onboarding />}/>
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
