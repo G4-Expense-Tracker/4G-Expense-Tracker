@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import MainPage from "./components/MainPage";
+import MainPage from "./components/pages/MainPage";
 import Onboarding from "./components/onboarding/Onboarding";
-import LoginPage from "./components/LoginPage";
-import SignupPage from "./components/SignupPage";
-import LoadingPage from "./components/LoadingPage";
+import LoginPage from "./components/pages/LoginPage";
+import SignupPage from "./components/pages/SignupPage";
+import LoadingPage from "./components/pages/LoadingPage";
 
 
 
