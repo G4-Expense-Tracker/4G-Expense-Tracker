@@ -23,6 +23,37 @@ export async function getUserById(id) {
   }
 }
 
+export async function verifyUserCredentials(email, password) {
+  const user = await getUserByEmail(email);
+  if (!user) return null;
+
+  const match = await bcrypt.compare(password, user.password_hash);
+  if (!match) return null;
+
+  return user;
+}
+
+export async function getUserByEmail(email) {
+  let sqlQuery = `
+		SELECT * FROM user
+        WHERE email = :email;
+	`;
+
+  let params = {
+    email,
+  };
+
+  try {
+    const results = await database.query(sqlQuery, params);
+    console.log(results[0]);
+    return results[0];
+  } catch (err) {
+    console.log("Error selecting from user table");
+    console.log(err);
+    return null;
+  }
+}
+
 export async function addUser(postData) {
   let hashedPassword = await bcrypt.hash(postData.password, saltRounds);
   let sqlInsertUser = `
@@ -42,10 +73,10 @@ VALUES (:first_name, :last_name, :email, :hashedPassword, :phone_number);
     let insertedID = results[0].insertId;
     console.log("Inserted new user with ID:");
     console.log(insertedID);
-    return true;
+    return { success: true, insertedID };
   } catch (err) {
     console.log(err);
-    return false;
+    return { success: false };
   }
 }
 
