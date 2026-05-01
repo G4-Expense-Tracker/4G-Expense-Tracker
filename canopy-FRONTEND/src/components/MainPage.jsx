@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
-import pictLogo from "./pictLogo.png";
+import pictLogo from "./welcomeLogo.png";
 
 export default function MainPage() {
   return (
@@ -79,10 +79,10 @@ export default function MainPage() {
         <Typography
           sx={{
             color: "#fff7cf",
-            fontFamily: "Georgia, serif",
+            fontFamily: "DM Serif Display, serif",
             fontSize: 44,
             fontWeight: 700,
-            mb: 6,
+            mb: 10,
           }}
         >
           Welcome
