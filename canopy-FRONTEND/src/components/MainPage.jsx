@@ -2,9 +2,12 @@ import { Box, Button, Typography } from "@mui/material";
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+import { useNavigate } from "react-router-dom";
 import pictLogo from "./pictLogo.png";
 
 export default function MainPage() {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -17,7 +20,6 @@ export default function MainPage() {
         bgcolor: "#329572",
       }}
     >
-      {/* Status Bar */}
       <Box
         sx={{
           display: "flex",
@@ -28,9 +30,7 @@ export default function MainPage() {
           color: "white",
         }}
       >
-        <Typography sx={{ fontWeight: 700, fontSize: 18 }}>
-          9:41
-        </Typography>
+        <Typography sx={{ fontWeight: 700, fontSize: 18 }}>9:41</Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
           <SignalCellular4BarIcon sx={{ fontSize: 18 }} />
@@ -39,7 +39,6 @@ export default function MainPage() {
         </Box>
       </Box>
 
-      {/* Logo */}
       <Box
         sx={{
           position: "absolute",
@@ -60,7 +59,6 @@ export default function MainPage() {
         />
       </Box>
 
-      {/* Curved Panel */}
       <Box
         sx={{
           position: "absolute",
@@ -75,7 +73,6 @@ export default function MainPage() {
           pt: 6,
         }}
       >
-        {/* Welcome */}
         <Typography
           sx={{
             color: "#fff7cf",
@@ -88,9 +85,9 @@ export default function MainPage() {
           Welcome
         </Typography>
 
-        {/* Buttons */}
         <Button
           variant="outlined"
+          onClick={() => navigate("/login")}
           sx={{
             display: "block",
             width: 220,
@@ -104,6 +101,10 @@ export default function MainPage() {
             borderColor: "white",
             backgroundColor: "rgba(255,255,255,0.35)",
             textTransform: "none",
+            "&:hover": {
+              borderColor: "white",
+              backgroundColor: "rgba(255,255,255,0.45)",
+            },
           }}
         >
           Login
@@ -111,6 +112,7 @@ export default function MainPage() {
 
         <Button
           variant="contained"
+          onClick={() => navigate("/signup")}
           sx={{
             display: "block",
             width: 220,
