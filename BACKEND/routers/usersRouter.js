@@ -78,12 +78,12 @@ router.post('/register', async (req, res) => {
 
     req.session.userId = addResult.insertedID;
 
-    res.json({ message: "User registered" });
+    res.json({ message: "User registered", isLoggedIn: true });
 })
 
 router.post('/logout', (req, res) => {
     req.session = null;
-    res.json({ message: "Logged out" });
+    res.json({ message: "Logged out", isLoggedIn: false });
 })
 
 export default router;
