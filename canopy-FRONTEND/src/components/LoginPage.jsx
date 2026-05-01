@@ -73,7 +73,7 @@ export default function LoginPage() {
       <Typography
         sx={{
           fontSize: 34,
-          fontWeight: 800,
+          fontWeight: 900,
           color: "#004638",
           mb: 3,
         }}
