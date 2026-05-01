@@ -8,6 +8,7 @@ import LoadingPage from "./components/LoadingPage";
 
 function App() {
 
+function App() {
   return (
     <BrowserRouter>
       <Routes>
@@ -21,4 +22,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
