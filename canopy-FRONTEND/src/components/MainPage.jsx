@@ -3,7 +3,7 @@ import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import { useNavigate } from "react-router-dom";
-import pictLogo from "./pictLogo.png";
+import pictLogo from "../assets/pictLogo.png";
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -134,4 +134,5 @@ export default function MainPage() {
       </Box>
     </Box>
   );
+}
 }

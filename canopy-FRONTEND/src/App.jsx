@@ -7,6 +7,8 @@ import SignupPage from "./components/SignupPage";
 import LoadingPage from "./components/LoadingPage";
 
 function App() {
+
+function App() {
   return (
     <BrowserRouter>
       <Routes>
@@ -20,7 +22,7 @@ function App() {
         <Route path="/onboarding" element={<Onboarding />}/>
       </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
 export default App;

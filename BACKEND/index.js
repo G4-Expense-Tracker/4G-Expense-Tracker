@@ -2,6 +2,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieSession from "cookie-session";
 
 dotenv.config();
 
@@ -13,9 +14,17 @@ import usersRouter from './routers/usersRouter.js';
 import goalsRouter from './routers/goalsRouter.js';
 import budgetsRouter from './routers/budgetsRouter.js';
 
-app.use('/users', usersRouter)
-app.use('/goals', goalsRouter)
-app.use('/budgets', budgetsRouter)
+app.use(
+  cookieSession({
+    name: "session",
+    keys: [process.env.COOKIE_SESSION_KEY],
+    maxAge: 24 * 60 * 60 * 1000,
+  })
+);
+
+app.use('/api/users', usersRouter)
+app.use('/api/goals', goalsRouter)
+app.use('/api/budgets', budgetsRouter)
 
 app.listen(8000, () => {
   console.log("Backend Web Server has started 🚀");
