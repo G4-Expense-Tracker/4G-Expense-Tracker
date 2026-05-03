@@ -95,7 +95,10 @@ export async function editUser(user_id, postData) {
 
   try {
     const results = await database.query(query, postData);
-    return { success: true };
+    let editedID = results[0].insertId;
+    console.log("Edited user with ID:");
+    console.log(editedID);
+    return { success: true, editedID };
   } catch (err) {
     console.log(err);
     return { success: false };
