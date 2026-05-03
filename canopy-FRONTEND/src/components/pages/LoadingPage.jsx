@@ -12,8 +12,9 @@ export default function LoadingPage() {
     <Box
       onClick={() => navigate("/main")}
       sx={{
-        width: 390,
-        height: 844,
+        width: "100%",
+        maxWidth: 390,
+        minHeight: "100svh",
         mx: "auto",
         position: "relative",
         overflow: "hidden",
@@ -22,8 +23,18 @@ export default function LoadingPage() {
         cursor: "pointer",
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between", px: "34px", pt: "28px", color: "text.secondary" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          px: 3,
+          pt: 2.5,
+          color: "text.secondary",
+        }}
+      >
         <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
+
         <Box sx={{ display: "flex", gap: 0.3 }}>
           <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
           <WifiIcon sx={{ fontSize: 14 }} />

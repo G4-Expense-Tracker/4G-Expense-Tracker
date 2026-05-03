@@ -17,24 +17,20 @@ export default function LoginPage() {
   return (
     <Box
       sx={{
-        width: 390,
-        height: 844,
+        width: "100%",
+        maxWidth: 390,
+        minHeight: "100svh",
         mx: "auto",
         bgcolor: "background.default",
-        position: "relative",
-        overflow: "hidden",
-        px: "28px",
-        boxSizing: "border-box",
+        px: 3,
+        pt: 2.5,
+        pb: 4,
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          pt: "28px",
-          color: "text.primary",
-        }}
-      >
+      {/* Status Bar */}
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
 
         <Box sx={{ display: "flex", gap: 0.3 }}>
@@ -44,49 +40,31 @@ export default function LoginPage() {
         </Box>
       </Box>
 
-      <IconButton
-        onClick={() => navigate("/main")}
-        sx={{
-          position: "absolute",
-          top: "78px",
-          left: "24px",
-          p: 0,
-          color: "text.primary",
-        }}
-      >
-        <ArrowBackIosNewIcon sx={{ fontSize: 22 }} />
-      </IconButton>
+      {/* Back Button */}
+      <Box sx={{ mb: 3 }}>
+        <IconButton onClick={() => navigate("/main")} sx={{ p: 0 }}>
+          <ArrowBackIosNewIcon sx={{ fontSize: 22 }} />
+        </IconButton>
+      </Box>
 
-      <Box
-        sx={{
-          mt: "150px",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          width: "100%",
-        }}
-      >
+      {/* Content */}
+      <Box sx={{ flexGrow: 1 }}>
         <Typography
           sx={{
             fontSize: 34,
             fontWeight: 800,
-            color: "text.primary",
-            mb: "28px",
-            width: "100%",
+            mb: 3,
           }}
         >
           Welcome back!
         </Typography>
 
-        <Typography sx={{ fontSize: 16, color: "text.primary", mb: "8px" }}>
-          User Name or Email Address *
-        </Typography>
+        <Typography sx={{ mb: 1 }}>User Name or Email Address *</Typography>
 
         <TextField
           fullWidth
-          variant="outlined"
           sx={{
-            mb: "22px",
+            mb: 2.5,
             "& .MuiOutlinedInput-root": {
               borderRadius: "30px",
               bgcolor: "#EDEDED",
@@ -96,16 +74,13 @@ export default function LoginPage() {
           }}
         />
 
-        <Typography sx={{ fontSize: 16, color: "text.primary", mb: "8px" }}>
-          Password *
-        </Typography>
+        <Typography sx={{ mb: 1 }}>Password *</Typography>
 
         <TextField
           fullWidth
           type="password"
-          variant="outlined"
           sx={{
-            mb: "30px",
+            mb: 3,
             "& .MuiOutlinedInput-root": {
               borderRadius: "30px",
               bgcolor: "#EDEDED",
@@ -125,36 +100,21 @@ export default function LoginPage() {
             textTransform: "none",
             bgcolor: "primary.main",
             color: "#fff",
-            mb: "16px",
+            mb: 2,
             boxShadow: "0px 6px 10px rgba(0,0,0,0.15)",
-            "&:hover": {
-              bgcolor: "primary.dark",
-            },
+            "&:hover": { bgcolor: "primary.dark" },
           }}
         >
           Login
         </Button>
 
-        <Typography
-          sx={{
-            fontSize: 14,
-            fontWeight: 700,
-            color: "text.primary",
-          }}
-        >
+        <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
           Forgot your password?
         </Typography>
       </Box>
 
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: 40,
-          width: "100%",
-          left: 0,
-          textAlign: "center",
-        }}
-      >
+      {/* Bottom (no absolute anymore) */}
+      <Box sx={{ mt: 4, textAlign: "center" }}>
         <Typography sx={{ fontSize: 14 }}>
           Don’t have an account?{" "}
           <span

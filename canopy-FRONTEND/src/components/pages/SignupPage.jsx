@@ -24,39 +24,32 @@ export default function SignupPage() {
   const [showConfirm, setShowConfirm] = useState(false);
 
   const inputStyle = {
-    mb: "14px",
+    mb: 1.5,
     "& .MuiOutlinedInput-root": {
       height: 46,
       borderRadius: "28px",
       bgcolor: "#ffffff",
       "& fieldset": { borderColor: "#8FCDBE" },
-      "&:hover fieldset": { borderColor: "#8FCDBE" },
-      "&.Mui-focused fieldset": { borderColor: "#8FCDBE" },
     },
   };
 
   return (
     <Box
       sx={{
-        width: 390,
-        height: 844,
+        width: "100%",
+        maxWidth: 390,
+        minHeight: "100svh",
         mx: "auto",
-        position: "relative",
-        overflow: "hidden",
         bgcolor: "background.default",
-        px: "20px",
-        boxSizing: "border-box",
+        px: 2.5,
+        pt: 2,
+        pb: 3,
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       {/* Status Bar */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          pt: "18px",
-          color: "text.primary",
-        }}
-      >
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
 
         <Box sx={{ display: "flex", gap: 0.3 }}>
@@ -66,70 +59,55 @@ export default function SignupPage() {
         </Box>
       </Box>
 
-      {/* Back Button - LEFT */}
-      <IconButton
-        onClick={() => navigate("/login")}
-        sx={{
-          mt: "22px",
-          ml: "-8px",
-          p: 0,
-          color: "#2d3f49",
-          display: "block",
-        }}
-      >
-        <ArrowBackIosNewIcon sx={{ fontSize: 22 }} />
-      </IconButton>
+      {/* Back Button */}
+      <Box sx={{ mb: 3 }}>
+        <IconButton onClick={() => navigate("/login")} sx={{ p: 0 }}>
+          <ArrowBackIosNewIcon sx={{ fontSize: 22 }} />
+        </IconButton>
+      </Box>
 
       {/* Content */}
-      <Box sx={{ mt: "36px", width: "100%", textAlign: "left" }}>
-        <Typography
-          sx={{
-            mb: "24px",
-            fontSize: 32,
-            fontWeight: 800,
-            color: "text.primary",
-            lineHeight: 1.1,
-          }}
-        >
+      <Box sx={{ flexGrow: 1 }}>
+        <Typography sx={{ mb: 3, fontSize: 32, fontWeight: 800 }}>
           Create an account
         </Typography>
 
-        {/* First + Last Name */}
+        {/* Name Row */}
         <Box sx={{ display: "flex", gap: 2 }}>
           <Box sx={{ flex: 1 }}>
-            <Typography sx={{ fontSize: 14, mb: "6px" }}>
+            <Typography sx={{ fontSize: 14, mb: 0.5 }}>
               First Name *
             </Typography>
-            <TextField fullWidth variant="outlined" sx={inputStyle} />
+            <TextField fullWidth sx={inputStyle} />
           </Box>
 
           <Box sx={{ flex: 1 }}>
-            <Typography sx={{ fontSize: 14, mb: "6px" }}>
+            <Typography sx={{ fontSize: 14, mb: 0.5 }}>
               Last Name *
             </Typography>
-            <TextField fullWidth variant="outlined" sx={inputStyle} />
+            <TextField fullWidth sx={inputStyle} />
           </Box>
         </Box>
 
-        <Typography sx={{ fontSize: 14, mb: "6px" }}>Email *</Typography>
-        <TextField fullWidth variant="outlined" sx={inputStyle} />
+        <Typography sx={{ fontSize: 14, mb: 0.5 }}>Email *</Typography>
+        <TextField fullWidth sx={inputStyle} />
 
-        <Typography sx={{ fontSize: 14, mb: "6px" }}>Phone Number *</Typography>
-        <TextField fullWidth variant="outlined" sx={inputStyle} />
+        <Typography sx={{ fontSize: 14, mb: 0.5 }}>
+          Phone Number *
+        </Typography>
+        <TextField fullWidth sx={inputStyle} />
 
-        <Typography sx={{ fontSize: 14, mb: "6px" }}>Password *</Typography>
+        <Typography sx={{ fontSize: 14, mb: 0.5 }}>
+          Password *
+        </Typography>
         <TextField
           fullWidth
-          variant="outlined"
           type={showPassword ? "text" : "password"}
           sx={inputStyle}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setShowPassword(!showPassword)}
-                  edge="end"
-                >
+                <IconButton onClick={() => setShowPassword(!showPassword)}>
                   {showPassword ? (
                     <VisibilityOutlinedIcon />
                   ) : (
@@ -141,21 +119,17 @@ export default function SignupPage() {
           }}
         />
 
-        <Typography sx={{ fontSize: 14, mb: "6px" }}>
+        <Typography sx={{ fontSize: 14, mb: 0.5 }}>
           Confirm Password *
         </Typography>
         <TextField
           fullWidth
-          variant="outlined"
           type={showConfirm ? "text" : "password"}
           sx={inputStyle}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton
-                  onClick={() => setShowConfirm(!showConfirm)}
-                  edge="end"
-                >
+                <IconButton onClick={() => setShowConfirm(!showConfirm)}>
                   {showConfirm ? (
                     <VisibilityOutlinedIcon />
                   ) : (
@@ -167,24 +141,17 @@ export default function SignupPage() {
           }}
         />
 
-        {/* Checkbox - LEFT */}
         <FormControlLabel
-          control={<Checkbox size="small" sx={{ p: "4px" }} />}
+          control={<Checkbox size="small" />}
           label={
             <Typography sx={{ fontSize: 13 }}>
               I agree to the{" "}
-              <Link underline="none" sx={{ color: "#2f6df6" }}>
+              <Link sx={{ color: "#2f6df6" }}>
                 Terms of Service
               </Link>
             </Typography>
           }
-          sx={{
-            mt: "4px",
-            mb: "18px",
-            ml: 0,
-            display: "flex",
-            justifyContent: "flex-start",
-          }}
+          sx={{ mb: 2 }}
         />
 
         <Button
@@ -198,29 +165,20 @@ export default function SignupPage() {
             fontSize: 17,
             fontWeight: 700,
             textTransform: "none",
-            boxShadow: "none",
-            "&:hover": {
-              bgcolor: "primary.dark",
-              boxShadow: "none",
-            },
           }}
         >
           Create Account
         </Button>
+      </Box>
 
-        <Box sx={{ mt: 2, textAlign: "center" }}>
-          <Typography sx={{ fontSize: 14 }}>
-            Already have an account?{" "}
-            <Link
-              component="button"
-              onClick={() => navigate("/login")}
-              underline="none"
-              sx={{ fontSize: 14 }}
-            >
-              Sign in
-            </Link>
-          </Typography>
-        </Box>
+      {/* Bottom */}
+      <Box sx={{ mt: 3, textAlign: "center" }}>
+        <Typography sx={{ fontSize: 14 }}>
+          Already have an account?{" "}
+          <Link onClick={() => navigate("/login")} underline="none">
+            Sign in
+          </Link>
+        </Typography>
       </Box>
     </Box>
   );
