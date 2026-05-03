@@ -71,7 +71,7 @@ export async function addExpense(postData) {
   }
 }
 
-export async function editExpense(expenseId, postData) {
+export async function editExpense(expense_id, postData) {
   const query = `
     UPDATE expense
         SET category_id = :category_id,
@@ -91,14 +91,14 @@ export async function editExpense(expenseId, postData) {
   //     note (optional)
   //     quick_expense (boolean)
 
-  postData.expenseId = expenseId;
+  postData.expense_id = expense_id;
 
   try {
     const results = await database.query(query, postData);
-    let insertedID = results[0].insertId;
-    console.log("Inserted new expense with ID:");
-    console.log(insertedID);
-    return { success: true, insertedID };
+    let editedID = results[0].insertId;
+    console.log("Edited expense with ID:");
+    console.log(editedID);
+    return { success: true, editedID };
   } catch (err) {
     console.log(err);
     return { success: false };
