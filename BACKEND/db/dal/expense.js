@@ -48,7 +48,7 @@ export async function getExpensesByCategory(userid, category_id) {
 export async function addExpense(postData) {
   const query = `
     INSERT INTO expense (category_id, user_id, title, date, note, quick_expense)
-    VALUES (:category_id, :user_id, :title, :date, :note, :quick_expense)
+    VALUES (:category_id, :user_id, :title, :date, :note, :quick_expense);
     `;
 
   //   postData MUST HAVE:
@@ -80,7 +80,7 @@ export async function editExpense(expenseId, postData) {
         date = :date,
         note = :note,
         quick_expense = :quick_expense
-    WHERE expense_id = :expense_id
+    WHERE expense_id = :expense_id;
     `;
 
   //   postData MUST HAVE:
@@ -108,7 +108,7 @@ export async function editExpense(expenseId, postData) {
 export async function deleteExpense(expense_id) {
   let query = `
     DELETE FROM expense
-    WHERE expense_id = :expense_id
+    WHERE expense_id = :expense_id;
     `;
 
   let params = {
