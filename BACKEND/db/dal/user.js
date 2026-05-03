@@ -80,6 +80,28 @@ VALUES (:first_name, :last_name, :email, :hashedPassword, :phone_number);
   }
 }
 
+export async function editUser(user_id, postData) {
+  const query = `
+    UPDATE user
+        SET first_name = :first_name,
+        last_name = :last_name,
+        password_hash = :password_hash,
+        email = :email,
+        phone_number = :phone_number,
+    WHERE user_id = :user_id;
+    `;
+
+  postData.user_id = user_id;
+
+  try {
+    const results = await database.query(query, postData);
+    return { success: true };
+  } catch (err) {
+    console.log(err);
+    return { success: false };
+  }
+}
+
 export async function deleteUser(webUserId) {
   let sqlDeleteUser = `
 DELETE FROM user
