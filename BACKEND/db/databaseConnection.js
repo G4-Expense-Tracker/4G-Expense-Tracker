@@ -12,4 +12,4 @@ const dbConfig = {
 
 const database = mysql.createPool(dbConfig);
 
-module.exports = database;
+export default database;
