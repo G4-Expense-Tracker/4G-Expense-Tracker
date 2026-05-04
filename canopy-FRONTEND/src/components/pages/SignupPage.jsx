@@ -23,6 +23,51 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSignup = async () => {
+    setError("");
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:8000/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          password,
+          phone_number: phone,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Signup failed");
+        return;
+      }
+
+      navigate("/main");
+    } catch (err) {
+      setError("Something went wrong");
+    }
+  };
+
   const inputStyle = {
     mb: 1.5,
     "& .MuiOutlinedInput-root": {
@@ -78,30 +123,47 @@ export default function SignupPage() {
             <Typography sx={{ fontSize: 14, mb: 0.5 }}>
               First Name *
             </Typography>
-            <TextField fullWidth sx={inputStyle} />
+            <TextField 
+              fullWidth
+              onChange={(e) => setFirstName(e.target.value)}
+              sx={inputStyle} 
+            />
           </Box>
 
           <Box sx={{ flex: 1 }}>
             <Typography sx={{ fontSize: 14, mb: 0.5 }}>
               Last Name *
             </Typography>
-            <TextField fullWidth sx={inputStyle} />
+            <TextField 
+              fullWidth
+              onChange={(e) => setLastName(e.target.value)}
+              sx={inputStyle} 
+            />
           </Box>
         </Box>
 
         <Typography sx={{ fontSize: 14, mb: 0.5 }}>Email *</Typography>
-        <TextField fullWidth sx={inputStyle} />
+        <TextField 
+          fullWidth
+          onChange={(e) => setEmail(e.target.value)}
+          sx={inputStyle} 
+        />
 
         <Typography sx={{ fontSize: 14, mb: 0.5 }}>
           Phone Number *
         </Typography>
-        <TextField fullWidth sx={inputStyle} />
+        <TextField 
+          fullWidth
+          onChange={(e) => setPhone(e.target.value)}
+          sx={inputStyle} 
+        />
 
         <Typography sx={{ fontSize: 14, mb: 0.5 }}>
           Password *
         </Typography>
         <TextField
           fullWidth
+          onChange={(e) => setPassword(e.target.value)}
           type={showPassword ? "text" : "password"}
           sx={inputStyle}
           InputProps={{
@@ -124,6 +186,7 @@ export default function SignupPage() {
         </Typography>
         <TextField
           fullWidth
+          onChange={(e) => setConfirmPassword(e.target.value)}
           type={showConfirm ? "text" : "password"}
           sx={inputStyle}
           InputProps={{
@@ -156,7 +219,7 @@ export default function SignupPage() {
 
         <Button
           fullWidth
-          onClick={() => navigate("/main")}
+          onClick={handleSignup}
           sx={{
             height: 52,
             borderRadius: "28px",
