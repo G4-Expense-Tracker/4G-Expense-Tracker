@@ -183,3 +183,25 @@ export async function deleteGoal(goal_id) {
     return false;
   }
 }
+
+// I'll just do this next sprint
+
+// export async function getUserProgress(user_id, goal_id) {
+//   const query1 = `
+//     SELECT * from goal
+//     WHERE user_id = :userid AND goal_id = :goal_id
+//     `;
+
+//     const query2 = `
+//     SELECT
+//     from user_action_log
+//     `
+
+//   try {
+//     await database.query(query1, params);
+
+//   } catch (err) {
+//     console.log(err);
+//     return false;
+//   }
+// }
