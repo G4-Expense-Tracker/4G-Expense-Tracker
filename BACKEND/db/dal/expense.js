@@ -1,4 +1,4 @@
-import database from "../databaseConnection";
+import database from "../databaseConnection.js";
 
 export async function getExpensesByUser(userid) {
   const query = `
