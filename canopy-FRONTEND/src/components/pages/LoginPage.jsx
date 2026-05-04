@@ -10,9 +10,39 @@ import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Login failed");
+        return;
+      }
+
+      navigate("/main");
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong");
+    }
+  };
 
   return (
     <Box
@@ -63,6 +93,8 @@ export default function LoginPage() {
 
         <TextField
           fullWidth
+          value={email}
+          onChange={(e) => { setEmail(e.target.value); setError(''); }}
           sx={{
             mb: 2.5,
             "& .MuiOutlinedInput-root": {
@@ -79,6 +111,8 @@ export default function LoginPage() {
         <TextField
           fullWidth
           type="password"
+          value={password}
+          onChange={(e) => { setPassword(e.target.value); setError(''); }}
           sx={{
             mb: 3,
             "& .MuiOutlinedInput-root": {
@@ -90,8 +124,16 @@ export default function LoginPage() {
           }}
         />
 
+        {error && (
+          <Typography color="error" sx={{ mb: 2 }}>
+            {error}
+          </Typography>
+        )}
+
         <Button
           fullWidth
+          onClick={handleLogin}
+          disabled={!email || !password}
           sx={{
             height: 56,
             borderRadius: "30px",
