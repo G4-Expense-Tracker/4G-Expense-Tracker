@@ -1,0 +1,185 @@
+import database from "../databaseConnection";
+
+export async function getGoalsByUser(userid) {
+  const query = `
+    SELECT * from goal
+    WHERE user_id = :userid;
+    `;
+
+  const params = {
+    userid,
+  };
+
+  try {
+    const results = await database.query(query, params);
+    console.log(results[0]);
+    return results[0];
+  } catch (err) {
+    console.log("Error selecting from goal table");
+    console.log(err);
+    return null;
+  }
+}
+
+export async function getGoalsById(goal_id) {
+  const query = `
+    SELECT * from goal
+    WHERE goal_id = :goal_id;
+    `;
+
+  const params = {
+    goal_id,
+  };
+
+  try {
+    const results = await database.query(query, params);
+    console.log(results[0]);
+    return results[0];
+  } catch (err) {
+    console.log("Error selecting from goal table");
+    console.log(err);
+    return null;
+  }
+}
+
+export async function addGoal(postData) {
+  const query = `
+    INSERT INTO goal (user_id, name, target_amount, progress, level, start_date)
+    VALUES (:user_id, :name, :target_amount, :progress, :level, CURDATE());
+    `;
+
+  //   postData MUST HAVE:
+  //     user_id,
+  //     name,
+  //     target_amount
+
+  postData.progress = 0;
+  postData.level = 1;
+
+  try {
+    const results = await database.query(query, postData);
+
+    const affectedRows = results[0].affectedRows;
+
+    if (affectedRows === 0) {
+      return { success: false, message: "Goal not found" };
+    }
+
+    const updatedGoal = await getGoalById(goal_id);
+
+    return { success: true, goal_id };
+  } catch (err) {
+    console.log(err);
+    return { success: false };
+  }
+}
+
+export async function editGoal(goal_id, postData) {
+  const query = `
+    UPDATE goal
+        SET name = :name, 
+        target_amount = :target_amount, 
+        progress = :progress, 
+        level = :level
+    WHERE goal_id = :goal_id;
+    `;
+
+  //   postData MUST HAVE:
+  //       name,
+  // target_amount,
+  // progress,
+  // level
+
+  postData.goal_id = goal_id;
+
+  try {
+    const results = await database.query(query, postData);
+
+    const affectedRows = results[0].affectedRows;
+
+    if (affectedRows === 0) {
+      return { success: false, message: "Goal not found" };
+    }
+
+    const updatedGoal = await getGoalById(goal_id);
+
+    return { success: true, goal_id };
+  } catch (err) {
+    console.log(err);
+    return { success: false };
+  }
+}
+
+export async function editProgress(goal_id, postData) {
+  const query = `
+    UPDATE goal
+        SET progress = progress + :progress
+    WHERE goal_id = :goal_id;
+    `;
+
+  //   postData MUST HAVE:
+  //     progress (INT)
+
+  postData.goal_id = goal_id;
+
+  try {
+    const results = await database.query(query, postData);
+
+    const affectedRows = results[0].affectedRows;
+
+    if (affectedRows === 0) {
+      return { success: false, message: "Goal not found" };
+    }
+
+    const updatedGoal = await getGoalById(goal_id);
+
+    return { success: true, goal_id };
+  } catch (err) {
+    console.log(err);
+    return { success: false };
+  }
+}
+
+export async function levelUp(goal_id) {
+  const query = `
+    UPDATE goal
+        SET level = level + 1
+    WHERE goal_id = :goal_id;
+    `;
+
+  try {
+    const results = await database.query(query, postData);
+
+    const affectedRows = results[0].affectedRows;
+
+    if (affectedRows === 0) {
+      return { success: false, message: "Goal not found" };
+    }
+
+    const updatedGoal = await getGoalById(goal_id);
+
+    return { success: true, goal_id };
+  } catch (err) {
+    console.log(err);
+    return { success: false };
+  }
+}
+
+export async function deleteGoal(goal_id) {
+  let query = `
+    DELETE FROM goal
+    WHERE goal_id = :goal_id;
+    `;
+
+  let params = {
+    goal_id,
+  };
+
+  try {
+    await database.query(query, params);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
