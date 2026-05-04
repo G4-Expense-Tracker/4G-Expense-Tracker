@@ -27,6 +27,8 @@ export async function verifyUserCredentials(email, password) {
   const user = await getUserByEmail(email);
   if (!user) return null;
 
+  console.log('user is', user)
+
   const match = await bcrypt.compare(password, user.password_hash);
   if (!match) return null;
 
@@ -46,7 +48,8 @@ export async function getUserByEmail(email) {
   try {
     const results = await database.query(sqlQuery, params);
     console.log(results[0]);
-    return results[0];
+    const rows = results[0]
+    return rows.length > 0 ? rows[0] : null;
   } catch (err) {
     console.log("Error selecting from user table");
     console.log(err);
