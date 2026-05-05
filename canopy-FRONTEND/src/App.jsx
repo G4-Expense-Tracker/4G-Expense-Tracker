@@ -5,7 +5,7 @@ import Onboarding from "./components/onboarding/Onboarding";
 import LoginPage from "./components/pages/LoginPage";
 import SignupPage from "./components/pages/SignupPage";
 import LoadingPage from "./components/pages/LoadingPage";
-import DashboardPage from "./components/pages/dashboardPage";
+import DashboardPage from "./components/pages/dashboard/DashboardPage";
 
 
 
