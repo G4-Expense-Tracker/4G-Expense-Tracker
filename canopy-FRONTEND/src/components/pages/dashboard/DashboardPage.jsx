@@ -17,7 +17,7 @@ export default function DashboardPage() {
         mx: "auto",
         position: "relative",
         overflow: "hidden",
-        bgcolor: "#329572",
+        bgcolor: "#e3f2ed",
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "space-between", px: 3, pt: 2, color: "white" }}>
