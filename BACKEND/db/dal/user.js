@@ -14,8 +14,8 @@ export async function getUserById(id) {
 
   try {
     const results = await database.query(sqlQuery, params);
-    console.log(results[0]);
-    return results[0];
+    const rows = results[0];
+    return rows.length > 0 ? rows[0] : null;
   } catch (err) {
     console.log("Error selecting from user table");
     console.log(err);
@@ -27,7 +27,7 @@ export async function verifyUserCredentials(email, password) {
   const user = await getUserByEmail(email);
   if (!user) return null;
 
-  console.log('user is', user)
+  // console.log('user is', user)
 
   const match = await bcrypt.compare(password, user.password_hash);
   if (!match) return null;
@@ -47,8 +47,8 @@ export async function getUserByEmail(email) {
 
   try {
     const results = await database.query(sqlQuery, params);
-    console.log(results[0]);
-    const rows = results[0]
+    // console.log(results[0]);
+    const rows = results[0];
     return rows.length > 0 ? rows[0] : null;
   } catch (err) {
     console.log("Error selecting from user table");
@@ -74,12 +74,12 @@ VALUES (:first_name, :last_name, :email, :hashedPassword, :phone_number);
   try {
     const results = await database.query(sqlInsertUser, params);
     let insertedID = results[0].insertId;
-    console.log("Inserted new user with ID:");
-    console.log(insertedID);
+    // console.log("Inserted new user with ID:");
+    // console.log(insertedID);
     return { success: true, insertedID };
   } catch (err) {
     console.log(err);
-    return { success: false };
+    return { success: false, error: err.message };
   }
 }
 
@@ -90,36 +90,39 @@ export async function editUser(user_id, postData) {
         last_name = :last_name,
         password_hash = :password_hash,
         email = :email,
-        phone_number = :phone_number,
+        phone_number = :phone_number
     WHERE user_id = :user_id;
     `;
 
   postData.user_id = user_id;
 
+  if (postData.password) {
+    postData.password_hash = await bcrypt.hash(postData.password, saltRounds);
+  }
+
   try {
     const results = await database.query(query, postData);
-    let editedID = results[0].insertId;
-    console.log("Edited user with ID:");
-    console.log(editedID);
-    return { success: true, editedID };
+    const result = results[0];
+    return { success: result.affectedRows > 0 };
   } catch (err) {
     console.log(err);
     return { success: false };
   }
 }
 
-export async function deleteUser(webUserId) {
+export async function deleteUser(user_id) {
   let sqlDeleteUser = `
 DELETE FROM user
-WHERE user_id = :userID
+WHERE user_id = :user_id
 `;
   let params = {
-    userID: webUserId,
+    user_id,
   };
-  console.log(sqlDeleteUser);
+  // console.log(sqlDeleteUser);
   try {
-    await database.query(sqlDeleteUser, params);
-    return true;
+    const results = await database.query(sqlDeleteUser, params);
+    const result = results[0];
+    return result.affectedRows > 0;
   } catch (err) {
     console.log(err);
     return false;
