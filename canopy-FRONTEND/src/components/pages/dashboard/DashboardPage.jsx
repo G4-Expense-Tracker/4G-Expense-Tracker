@@ -4,6 +4,7 @@ import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import { useNavigate } from "react-router-dom";
 import pictLogo from "../../../assets/pictLogo.png";
+import seed1 from "../../../assets/seed1.png";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function DashboardPage() {
         mx: "auto",
         position: "relative",
         overflow: "hidden",
-        bgcolor: "#e3f2ed",
+        bgcolor: "#fafdf5",
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "space-between", px: 3, pt: 2, color: "white" }}>
@@ -39,7 +40,7 @@ export default function DashboardPage() {
           zIndex: 2,
         }}
       >
-        <Box component="img" src={pictLogo} alt="Logo" sx={{ width: 120 }} />
+        <Box component="img" src={seed1} alt="Logo" sx={{ width: 120 }} />
       </Box>
 
       <Box
@@ -49,7 +50,7 @@ export default function DashboardPage() {
           left: "-8%",
           width: "116%",
           minHeight: "53svh",
-          background: "linear-gradient(180deg, #79be8d 0%, #8ac37d 100%)",
+          background: "linear-gradient(180deg, #fafdf5 0%, #fafdf5 100%)",
           borderRadius: "50% 50% 0 0 / 12% 12% 0 0",
           boxShadow: "inset 0 0 14px rgba(255,255,255,0.65)",
           textAlign: "center",
