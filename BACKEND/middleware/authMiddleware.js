@@ -4,3 +4,10 @@ export function requireLogin(req, res, next) {
   }
   next();
 }
+
+export function requireLogout(req, res, next) {
+  if (req.session && req.session.userId) {
+    return res.status(403).json({ error: "Already logged in." });
+  }
+  next();
+}
