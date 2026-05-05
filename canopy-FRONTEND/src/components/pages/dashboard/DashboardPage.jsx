@@ -108,6 +108,7 @@ export default function DashboardPage() {
           Create Account
         </Button>
       </Box>
+      theme.transition.create(["background-color", "transform"]);
     </Box>
   );
 }
