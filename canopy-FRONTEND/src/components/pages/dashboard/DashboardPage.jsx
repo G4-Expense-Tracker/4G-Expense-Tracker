@@ -1,27 +1,36 @@
-import { Box, Typography, IconButton, LinearProgress, Paper } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import AddIcon from "@mui/icons-material/Add";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import PersonIcon from "@mui/icons-material/Person";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import {
+  Box,
+  Typography,
+  IconButton,
+  LinearProgress,
+  BottomNavigation,
+  BottomNavigationAction,
+} from "@mui/material";
+
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
+import HomeIcon from "@mui/icons-material/Home";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import PersonIcon from "@mui/icons-material/Person";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function DashboardPage() {
   return (
     <Box
       sx={{
         width: "100%",
-        maxWidth: 390,
-        minHeight: "100svh",
+        maxWidth: "390px",
+        minHeight: "100vh",
         mx: "auto",
-        bgcolor: "#fbfff5",
+        bgcolor: "#f8fbf2",
         position: "relative",
         overflow: "hidden",
-        pb: 9,
       }}
     >
       {/* Status Bar */}
@@ -31,14 +40,26 @@ export default function DashboardPage() {
           justifyContent: "space-between",
           px: 3,
           pt: 2,
-          mb: 4,
         }}
       >
-        <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
-        <Box sx={{ display: "flex", gap: 0.3 }}>
-          <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
-          <WifiIcon sx={{ fontSize: 14 }} />
-          <BatteryFullIcon sx={{ fontSize: 16 }} />
+        <Typography
+          sx={{
+            fontWeight: 700,
+            fontSize: 14,
+          }}
+        >
+          9:41
+        </Typography>
+
+        <Box
+          sx={{
+            display: "flex",
+            gap: 0.5,
+          }}
+        >
+          <SignalCellular4BarIcon sx={{ fontSize: 16 }} />
+          <WifiIcon sx={{ fontSize: 16 }} />
+          <BatteryFullIcon sx={{ fontSize: 18 }} />
         </Box>
       </Box>
 
@@ -46,42 +67,43 @@ export default function DashboardPage() {
       <Typography
         sx={{
           textAlign: "center",
-          fontFamily: "Georgia, serif",
-          fontSize: 20,
+          mt: 3,
           fontWeight: 700,
-          mb: 3,
+          fontSize: 28,
+          fontFamily: "Georgia, serif",
         }}
       >
         Good Morning, Hye
       </Typography>
 
-      {/* Tree Goal Circle */}
+      {/* Goal Section */}
       <Box
         sx={{
+          mt: 3,
           position: "relative",
-          width: 240,
-          height: 240,
-          mx: "auto",
-          mb: 5,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
+        {/* Left Arrow */}
         <IconButton
           sx={{
             position: "absolute",
-            left: -20,
-            top: "45%",
-            color: "#168c6c",
+            left: 18,
+            color: "#198754",
           }}
         >
           <ChevronLeftIcon />
         </IconButton>
 
+        {/* Goal Circle */}
         <Box
           sx={{
             width: 220,
             height: 220,
-            mx: "auto",
             border: "14px solid #ffdb57",
+            borderRightColor: "#00503f",
             borderRadius: "50%",
             bgcolor: "#fff8cc",
             display: "flex",
@@ -91,125 +113,254 @@ export default function DashboardPage() {
             textAlign: "center",
           }}
         >
-          <Typography sx={{ fontSize: 48 }}>🌱</Typography>
-          <Typography sx={{ fontWeight: 800, color: "#00503f" }}>
-            Click here
+          <Typography sx={{ fontSize: 52 }}>
+            🌲
           </Typography>
-          <Typography sx={{ fontSize: 12, fontWeight: 700 }}>
-            to set your goal
+
+          <Typography
+            sx={{
+              fontWeight: 800,
+              color: "#00503f",
+              fontSize: 24,
+            }}
+          >
+            Korea
+          </Typography>
+
+          <Typography
+            sx={{
+              fontSize: 14,
+              fontWeight: 700,
+            }}
+          >
+            $1500 / 1800
           </Typography>
         </Box>
 
+        {/* Right Arrow */}
         <IconButton
           sx={{
             position: "absolute",
-            right: -20,
-            top: "45%",
-            color: "#168c6c",
+            right: 18,
+            color: "#198754",
           }}
         >
           <ChevronRightIcon />
         </IconButton>
+
+        {/* Progress Bubble */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: 12,
+            right: 48,
+            width: 38,
+            height: 38,
+            borderRadius: "50%",
+            bgcolor: "#00503f",
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 12,
+            fontWeight: 700,
+          }}
+        >
+          83%
+        </Box>
       </Box>
 
       {/* Budget Card */}
-      <Paper
-        elevation={3}
+      <Box
         sx={{
-          width: "82%",
-          mx: "auto",
-          bgcolor: "#dcf5bf",
-          borderRadius: 2,
-          p: 2,
-          mb: 2,
+          mx: 2.5,
+          mt: 4,
+          p: 2.5,
+          borderRadius: 4,
+          bgcolor: "#dff0bf",
+          boxShadow: "0px 4px 12px rgba(0,0,0,0.12)",
         }}
       >
-        <Typography sx={{ fontWeight: 800, color: "#00503f" }}>
+        <Typography
+          sx={{
+            color: "#00503f",
+            fontWeight: 700,
+            fontSize: 24,
+          }}
+        >
           Daily Budget
         </Typography>
 
-        <Typography sx={{ fontSize: 28, fontWeight: 900, color: "#00503f" }}>
+        <Typography
+          sx={{
+            fontWeight: 800,
+            fontSize: 34,
+            lineHeight: 1,
+            mt: 1,
+          }}
+        >
           $50
         </Typography>
 
         <LinearProgress
           variant="determinate"
-          value={85}
+          value={90}
           sx={{
-            height: 10,
+            mt: 2,
+            height: 12,
             borderRadius: 10,
-            my: 1.5,
-            bgcolor: "#b8d99a",
+            bgcolor: "#d8d8d8",
+
             "& .MuiLinearProgress-bar": {
               bgcolor: "#00503f",
             },
           }}
         />
 
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mt: 1,
+          }}
+        >
           <Box>
-            <Typography sx={{ fontSize: 12, fontWeight: 700 }}>Used</Typography>
-            <Typography sx={{ fontSize: 13, fontWeight: 800 }}>$45</Typography>
+            <Typography sx={{ fontSize: 12 }}>
+              Used
+            </Typography>
+
+            <Typography
+              sx={{
+                fontWeight: 700,
+                color: "#00503f",
+              }}
+            >
+              $45
+            </Typography>
           </Box>
 
           <Box sx={{ textAlign: "right" }}>
-            <Typography sx={{ fontSize: 12, fontWeight: 700 }}>
+            <Typography sx={{ fontSize: 12 }}>
               Remaining
             </Typography>
-            <Typography sx={{ fontSize: 13, fontWeight: 800 }}>$5</Typography>
+
+            <Typography
+              sx={{
+                fontWeight: 700,
+                color: "#00503f",
+              }}
+            >
+              $5
+            </Typography>
           </Box>
         </Box>
-      </Paper>
 
-      {/* Dots */}
-      <Box sx={{ display: "flex", justifyContent: "center", gap: 1, mb: 3 }}>
-        <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "#00503f" }} />
-        <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "#8bab68" }} />
-        <Box sx={{ width: 6, height: 6, borderRadius: "50%", bgcolor: "#8bab68" }} />
+        {/* Slider Dots */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: 1,
+            mt: 2,
+          }}
+        >
+          <Box
+            sx={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              bgcolor: "#00503f",
+            }}
+          />
+
+          <Box
+            sx={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              bgcolor: "#9ab68c",
+            }}
+          />
+
+          <Box
+            sx={{
+              width: 8,
+              height: 8,
+              borderRadius: "50%",
+              bgcolor: "#9ab68c",
+            }}
+          />
+        </Box>
       </Box>
 
-      {/* Bottom Nav */}
+      {/* Bottom Navigation */}
       <Box
         sx={{
           position: "absolute",
           bottom: 0,
-          left: 0,
           width: "100%",
-          height: 70,
-          bgcolor: "#a8c77d",
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
+          bgcolor: "#c8d99d",
+          pt: 1,
+          pb: 1,
         }}
       >
-        <NavItem icon={<HomeIcon />} label="Home" />
-        <NavItem icon={<BarChartIcon />} label="Expense" />
-
-        <IconButton
+        {/* Floating Add Button */}
+        <Box
           sx={{
+            position: "absolute",
+            top: -28,
+            left: "50%",
+            transform: "translateX(-50%)",
             width: 58,
             height: 58,
+            borderRadius: "50%",
             bgcolor: "#fff8cc",
-            border: "4px solid #9abb6b",
-            mt: -4,
-            "&:hover": { bgcolor: "#fff8cc" },
+            border: "4px solid #9ab68c",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 2,
           }}
         >
-          <AddIcon sx={{ color: "#00503f", fontSize: 32 }} />
-        </IconButton>
+          <AddIcon
+            sx={{
+              color: "#00503f",
+              fontSize: 34,
+            }}
+          />
+        </Box>
 
-        <NavItem icon={<EmojiEventsIcon />} label="Goal" />
-        <NavItem icon={<PersonIcon />} label="Profile" />
+        <BottomNavigation
+          showLabels
+          sx={{
+            bgcolor: "transparent",
+          }}
+        >
+          <BottomNavigationAction
+            label="Home"
+            icon={<HomeIcon />}
+            sx={{ color: "#00503f" }}
+          />
+
+          <BottomNavigationAction
+            label="Expense"
+            icon={<BarChartIcon />}
+            sx={{ color: "#00503f" }}
+          />
+
+          <BottomNavigationAction
+            label="Goal"
+            icon={<EmojiEventsIcon />}
+            sx={{ color: "#00503f" }}
+          />
+
+          <BottomNavigationAction
+            label="Profile"
+            icon={<PersonIcon />}
+            sx={{ color: "#00503f" }}
+          />
+        </BottomNavigation>
       </Box>
-    </Box>
-  );
-}
-
-function NavItem({ icon, label }) {
-  return (
-    <Box sx={{ textAlign: "center", color: "#00503f" }}>
-      <Box sx={{ fontSize: 20 }}>{icon}</Box>
-      <Typography sx={{ fontSize: 10 }}>{label}</Typography>
     </Box>
   );
 }
