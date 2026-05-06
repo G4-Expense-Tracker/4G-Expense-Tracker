@@ -5,8 +5,8 @@ import Onboarding from "./components/onboarding/Onboarding";
 import LoginPage from "./components/pages/LoginPage";
 import SignupPage from "./components/pages/SignupPage";
 import LoadingPage from "./components/pages/LoadingPage";
-import DashboardPage from "./components/dashboard/DashboardPage";
-import ExpenseDashboard from "./components/dashboard/ExpenseDashboard";
+import DashboardPage from "./components/pages/dashboard/DashboardPage";
+import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
 
 function App() {
   return (
