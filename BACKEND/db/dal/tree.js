@@ -3,7 +3,7 @@ import database from "../databaseConnection.js";
 export async function getTreesByUser(user_id) {
   const query = `
     SELECT * FROM tree
-    WHERE user_id = :userid;
+    WHERE user_id = :user_id;
     `;
 
   const params = {
@@ -21,11 +21,11 @@ export async function getTreesByUser(user_id) {
   }
 }
 
-export async function getTreesByYear(user_id) {
+export async function getTreesByUser(user_id) {
   const query = `
     SELECT * FROM tree
-    WHERE user_id = :userid;
-    GROUP BY YEAR(date_earned)
+    WHERE user_id = :user_id
+    ORDER BY YEAR(date_earned) DESC;
     `;
 
   const params = {
@@ -34,12 +34,12 @@ export async function getTreesByYear(user_id) {
 
   try {
     const results = await database.query(query, params);
-    console.log(results[0]);
+    // console.log(results[0]);
     return results[0];
   } catch (err) {
     console.log("Error selecting from tree table");
     console.log(err);
-    return null;
+    return [];
   }
 }
 
@@ -49,12 +49,12 @@ export async function addTree(postData) {
     VALUES (:user_id, :tree_type, :date_earned);
     `;
 
-  const params = {
-    user_id,
-  };
+  // const params = {
+  //   user_id,
+  // };
 
   try {
-    const results = await database.query(query, params);
+    const results = await database.query(query, postData);
     console.log(results[0]);
     return results[0];
   } catch (err) {

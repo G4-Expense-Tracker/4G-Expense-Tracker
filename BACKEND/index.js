@@ -18,6 +18,7 @@ app.use(express.json());
 import usersRouter from './routers/usersRouter.js';
 import goalsRouter from './routers/goalsRouter.js';
 import budgetsRouter from './routers/budgetsRouter.js';
+import expensesRouter from './routers/expensesRouter.js';
 
 app.use(
   cookieSession({
@@ -30,6 +31,7 @@ app.use(
 app.use('/api/users', usersRouter)
 app.use('/api/goals', goalsRouter)
 app.use('/api/budgets', budgetsRouter)
+app.use('/api/expenses', expensesRouter)
 
 app.listen(8000, () => {
   console.log("Backend Web Server has started 🚀");
