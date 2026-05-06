@@ -5,7 +5,11 @@ import Onboarding from "./components/onboarding/Onboarding";
 import LoginPage from "./components/pages/LoginPage";
 import SignupPage from "./components/pages/SignupPage";
 import LoadingPage from "./components/pages/LoadingPage";
-import DashboardPage from "./components/pages/dashboard/DashboardPage";
+import DashboardPage from "./components/dashboard/DashboardPage";
+import ExpenseDashboard from "./components/dashboard/ExpenseDashboard";
+
+
+
 
 
 
@@ -19,6 +23,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />}/>
         <Route path="/onboarding" element={<Onboarding />}/>
         <Route path="/dashboard" element={<DashboardPage />}/>
+        <Route path="/expense" element={<ExpenseDashboard />} />
       </Routes>
     </BrowserRouter>
   )
