@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Box, Typography, IconButton, LinearProgress } from "@mui/material";
+
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import BottomNav from "./BottomNav";
+
+import Footer from "./Footer";
 
 const dashboards = [
   { title: "Click here", subtitle: "to set your goal", emoji: "🌱", progress: 0 },
@@ -37,8 +39,8 @@ export default function DashboardPage() {
         mx: "auto",
         bgcolor: "#f8fbf2",
         position: "relative",
-        overflow: "hidden",
-        pb: 9,
+        overflowX: "hidden",
+        pb: 11,
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "space-between", px: 3, pt: 2 }}>
@@ -161,7 +163,9 @@ export default function DashboardPage() {
             height: 10,
             borderRadius: 10,
             bgcolor: "#d8d8d8",
-            "& .MuiLinearProgress-bar": { bgcolor: "#00503f" },
+            "& .MuiLinearProgress-bar": {
+              bgcolor: "#00503f",
+            },
           }}
         />
 
@@ -178,7 +182,7 @@ export default function DashboardPage() {
         </Box>
       </Box>
 
-      <BottomNav />
+      <FooterNav />
     </Box>
   );
 }
