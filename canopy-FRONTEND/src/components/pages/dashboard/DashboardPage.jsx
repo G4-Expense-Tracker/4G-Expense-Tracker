@@ -7,7 +7,7 @@ import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-import Footer from "../dashboard/Footer";
+import Footer from "../../pages/dashboard/Footer";
 
 const dashboards = [
   { title: "Click here", subtitle: "to set your goal", emoji: "🌱", progress: 0 },
