@@ -8,11 +8,6 @@ import LoadingPage from "./components/pages/LoadingPage";
 import DashboardPage from "./components/dashboard/DashboardPage";
 import ExpenseDashboard from "./components/dashboard/ExpenseDashboard";
 
-
-
-
-
-
 function App() {
   return (
     <BrowserRouter>
