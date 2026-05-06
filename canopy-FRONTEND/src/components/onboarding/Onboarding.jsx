@@ -12,9 +12,6 @@ const img4 = "/onboarding_imgs/OB_IMG_4.png"
 
 
 function Onboarding() {
-  const [step, setStep] = useState(0);
-  const totalSteps = 4;
-  const [skipped, setSkipped] = useState(false)
 
   //STEPS
   const steps = [
@@ -45,26 +42,40 @@ function Onboarding() {
   ]
 
 
+  const [step, setStep] = useState(0);
+  const totalSteps = steps.length;
+  const [showEnd, setShowEnd] = useState(false);
+
   //progress through steps:
   const next = () => {
     if (step < totalSteps - 1) {
       setStep((prev) => prev + 1);
+    } else {
+      setShowEnd(true)
     }
   };
 
   const handleSkip = () => {
-    setSkipped(true)
+    setShowEnd(true)
   }
 
   const backHandler = () => {
+    if (step === 0){
+      setStep(0)
+      return
+    }
     setStep((prev) => prev - 1)
   }
 
-  if (skipped) {
-    return (
-      <OB_End />
-    )
+  const endBack = () => {
+    setShowEnd(false)
+    setStep(totalSteps - 1)
+  }
 
+  if (showEnd === true) {
+    return (
+      <OB_End onBack={endBack} />
+    )
 
   } else {
 
