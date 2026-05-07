@@ -11,21 +11,24 @@ import Goal from "./components/goal_pages/Goal";
 import DashboardPage from "./components/pages/dashboard/DashboardPage";
 import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
 import CategoryPage from "./components/category/CategoryPage";
+import NewGoal from "./components/goal_pages/NewGoal";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path ="/" element={<LoadingPage />}/>
-        <Route path="/main" element={<MainPage />}/>
-        <Route path="/login" element={<LoginPage />}/>
-        <Route path="/signup" element={<SignupPage />}/>
-        <Route path="/onboarding" element={<Onboarding />}/>
-        <Route path ="/goals" element={<Goal />}/>
-        <Route path="/dashboard" element={<DashboardPage />}/>
+        <Route path="/" element={<LoadingPage />} />
+        <Route path="/main" element={<MainPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/goals" element={<Goal />} />
+        <Route path="/newgoal" element={<NewGoal />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/expense" element={<ExpenseDashboard />} />
         <Route path="/category" element={<CategoryPage />} />
       </Routes>
+      
     </BrowserRouter>
   )
 }
