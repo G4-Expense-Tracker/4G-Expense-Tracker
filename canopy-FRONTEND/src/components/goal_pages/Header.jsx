@@ -4,10 +4,22 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 
 function Header({ name }) {
+
+    const ArrowLeft = () => {
+        /* previous goal callback */
+    }
+    const ArrowRight = () => {
+        /* next goal callback */
+    }
+    const handleDots = () => {
+        /* dot menu */
+    }
+
+
     return (
         <Container maxWidth="sm" sx={{
-            paddingTop:"4rem",
-            }}>
+            paddingTop: "4rem",
+        }}>
 
             {/*             TOP ROW            */}
             <Grid
@@ -15,20 +27,20 @@ function Header({ name }) {
                 spacing={2}
 
                 sx={{
-                    paddingBottom:"4rem"
+                    paddingBottom: "4rem"
                 }}
             >
 
-                <Grid 
-                    size={8} 
+                <Grid
+                    size={8}
                     sx={{
 
                     }}>
 
                     <Typography variant="h4" component="h1"
-                    sx={{
-                        textAlign:"center"
-                    }}>
+                        sx={{
+                            textAlign: "center"
+                        }}>
                         {name}
                     </Typography>
 
@@ -37,7 +49,12 @@ function Header({ name }) {
                 <Grid
                     size={4}
                 >
-                    <MoreHorizIcon />
+                    <MoreHorizIcon
+                    sx={{
+                        fontSize:"2rem"
+                    }}
+                    onClick={handleDots}
+                    />
                 </Grid>
 
             </Grid>
@@ -53,19 +70,24 @@ function Header({ name }) {
                     size={2}
                     display="flex"
                     sx={{
-                        paddingTop:"6rem"
+                        paddingTop: "6rem"
                     }}
                 >
-                    <KeyboardArrowLeftIcon />
+                    <KeyboardArrowLeftIcon
+                        sx={{
+                            fontSize: "4rem"
+                        }}
+                        onClick={ArrowLeft}
+                        />
                 </Grid>
-
-                {/* PLEASE HELP :') */}
 
                 <Grid
                     size={8}
-                    display="flex"
+
                     sx={{
-                        justifyContent:"center"
+                        display: "flex",
+                        justifyContent: "center",
+                        paddingRight: "3rem"
                     }}
                 >
 
@@ -83,10 +105,15 @@ function Header({ name }) {
                     size={2}
                     display="flex"
                     sx={{
-                        paddingTop:"6rem"
+                        paddingTop: "6rem"
                     }}
                 >
-                    <KeyboardArrowRightIcon />
+                    <KeyboardArrowRightIcon
+                        sx={{
+                            fontSize: "4rem"
+                        }}
+                        onClick={ArrowRight}
+                        />
                 </Grid>
 
             </Grid>
