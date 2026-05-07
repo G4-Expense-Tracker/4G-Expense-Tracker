@@ -134,7 +134,7 @@ export default function LoginPage() {
           onClick={handleLogin}
           disabled={!email || !password}
           sx={{
-            height: 56,
+            height: 60,
             borderRadius: "30px",
             fontSize: 18,
             fontWeight: 700,
