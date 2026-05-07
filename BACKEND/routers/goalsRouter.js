@@ -18,7 +18,7 @@ router.get('/list', requireLogin, async (req, res) => {
 
         const goals = await getGoalsByUser(user_id)
 
-        if (!goals) {
+        if (!goals || goals.length === 0 ) {
             return res.json({ goals: null })
         }
 
@@ -100,7 +100,20 @@ router.post('/:goalId/edit', requireLogin, async (req, res) => {
 
 router.post('/:goalId/progress', requireLogin, async (req, res) => {
     try {
+        const goal_id = req.params.goalId;
+        const { uncleanProgress } = req.body;
+        const progress = parseInt(uncleanProgress)
 
+        const progressedGoal = await editProgress(goal_id, { progress })
+
+        if (!progressedGoal.success) {
+            return res.status(500).json({ error: "Failed to progress goal" });
+        }
+
+        return res.json({ 
+            success: true,
+            message: 'Goal progressed'
+        })
     } catch(err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" })
