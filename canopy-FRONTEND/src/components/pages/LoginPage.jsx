@@ -142,7 +142,7 @@ export default function LoginPage() {
             bgcolor: "primary.main",
             color: "#fff",
             mb: 2,
-            boxShadow: "0px 6px 10px rgb(255, 0, 0)",
+            boxShadow: "0px 6px 10px rgb(251, 250, 250)",
             "&:hover": { bgcolor: "primary.dark" },
           }}
         >
