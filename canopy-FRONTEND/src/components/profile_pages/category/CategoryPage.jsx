@@ -26,9 +26,10 @@ import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 
 // Imported the FooterNav Component from the dashboard to reuse the same footer navigation across different pages.
-import FooterNav from "../pages/dashboard/FooterNav";
+import FooterNav from "../../pages/dashboard/FooterNav";
 
 import { useNavigate } from "react-router-dom";
+import Header from "../Header";
 
 export default function CategoryPage() {
   const navigate = useNavigate();
@@ -78,87 +79,8 @@ export default function CategoryPage() {
       }}
     >
       {/* HEADER */}
-      <Box
-        sx={{
-          bgcolor: "#a8c276",
-          px: "20px",
-          pt: "18px",
-          pb: "28px",
-        }}
-      >
-        {/* STATUS BAR */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: "38px",
-          }}
-        >
-          <Typography
-            sx={{
-              fontWeight: 700,
-              fontSize: "15px",
-              color: "#1d1d1d",
-            }}
-          >
-            9:41
-          </Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 0.5,
-            }}
-          >
-            <SignalCellular4BarIcon sx={{ fontSize: 17 }} />
-            <WifiIcon sx={{ fontSize: 17 }} />
-            <BatteryFullIcon sx={{ fontSize: 20 }} />
-          </Box>
-        </Box>
-
-        {/* TOP ROW */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          {/* BACK BUTTON */}
-          <IconButton
-            onClick={() => navigate(-1)}
-            sx={{
-              color: "#004638",
-              p: 0,
-            }}
-          >
-            <ArrowBackIosNewIcon sx={{ fontSize: 28 }} />
-          </IconButton>
-
-          {/* TITLE */}
-          <Typography
-            sx={{
-              fontSize: "32px",
-              fontWeight: 800,
-              color: "#004638",
-            }}
-          >
-            Category
-          </Typography>
-
-          {/* ADD BUTTON */}
-          <IconButton
-            sx={{
-              color: "#004638",
-              p: 0,
-            }}
-          >
-            <AddIcon sx={{ fontSize: 42 }} />
-          </IconButton>
-        </Box>
-      </Box>
+      <Header title="Category"></Header>
+      
 
       {/* CONTENT */}
       <Box
