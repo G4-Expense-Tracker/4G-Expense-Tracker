@@ -18,11 +18,13 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import FlightOutlinedIcon from "@mui/icons-material/FlightOutlined";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 
+// Imported the FooterNav Component from the dashboard to reuse the same footer navigation across different pages.
 import FooterNav from "../pages/dashboard/FooterNav";
 
 import { useNavigate } from "react-router-dom";
