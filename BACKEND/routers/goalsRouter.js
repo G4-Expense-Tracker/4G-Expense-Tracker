@@ -36,18 +36,31 @@ router.get('/:goalId', requireLogin, async (req, res) => {
         const goal = await getGoalById(goal_id)
 
         if (!goal) {
-            return res.json({ goal: null })
+            return res.status(400).json({ error: 'Goal not found' })
         }
 
+        return res.json({ goal })
     } catch(err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" })
     }
 })
 
-router.post('/new', requireLogin, (req, res) => {
+router.post('/new', requireLogin, async (req, res) => {
     try {
+        const user_id = req.user.user_id;
+        const { name, target_amount } = req.body;
 
+        const newGoal = await addGoal({ user_id, name, target_amount })
+
+        if (!newGoal.success) {
+            return res.status(500).json({ error: "Failed to set goal" });
+        }
+
+        res.json({
+            success: true,
+            message: 'Goal saved'
+        })
     } catch(err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" })
@@ -56,7 +69,29 @@ router.post('/new', requireLogin, (req, res) => {
 
 router.post('/:goalId/edit', requireLogin, async (req, res) => {
     try {
+        const goal_id = req.params.goalId
+        const { 
+            name,
+            target_amount,
+            progress,
+            level
+         } = req.body;
 
+         const editedGoal = await editGoal(goal_id, {
+            name,
+            target_amount,
+            progress,
+            level
+         });
+
+         if (!editedGoal.success) {
+            return res.status(500).json({ error: "Failed to edit goal" });
+         }
+
+         res.json({
+            success: true,
+            message: 'Goal edited'
+         })
     } catch(err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" })
