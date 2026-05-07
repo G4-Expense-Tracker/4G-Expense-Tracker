@@ -218,7 +218,7 @@ eg {
     return progressObject;
   } catch (err) {
     console.log(err);
-    return false;
+    return {};
   }
 }
 
@@ -252,5 +252,45 @@ export async function logUserAction(postData) {
   } catch (err) {
     console.log(err);
     return { success: false };
+  }
+}
+
+export async function getQuotas(goal_level) {
+  /*
+
+Returns: {
+action_name: (quota)
+}
+
+eg {
+  "Log in to Canopy": 3,
+}
+
+*/
+
+  const query = `
+    SELECT 
+      a.name,
+      q.quota
+    FROM goal_level_quota q
+    INNER JOIN action_type a
+      ON q.action_type_id = a.action_type_id
+    WHERE q.goal_level = :goal_level;
+  `;
+
+  try {
+    const results = await database.query(query, { goal_level });
+    const rows = results[0];
+
+    const quotaObject = {};
+
+    for (const row of rows) {
+      quotaObject[row.name] = Number(row.quota);
+    }
+
+    return quotaObject;
+  } catch (err) {
+    console.log(err);
+    return {};
   }
 }
