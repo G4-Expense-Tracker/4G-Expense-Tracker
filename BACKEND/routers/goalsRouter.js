@@ -109,7 +109,18 @@ router.post('/:goalId/progress', requireLogin, async (req, res) => {
 
 router.post('/:goalId/levelUp', requireLogin, async (req, res) => {
     try {
+        const goal_id = req.params.goalId;
 
+        const levelledUpGoal = await levelUp(goal_id);
+
+        if (!levelledUpGoal.success) {
+            return res.status(500).json({ error: "Failed to edit goal" });
+        }
+
+        return res.json({
+            success: true,
+            message: 'Goal levelled up'
+        })
     } catch(err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" })
