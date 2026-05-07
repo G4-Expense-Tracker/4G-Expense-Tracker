@@ -22,6 +22,28 @@ export async function getExpensesByUser(user_id) {
   }
 }
 
+export async function getQuickExpenses(user_id) {
+  const query = `
+    SELECT * from expense
+    WHERE user_id = :user_id AND quick_expense = 1
+    ORDER BY date DESC;
+    `;
+
+  const params = {
+    user_id,
+  };
+
+  try {
+    const results = await database.query(query, params);
+    // console.log(results[0]);
+    return results[0];
+  } catch (err) {
+    console.log("Error selecting from expense table");
+    console.log(err);
+    return [];
+  }
+}
+
 export async function getOneExpense(expense_id) {
   const query = `
     SELECT * from expense
@@ -97,13 +119,13 @@ export async function editExpense(expense_id, postData) {
   const query = `
     UPDATE expense
         SET category_id = :category_id,
-        user_id = :user_id,
         title = :title,
         amount = :amount,
         date = :date,
         note = :note,
         quick_expense = :quick_expense
-    WHERE expense_id = :expense_id;
+    WHERE expense_id = :expense_id
+      AND user_id = :user_id;
     `;
 
   //   postData MUST HAVE:
@@ -127,14 +149,16 @@ export async function editExpense(expense_id, postData) {
   }
 }
 
-export async function deleteExpense(expense_id) {
+export async function deleteExpense(expense_id, user_id) {
   let query = `
     DELETE FROM expense
-    WHERE expense_id = :expense_id;
+    WHERE expense_id = :expense_id
+    AND user_id = :user_id;
     `;
 
   let params = {
     expense_id,
+    user_id,
   };
 
   try {
@@ -215,6 +239,48 @@ export async function getCategoryComparison(
     console.log(err);
     return [];
   }
+}
+
+function calculateChanges(rows) {
+  return rows.map((row) => {
+    const prev = Number(row.previous_total) || 0;
+    const curr = Number(row.current_total) || 0;
+
+    let percentChange;
+
+    if (prev === 0 && curr === 0) percentChange = 0;
+    else if (prev === 0) percentChange = 100;
+    else percentChange = ((curr - prev) / prev) * 100;
+
+    return {
+      category_id: row.category_id,
+      current: curr,
+      previous: prev,
+      percentChange,
+    };
+  });
+}
+
+export async function getTop3Changes(
+  user_id,
+  currentStart,
+  currentEnd,
+  prevStart,
+  prevEnd,
+) {
+  const rows = await getCategoryComparison(
+    user_id,
+    currentStart,
+    currentEnd,
+    prevStart,
+    prevEnd,
+  );
+
+  const data = calculateChanges(rows);
+
+  return data
+    .sort((a, b) => Math.abs(b.percentChange) - Math.abs(a.percentChange))
+    .slice(0, 3);
 }
 
 export async function getTotalByDateRange(user_id, startDate, endDate) {
