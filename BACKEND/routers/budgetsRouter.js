@@ -1,37 +1,54 @@
 import express from "express";
 const router = express.Router();
-import cors from "cors";
+import { requireLogin } from "../middleware/authMiddleware.js";
+import { setBudget, getBudget } from "../db/dal/budget.js";
 
-router.get('/list', (req, res) => {
+router.get('/view', requireLogin, async (req, res) => {
+    try {
+        const user_id = req.user.user_id
+        const timeframe = req.query.timeframe
 
+        if (!user_id || !timeframe) {
+            return res.status(400).json({ error:'Missing information' })
+        }
+
+        const budget = await getBudget(user_id, timeframe)
+
+        if (!budget) {
+            return res.json({ budget: null })
+        }
+
+        res.json({ budget })
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch budgets" });
+    }
 })
 
-router.get('/set', (req, res) => {
+router.post('/set', requireLogin, async (req, res) => {
+    try {
+        const user_id = req.user.user_id
+        const { timeframe, amount } = req.body
 
-})
+        if (!timeframe || !amount) {
+            return res.status(400).json({ error: "Missing timeframe or amount" });
+        }
 
-router.post('/set', (req, res) => {
+        const newBudget = await setBudget({user_id, timeframe, amount})
 
-})
+        if (!newBudget.success) {
+            return res.status(500).json({ error: "Failed to set budget" });
+        }
 
-router.get('/:budgetId/view', (req, res) => {
-    
-})
+        res.json({
+            success: true,
+            message: 'Budget saved'
+        })
 
-router.get('/:budgetId/edit', (req, res) => {
-
-})
-
-router.post('/:budgetId/edit', (req, res) => {
-
-})
-
-router.get('/:budgetId/delete', (req, res) => {
-
-})
-
-router.post('/:budgetId/delete', (req, res) => {
-
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to create budget" });
+    }
 })
 
 export default router;
