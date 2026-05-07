@@ -1,37 +1,78 @@
 import express from "express";
 const router = express.Router();
-import cors from "cors";
 
-router.get('/list', (req, res) => {
+import { requireLogin } from '../middleware/authMiddleware.js'
+import { 
+    getGoalsByUser,
+    getGoalById,
+    addGoal,
+    editGoal,
+    editProgress,
+    levelUp,
+    deleteGoal,
+} from "../db/dal/goal";
 
+router.get('/list', requireLogin, async (req, res) => {
+    try {
+
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server failure" })
+    }
 })
 
-router.get('/set', (req, res) => {
+router.get('/:goalId', requireLogin, async (req, res) => {
+    try {
 
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server failure" })
+    }
 })
 
-router.post('/set', (req, res) => {
+router.post('/new', requireLogin, (req, res) => {
+    try {
 
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server failure" })
+    }
 })
 
-router.get('/:goalId/view', (req, res) => {
-    
+router.post('/:goalId/edit', requireLogin, async (req, res) => {
+    try {
+
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server failure" })
+    }
 })
 
-router.get('/:goalId/edit', (req, res) => {
+router.post('/:goalId/progress', requireLogin, async (req, res) => {
+    try {
 
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server failure" })
+    }
 })
 
-router.post('/:goalId/edit', (req, res) => {
+router.post('/:goalId/levelUp', requireLogin, async (req, res) => {
+    try {
 
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server failure" })
+    }
 })
 
-router.get('/:goalId/delete', (req, res) => {
+router.post('/:goalId/delete', requireLogin, async (req, res) => {
+    try {
 
-})
-
-router.post('/:goalId/delete', (req, res) => {
-
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server failure" })
+    }
 })
 
 export default router;
