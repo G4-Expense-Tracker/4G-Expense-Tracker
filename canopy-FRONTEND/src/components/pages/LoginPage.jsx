@@ -129,13 +129,12 @@ export default function LoginPage() {
             {error}
           </Typography>
         )}
-
         <Button
           fullWidth
           onClick={handleLogin}
           disabled={!email || !password}
           sx={{
-            height: 56,
+            height: 60,
             borderRadius: "30px",
             fontSize: 18,
             fontWeight: 700,
@@ -143,8 +142,9 @@ export default function LoginPage() {
             bgcolor: "primary.main",
             color: "#fff",
             mb: 2,
-            boxShadow: "0px 6px 10px rgba(0,0,0,0.15)",
+            boxShadow: "0px 6px 10px rgb(251, 250, 250)",
             "&:hover": { bgcolor: "primary.dark" },
+            color: "#fff"
           }}
         >
           Login
