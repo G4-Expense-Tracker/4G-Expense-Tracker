@@ -10,9 +10,9 @@ import Goal from "./components/goal_pages/Goal";
 
 import DashboardPage from "./components/pages/dashboard/DashboardPage";
 import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
-import CategoryPage from "./components/category/CategoryPage";
-import AddCategoryPage from "./components/category/AddCategoryPage";
+import CategoryPage from "./components/profile_pages/category/CategoryPage";
 import NewGoal from "./components/goal_pages/NewGoal";
+import Accessibility from "./components/profile_pages/accessibility/Accessibility";
 
 function App() {
   return (
@@ -29,6 +29,8 @@ function App() {
         <Route path="/expense" element={<ExpenseDashboard />} />
         <Route path="/category" element={<CategoryPage />} />
         <Route path="/category/add" element={<AddCategoryPage />} />
+        <Route path="/accessibility" element={<Accessibility />} />
+
       </Routes>
       
     </BrowserRouter>
