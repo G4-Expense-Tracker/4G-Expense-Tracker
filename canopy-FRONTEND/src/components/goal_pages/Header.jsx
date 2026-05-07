@@ -69,7 +69,6 @@ function Header({ name }) {
                     }}
                 >
 
-                    
                     <img
                         src="/onboarding_imgs/OB_IMG_4.png"
                         alt="sapling"
