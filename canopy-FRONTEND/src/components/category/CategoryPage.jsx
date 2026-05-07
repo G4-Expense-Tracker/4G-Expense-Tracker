@@ -286,19 +286,6 @@ export default function CategoryPage() {
                   color: "#6fa67d",
                 }}
               />
-              // TODO: Add onClick to the MoreHorizIcon to open a menu with options to Edit or Delete the category. You can use the EditIcon and DeleteIcon for the menu options.
-              // Example:
-              /*
-              <Menu>
-                <MenuItem>
-                  <EditIcon />
-                  <Typography>Edit</Typography>
-                </MenuItem>
-                <MenuItem>
-                  <DeleteIcon />
-                  <Typography>Delete</Typography>
-                </MenuItem>
-              </Menu>
             </Box>
           ))}
         </Box>
