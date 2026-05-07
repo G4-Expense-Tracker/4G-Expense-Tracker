@@ -129,7 +129,6 @@ export default function LoginPage() {
             {error}
           </Typography>
         )}
-        /* Fixed on the button page layout */
         <Button
           fullWidth
           onClick={handleLogin}
