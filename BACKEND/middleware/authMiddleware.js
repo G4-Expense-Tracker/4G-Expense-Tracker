@@ -1,4 +1,4 @@
-import { getUserById } from "../db/dal/user";
+import { getUserById } from "../db/dal/user.js";
 
 export async function requireLogin(req, res, next) {
   try {
