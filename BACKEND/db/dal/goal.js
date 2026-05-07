@@ -196,7 +196,7 @@ eg {
       INNER JOIN user_action_log u
       on a.action_type_id = u.action_type_id
     WHERE user_id = :user_id AND goal_id = :goal_id AND goal_level = :current_level
-    GROUP BY u.action_type_id;
+    GROUP BY u.action_type_id, a.name;
     `;
 
   const params = {
@@ -219,5 +219,38 @@ eg {
   } catch (err) {
     console.log(err);
     return false;
+  }
+}
+
+export const ACTION_TYPES = {
+  LOGIN: 1,
+  LOG_EXPENSE: 2,
+  ADD_TO_SAVINGS: 3,
+  SET_DAILY_BUDGET: 4,
+  SPEND_WITHIN_BUDGET: 5,
+};
+
+export async function logUserAction(postData) {
+  const query = `
+    INSERT INTO user_action_log (user_id, action_type_id, goal_id, timestamp, goal_level)
+    VALUES (:user_id, :action_type_id, :goal_id, NOW(), :goal_level);
+    `;
+
+  //   postData MUST HAVE:
+  //     user_id
+  //     action_type_id (eg. ACTION_TYPES.LOGIN)
+  //     goal_id
+  //     goal_level
+
+  try {
+    const results = await database.query(query, postData);
+
+    const result = results[0];
+    const user_action_log_id = result.insertId;
+
+    return { success: true, user_action_log_id };
+  } catch (err) {
+    console.log(err);
+    return { success: false };
   }
 }
