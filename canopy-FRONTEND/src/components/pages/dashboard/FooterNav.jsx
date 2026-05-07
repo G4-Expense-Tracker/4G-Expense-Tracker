@@ -12,7 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 import { useNavigate, useLocation } from "react-router-dom";
 
-export default function Footer() {
+export default function FooterNav() {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -24,7 +24,7 @@ export default function Footer() {
         left: "50%",
         transform: "translateX(-50%)",
         width: "100%",
-        maxWidth: 390,
+        maxWidth: "390px",
         zIndex: 100,
       }}
     >
@@ -33,19 +33,22 @@ export default function Footer() {
         onClick={() => navigate("/expense")}
         sx={{
           position: "absolute",
-          top: -28,
+          top: "-28px",
           left: "50%",
           transform: "translateX(-50%)",
-          width: 58,
-          height: 58,
+          width: "58px",
+          height: "58px",
           borderRadius: "50%",
           bgcolor: "#fff8cc",
           border: "4px solid #9ab68c",
+
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+
           cursor: "pointer",
-          zIndex: 3,
+          zIndex: 10,
+
           boxShadow: "0px 4px 10px rgba(0,0,0,0.15)",
         }}
       >
@@ -57,27 +60,30 @@ export default function Footer() {
         />
       </Box>
 
-      {/* Footer */}
+      {/* Footer Background */}
       <Box
         sx={{
           bgcolor: "#c8d99d",
-          borderTopLeftRadius: 18,
-          borderTopRightRadius: 18,
+          borderTopLeftRadius: "18px",
+          borderTopRightRadius: "18px",
+
           pt: 1,
           pb: 1,
+
           boxShadow: "0px -3px 10px rgba(0,0,0,0.08)",
         }}
       >
         <BottomNavigation
-          showLabels
           value={location.pathname}
+          showLabels
           sx={{
             bgcolor: "transparent",
           }}
         >
+          {/* HOME */}
           <BottomNavigationAction
-            value="/dashboard"
             label="Home"
+            value="/dashboard"
             icon={<HomeIcon />}
             onClick={() => navigate("/dashboard")}
             sx={{
@@ -85,9 +91,10 @@ export default function Footer() {
             }}
           />
 
+          {/* EXPENSE */}
           <BottomNavigationAction
-            value="/expense"
             label="Expense"
+            value="/expense"
             icon={<BarChartIcon />}
             onClick={() => navigate("/expense")}
             sx={{
@@ -95,9 +102,10 @@ export default function Footer() {
             }}
           />
 
+          {/* GOAL */}
           <BottomNavigationAction
-            value="/goal"
             label="Goal"
+            value="/goal"
             icon={<EmojiEventsIcon />}
             onClick={() => navigate("/goal")}
             sx={{
@@ -105,9 +113,10 @@ export default function Footer() {
             }}
           />
 
+          {/* PROFILE */}
           <BottomNavigationAction
-            value="/profile"
             label="Profile"
+            value="/profile"
             icon={<PersonIcon />}
             onClick={() => navigate("/profile")}
             sx={{
