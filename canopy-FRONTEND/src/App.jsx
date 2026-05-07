@@ -11,6 +11,7 @@ import Goal from "./components/goal_pages/Goal";
 import DashboardPage from "./components/pages/dashboard/DashboardPage";
 import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
 import CategoryPage from "./components/category/CategoryPage";
+import AddCategoryPage from "./components/category/AddCategoryPage";
 import NewGoal from "./components/goal_pages/NewGoal";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/expense" element={<ExpenseDashboard />} />
         <Route path="/category" element={<CategoryPage />} />
+        <Route path="/category/add" element={<AddCategoryPage />} />
       </Routes>
       
     </BrowserRouter>
