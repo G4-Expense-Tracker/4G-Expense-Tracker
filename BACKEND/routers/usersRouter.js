@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 
+import { requireLogin, requireLogout } from "../middleware/authMiddleware.js";
 import {
   getUserById,
   addUser,
@@ -8,18 +9,7 @@ import {
   getUserByEmail
 } from "../db/dal/user.js";
 
-router.get('/login', async (req, res) => {
-    if (!req.session.userId) {
-        return res.json({ isLoggedIn: false })
-    }
-
-    const user = await getUserById(req.session.userId)
-
-    if (!user) {
-        req.session = null;
-        return res.json({ isLoggedIn: false })
-    }
-
+router.get('/session',requireLogin ,async (req, res) => {
     res.json({
         isLoggedIn: true,
         user: {
@@ -30,7 +20,7 @@ router.get('/login', async (req, res) => {
     });
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login',requireLogout , async (req, res) => {
     const { email, password } = req.body;
 
     const user =  await verifyUserCredentials(email, password)
@@ -51,7 +41,7 @@ router.post('/login', async (req, res) => {
     });
 })
 
-router.post('/register', async (req, res) => {
+router.post('/register',requireLogout ,async (req, res) => {
     const { first_name, last_name, email, password, phone_number } = req.body;
 
     if (!email || !password || !first_name) {
@@ -81,7 +71,7 @@ router.post('/register', async (req, res) => {
     res.json({ message: "User registered", isLoggedIn: true });
 })
 
-router.post('/logout', (req, res) => {
+router.post('/logout',requireLogin , (req, res) => {
     req.session = null;
     res.json({ message: "Logged out", isLoggedIn: false });
 })
