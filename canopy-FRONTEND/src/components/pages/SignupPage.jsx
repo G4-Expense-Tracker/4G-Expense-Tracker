@@ -62,7 +62,7 @@ export default function SignupPage() {
         return;
       }
 
-      navigate("/main");
+      navigate("/onboarding");
     } catch (err) {
       setError("Something went wrong");
     }
