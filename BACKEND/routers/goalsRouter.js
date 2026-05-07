@@ -35,7 +35,9 @@ router.get('/:goalId', requireLogin, async (req, res) => {
 
         const goal = await getGoalById(goal_id)
 
-        if (!goal)
+        if (!goal) {
+            return res.json({ goal: null })
+        }
 
     } catch(err) {
         console.error(err);
