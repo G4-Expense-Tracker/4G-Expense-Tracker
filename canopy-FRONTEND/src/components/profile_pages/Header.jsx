@@ -63,6 +63,7 @@ function Header({ title }) {
                 </Typography>
 
                 {/* ADD BUTTON */}
+                {/* we may actually remove this if we do not allow the user to add a new category! */}
                 <IconButton
                     sx={{
                         color: "#004638",
