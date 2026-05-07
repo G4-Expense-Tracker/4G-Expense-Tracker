@@ -176,24 +176,48 @@ export async function deleteGoal(goal_id) {
   }
 }
 
-// I'll just do this next sprint
+export async function getUserProgress(user_id, goal_id, current_level) {
+  /*
 
-// export async function getUserProgress(user_id, goal_id) {
-//   const query1 = `
-//     SELECT * from goal
-//     WHERE user_id = :user_id AND goal_id = :goal_id
-//     `;
+Returns: {
+action_name: (times user did action)
+}
 
-//     const query2 = `
-//     SELECT
-//     from user_action_log
-//     `
+eg {
+  "Log in to Canopy": 3,
+}
 
-//   try {
-//     await database.query(query1, params);
+*/
 
-//   } catch (err) {
-//     console.log(err);
-//     return false;
-//   }
-// }
+  const query = `
+    SELECT a.name,
+    COUNT(u.user_action_log_id) AS progress
+    FROM action_type a
+      INNER JOIN user_action_log u
+      on a.action_type_id = u.action_type_id
+    WHERE user_id = :user_id AND goal_id = :goal_id AND goal_level = :current_level
+    GROUP BY u.action_type_id;
+    `;
+
+  const params = {
+    user_id,
+    goal_id,
+    current_level,
+  };
+
+  try {
+    const results = await database.query(query, params);
+    const rows = results[0];
+
+    const progressObject = {};
+
+    for (const row of rows) {
+      progressObject[row.name] = Number(row.progress);
+    }
+
+    return progressObject;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
