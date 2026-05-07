@@ -118,7 +118,14 @@ router.post('/:goalId/levelUp', requireLogin, async (req, res) => {
 
 router.post('/:goalId/delete', requireLogin, async (req, res) => {
     try {
+        const goal_id = req.params.goalId;
 
+        await deleteGoal(goal_id);
+
+        res.json({
+            success: true,
+            message: 'Goal deleted'
+        })
     } catch(err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" })
