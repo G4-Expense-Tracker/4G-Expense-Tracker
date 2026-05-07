@@ -23,7 +23,7 @@ import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 
-import FooterNav from "../dashboard/FooterNav";
+//import FooterNav from "../dashboard/FooterNav";
 
 import { useNavigate } from "react-router-dom";
 
