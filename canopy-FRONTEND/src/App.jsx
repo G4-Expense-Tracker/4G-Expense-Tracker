@@ -5,6 +5,7 @@ import Onboarding from "./components/onboarding/Onboarding";
 import LoginPage from "./components/pages/LoginPage";
 import SignupPage from "./components/pages/SignupPage";
 import LoadingPage from "./components/pages/LoadingPage";
+import Goal from "./components/goal_pages/Goal";
 
 
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/login" element={<LoginPage />}/>
         <Route path="/signup" element={<SignupPage />}/>
         <Route path="/onboarding" element={<Onboarding />}/>
+        <Route path ="/goals" element={<Goal />}/>
       </Routes>
     </BrowserRouter>
   )
