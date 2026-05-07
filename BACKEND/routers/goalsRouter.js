@@ -10,11 +10,19 @@ import {
     editProgress,
     levelUp,
     deleteGoal,
-} from "../db/dal/goal";
+} from "../db/dal/goal.js";
 
 router.get('/list', requireLogin, async (req, res) => {
     try {
+        const user_id = req.user.user_id
 
+        const goals = await getGoalsByUser(user_id)
+
+        if (!goals) {
+            return res.json({ goals: null })
+        }
+
+        return res.json({ goals })
     } catch(err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" })
@@ -23,6 +31,13 @@ router.get('/list', requireLogin, async (req, res) => {
 
 router.get('/:goalId', requireLogin, async (req, res) => {
     try {
+        const goal_id = req.params.goalId
+
+        const goal = await getGoalById(goal_id)
+
+        if (!goal) {
+            return res.json({ goal: null })
+        }
 
     } catch(err) {
         console.error(err);
