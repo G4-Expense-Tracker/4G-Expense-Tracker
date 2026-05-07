@@ -139,7 +139,7 @@ export default function LoginPage() {
             fontSize: 18,
             fontWeight: 700,
             textTransform: "none",
-            bgcolor: "primary.main",
+            bgcolor: "#EDEDED",
             color: "#fff",
             mb: 2,
             boxShadow: "0px 6px 10px rgb(251, 250, 250)",
