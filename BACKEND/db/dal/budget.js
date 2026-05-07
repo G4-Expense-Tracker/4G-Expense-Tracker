@@ -13,8 +13,8 @@ export async function getBudget(user_id, timeframe) {
 
   try {
     const results = await database.query(query, params);
-    console.log(results[0]);
-    return results[0];
+    const rows = results[0];
+    return rows.length > 0 ? rows[0] : null;
   } catch (err) {
     console.log("Error selecting from budget table");
     console.log(err);
@@ -22,23 +22,23 @@ export async function getBudget(user_id, timeframe) {
   }
 }
 
-export async function setBudget(user_id, timeframe, amount) {
+export async function setBudget(postData) {
   const query = `
     INSERT INTO budget (user_id, timeframe, amount)
-    VALUES (:user_id, :timeframe, :amount);
+    VALUES (:user_id, :timeframe, :amount)
+        ON DUPLICATE KEY UPDATE
+        amount = :amount;
     `;
 
-  const params = {
-    user_id,
-    timeframe,
-    amount,
-  };
+  // postData must have:
+  //   user_id,
+  //   timeframe,
+  //   amount,
+  //
 
   try {
     const results = await database.query(query, postData);
     let insertedID = results[0].insertId;
-    console.log("Inserted new budget with ID:");
-    console.log(insertedID);
     return { success: true, insertedID };
   } catch (err) {
     console.log(err);
@@ -46,22 +46,22 @@ export async function setBudget(user_id, timeframe, amount) {
   }
 }
 
-async function editBudget(budget_id, postData) {
-  const query = `
-    UPDATE budget
-        SET user_id = :user_id,
-        timeframe = :timeframe,
-        amount = :amount
-    WHERE budget_id = :budget_id;
-    `;
+// export async function editBudget(budget_id, postData) {
+//   const query = `
+//     UPDATE budget
+//         SET user_id = :user_id,
+//         timeframe = :timeframe,
+//         amount = :amount
+//     WHERE budget_id = :budget_id;
+//     `;
 
-  postData.budget_id = budget_id;
-  try {
-    const results = await database.query(query, postData);
-    console.log("edited budget");
-    return true;
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-}
+//   postData.budget_id = budget_id;
+//   try {
+//     const results = await database.query(query, postData);
+//     const result = results[0];
+//     return { success: result.affectedRows > 0 };
+//   } catch (err) {
+//     console.log(err);
+//     return { success: false };
+//   }
+// }

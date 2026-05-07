@@ -1,27 +1,27 @@
 import database from "../databaseConnection.js";
 
-export async function getGoalsByUser(userid) {
+export async function getGoalsByUser(user_id) {
   const query = `
     SELECT * from goal
-    WHERE user_id = :userid;
+    WHERE user_id = :user_id;
     `;
 
   const params = {
-    userid,
+    user_id,
   };
 
   try {
     const results = await database.query(query, params);
-    console.log(results[0]);
+    // console.log(results[0]);
     return results[0];
   } catch (err) {
     console.log("Error selecting from goal table");
     console.log(err);
-    return null;
+    return [];
   }
 }
 
-export async function getGoalsById(goal_id) {
+export async function getGoalById(goal_id) {
   const query = `
     SELECT * from goal
     WHERE goal_id = :goal_id;
@@ -32,9 +32,9 @@ export async function getGoalsById(goal_id) {
   };
 
   try {
-    const results = await database.query(query, params);
-    console.log(results[0]);
-    return results[0];
+    const results = await database.query(query, { goal_id });
+    const rows = results[0];
+    return rows.length > 0 ? rows[0] : null;
   } catch (err) {
     console.log("Error selecting from goal table");
     console.log(err);
@@ -59,13 +59,8 @@ export async function addGoal(postData) {
   try {
     const results = await database.query(query, postData);
 
-    const affectedRows = results[0].affectedRows;
-
-    if (affectedRows === 0) {
-      return { success: false, message: "Goal not found" };
-    }
-
-    const updatedGoal = await getGoalById(goal_id);
+    const result = results[0];
+    const goal_id = result.insertId;
 
     return { success: true, goal_id };
   } catch (err) {
@@ -101,8 +96,6 @@ export async function editGoal(goal_id, postData) {
       return { success: false, message: "Goal not found" };
     }
 
-    const updatedGoal = await getGoalById(goal_id);
-
     return { success: true, goal_id };
   } catch (err) {
     console.log(err);
@@ -131,8 +124,6 @@ export async function editProgress(goal_id, postData) {
       return { success: false, message: "Goal not found" };
     }
 
-    const updatedGoal = await getGoalById(goal_id);
-
     return { success: true, goal_id };
   } catch (err) {
     console.log(err);
@@ -148,7 +139,7 @@ export async function levelUp(goal_id) {
     `;
 
   try {
-    const results = await database.query(query, postData);
+    const results = await database.query(query, { goal_id });
 
     const affectedRows = results[0].affectedRows;
 
@@ -176,8 +167,9 @@ export async function deleteGoal(goal_id) {
   };
 
   try {
-    await database.query(query, params);
-    return true;
+    const results = await database.query(query, params);
+    const result = results[0];
+    return result.affectedRows > 0;
   } catch (err) {
     console.log(err);
     return false;
@@ -189,7 +181,7 @@ export async function deleteGoal(goal_id) {
 // export async function getUserProgress(user_id, goal_id) {
 //   const query1 = `
 //     SELECT * from goal
-//     WHERE user_id = :userid AND goal_id = :goal_id
+//     WHERE user_id = :user_id AND goal_id = :goal_id
 //     `;
 
 //     const query2 = `
