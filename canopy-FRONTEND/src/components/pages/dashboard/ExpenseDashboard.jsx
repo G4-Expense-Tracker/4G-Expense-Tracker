@@ -6,7 +6,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import BottomNav from "./BottomNav";
+import BottomNav from "./Bottomnav.jsx";
 
 export default function ExpenseDashboard() {
   return (
