@@ -28,7 +28,7 @@ export default function AddCategoryPage() {
                 {/* HEADER */}
                 <Box
                     sx={{
-                        bgcolor: "#a8c276",
+                        bgcolor: "#004738",
                         px: "20px",
                         pt: "18px",
                         pb: "28px",
