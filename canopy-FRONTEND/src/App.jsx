@@ -8,6 +8,9 @@ import LoadingPage from "./components/pages/LoadingPage";
 import Goal from "./components/goal_pages/Goal";
 
 
+import DashboardPage from "./components/pages/dashboard/DashboardPage";
+import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
+import CategoryPage from "./components/category/CategoryPage";
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
         <Route path="/signup" element={<SignupPage />}/>
         <Route path="/onboarding" element={<Onboarding />}/>
         <Route path ="/goals" element={<Goal />}/>
+        <Route path="/dashboard" element={<DashboardPage />}/>
+        <Route path="/expense" element={<ExpenseDashboard />} />
+        <Route path="/category" element={<CategoryPage />} />
       </Routes>
     </BrowserRouter>
   )
