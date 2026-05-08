@@ -29,14 +29,20 @@ import { iconList } from "./AddCategoryPage";
 
 export default function CategoryPage() {
   const navigate = useNavigate();
+
+  // Keeps track of which category row has the edit/delete menu open
   const [activeMenu, setActiveMenu] = useState(null);
+
+  // Stores categories created by the user from localStorage
   const [customCategories, setCustomCategories] = useState([]);
 
+  // Load saved categories when page opens
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem("customCategories")) || [];
     setCustomCategories(saved);
   }, []);
 
+  // Default categories should stay fixed
   const defaultCategories = [
     { title: "Food", icon: RestaurantIcon },
     { title: "Drink", icon: LocalDrinkIcon },
@@ -47,6 +53,7 @@ export default function CategoryPage() {
     { title: "Housing", icon: ApartmentIcon },
   ];
 
+  // Delete only custom categories, not default categories
   function handleDelete(indexToDelete) {
     const customIndex = indexToDelete - defaultCategories.length;
 
@@ -65,6 +72,20 @@ export default function CategoryPage() {
     setActiveMenu(null);
   }
 
+  // Edit only custom categories
+  function handleEdit(indexToEdit) {
+    const customIndex = indexToEdit - defaultCategories.length;
+
+    if (customIndex < 0) {
+      alert("Default categories cannot be edited.");
+      setActiveMenu(null);
+      return;
+    }
+
+    navigate(`/add-category?editIndex=${customIndex}`);
+  }
+
+  // Convert saved icon name back into MUI icon
   const savedCategories = customCategories.map((category) => {
     const matchedIcon =
       iconList.find((item) => item.name === category.iconName)?.icon ||
@@ -76,6 +97,7 @@ export default function CategoryPage() {
     };
   });
 
+  // Combine default categories and user-created categories
   const categories = [...defaultCategories, ...savedCategories];
 
   return (
@@ -91,7 +113,9 @@ export default function CategoryPage() {
         pb: 13,
       }}
     >
+      {/* Header */}
       <Box sx={{ bgcolor: "#a9c57b", px: 3, pt: 2, pb: 5 }}>
+        {/* Status bar */}
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 5 }}>
           <Typography sx={{ fontWeight: 700 }}>9:41</Typography>
 
@@ -102,6 +126,7 @@ export default function CategoryPage() {
           </Box>
         </Box>
 
+        {/* Header title row */}
         <Box
           sx={{
             display: "flex",
@@ -109,6 +134,7 @@ export default function CategoryPage() {
             justifyContent: "space-between",
           }}
         >
+          {/* Back button */}
           <IconButton
             onClick={() => navigate("/expense")}
             sx={{ color: "#004638" }}
@@ -126,6 +152,7 @@ export default function CategoryPage() {
             Category
           </Typography>
 
+          {/* Add category button */}
           <IconButton
             onClick={() => navigate("/add-category")}
             sx={{ color: "#004638" }}
@@ -135,6 +162,7 @@ export default function CategoryPage() {
         </Box>
       </Box>
 
+      {/* Page content */}
       <Box sx={{ px: 2.5, pt: 4 }}>
         <Typography sx={{ fontSize: 18, mb: 2 }}>Search</Typography>
 
@@ -153,6 +181,7 @@ export default function CategoryPage() {
 
         <Typography sx={{ fontSize: 18, mb: 3 }}>Select categories</Typography>
 
+        {/* Category list */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
           {categories.map((category, index) => {
             const Icon = category.icon;
@@ -171,16 +200,19 @@ export default function CategoryPage() {
                   justifyContent: "space-between",
                 }}
               >
+                {/* Left side: icon + name */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                   <Icon sx={{ color: "#004638" }} />
+
                   <Typography sx={{ fontSize: 18 }}>
                     {category.title}
                   </Typography>
                 </Box>
 
+                {/* Right side: three dots OR edit/delete buttons */}
                 {activeMenu === index ? (
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <IconButton onClick={() => console.log("edit", category.title)}>
+                    <IconButton onClick={() => handleEdit(index)}>
                       <EditIcon sx={{ color: "#004638", fontSize: 26 }} />
                     </IconButton>
 
@@ -206,6 +238,7 @@ export default function CategoryPage() {
   );
 }
 
+/* Footer navigation */
 function Footer({ navigate }) {
   return (
     <Box
@@ -262,6 +295,7 @@ function Footer({ navigate }) {
   );
 }
 
+/* Small reusable footer item */
 function NavItem({ icon, label, onClick }) {
   return (
     <Box
