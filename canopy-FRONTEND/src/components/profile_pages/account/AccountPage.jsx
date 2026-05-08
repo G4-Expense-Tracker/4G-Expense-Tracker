@@ -32,22 +32,23 @@ export default function AccountPage() {
         color: "#005844",
       }}
     >
-      {/* Top Green Header */}
+      {/* Header */}
       <Box
         sx={{
           bgcolor: "#A8BF7E",
           px: "22px",
           pt: "24px",
-          pb: "18px",
+          pb: "20px",
         }}
       >
         {/* Status Bar */}
         <Box
           sx={{
+            height: 36,
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            mb: "36px",
+            mb: "30px",
             px: "10px",
           }}
         >
@@ -63,7 +64,14 @@ export default function AccountPage() {
         </Box>
 
         {/* Back + Title */}
-        <Box sx={{ position: "relative", display: "flex", alignItems: "center" }}>
+        <Box
+          sx={{
+            position: "relative",
+            height: 45,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           <IconButton onClick={() => navigate("/main")} sx={{ p: 0 }}>
             <ArrowBackIosNewIcon sx={{ fontSize: 31, color: "#344D59" }} />
           </IconButton>
@@ -76,6 +84,7 @@ export default function AccountPage() {
               fontSize: 32,
               fontWeight: 800,
               color: "#005844",
+              whiteSpace: "nowrap",
             }}
           >
             My Account
@@ -84,14 +93,7 @@ export default function AccountPage() {
       </Box>
 
       {/* Main Content */}
-      <Box
-        sx={{
-          flexGrow: 1,
-          px: "22px",
-          pt: "38px",
-          pb: "20px",
-        }}
-      >
+      <Box sx={{ flexGrow: 1, px: "22px", pt: "38px" }}>
         {/* Profile Icon */}
         <Box sx={{ display: "flex", justifyContent: "center", mb: "36px" }}>
           <Box sx={{ position: "relative" }}>
@@ -104,72 +106,49 @@ export default function AccountPage() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: 48,
               }}
             >
-              🌷
+              <Typography sx={{ fontSize: 48 }}>🌷</Typography>
             </Box>
 
-            <EditOutlinedIcon
+            <IconButton
+              onClick={() => console.log("edit profile image")}
               sx={{
                 position: "absolute",
-                top: 0,
-                right: -18,
-                fontSize: 23,
-                color: "#005844",
+                top: -8,
+                right: -25,
+                p: 0,
               }}
-            />
+            >
+              <EditOutlinedIcon sx={{ fontSize: 23, color: "#005844" }} />
+            </IconButton>
           </Box>
         </Box>
 
-        {/* Name Inputs */}
+        {/* First + Last Name */}
         <Box sx={{ display: "flex", gap: "18px", mb: "14px" }}>
           <Box sx={{ flex: 1 }}>
-            <Typography sx={{ fontSize: 17, mb: "8px", color: "#111" }}>
-              First Name
-            </Typography>
-            <TextField
-              fullWidth
-              defaultValue="Hye"
-              sx={inputStyle}
-            />
+            <Typography sx={labelStyle}>First Name</Typography>
+            <TextField fullWidth defaultValue="Hye" sx={smallInputStyle} />
           </Box>
 
           <Box sx={{ flex: 1 }}>
-            <Typography sx={{ fontSize: 17, mb: "8px", color: "#111" }}>
-              Last Name
-            </Typography>
-            <TextField
-              fullWidth
-              defaultValue="Shim"
-              sx={inputStyle}
-            />
+            <Typography sx={labelStyle}>Last Name</Typography>
+            <TextField fullWidth defaultValue="Shim" sx={smallInputStyle} />
           </Box>
         </Box>
 
-        {/* Email */}
-        <Typography sx={{ fontSize: 17, mb: "8px", color: "#111" }}>
-          Email
-        </Typography>
+        <Typography sx={labelStyle}>Email</Typography>
         <TextField
           fullWidth
           defaultValue="Shim_Hye_Soo@gmail.com"
           sx={{ ...inputStyle, mb: "14px" }}
         />
 
-        {/* Phone */}
-        <Typography sx={{ fontSize: 17, mb: "8px", color: "#111" }}>
-          Phone
-        </Typography>
-        <TextField
-          fullWidth
-          sx={{ ...inputStyle, mb: "14px" }}
-        />
+        <Typography sx={labelStyle}>Phone</Typography>
+        <TextField fullWidth sx={{ ...inputStyle, mb: "14px" }} />
 
-        {/* Password */}
-        <Typography sx={{ fontSize: 17, mb: "8px", color: "#111" }}>
-          Password
-        </Typography>
+        <Typography sx={labelStyle}>Password</Typography>
         <TextField
           fullWidth
           type="password"
@@ -177,9 +156,9 @@ export default function AccountPage() {
           sx={{ ...inputStyle, mb: "36px" }}
         />
 
-        {/* Save Button */}
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Button
+            onClick={() => navigate("/main")}
             sx={{
               width: 210,
               height: 54,
@@ -200,7 +179,7 @@ export default function AccountPage() {
         </Box>
       </Box>
 
-      {/* Bottom Navigation */}
+      {/* Bottom Nav */}
       <Box
         sx={{
           height: 90,
@@ -212,11 +191,20 @@ export default function AccountPage() {
           color: "#005844",
         }}
       >
-        <NavItem icon={<HomeOutlinedIcon />} label="Home" />
-        <NavItem icon={<BarChartOutlinedIcon />} label="Expense" />
+        <NavItem
+          icon={<HomeOutlinedIcon />}
+          label="Home"
+          onClick={() => navigate("/main")}
+        />
 
-        {/* Middle Add Button */}
+        <NavItem
+          icon={<BarChartOutlinedIcon />}
+          label="Expense"
+          onClick={() => navigate("/expense")}
+        />
+
         <Box
+          onClick={() => navigate("/add")}
           sx={{
             position: "absolute",
             top: -28,
@@ -230,6 +218,7 @@ export default function AccountPage() {
             alignItems: "center",
             justifyContent: "center",
             border: "5px solid #A8BF7E",
+            cursor: "pointer",
           }}
         >
           <AddIcon sx={{ fontSize: 42, color: "#005844" }} />
@@ -237,12 +226,27 @@ export default function AccountPage() {
 
         <Box sx={{ width: 58 }} />
 
-        <NavItem icon={<EmojiEventsOutlinedIcon />} label="Goal" />
-        <NavItem icon={<PersonIcon />} label="Profile" />
+        <NavItem
+          icon={<EmojiEventsOutlinedIcon />}
+          label="Goal"
+          onClick={() => navigate("/goal")}
+        />
+
+        <NavItem
+          icon={<PersonIcon />}
+          label="Profile"
+          onClick={() => navigate("/account")}
+        />
       </Box>
     </Box>
   );
 }
+
+const labelStyle = {
+  fontSize: 17,
+  mb: "8px",
+  color: "#111",
+};
 
 const inputStyle = {
   "& .MuiOutlinedInput-root": {
@@ -250,41 +254,45 @@ const inputStyle = {
     borderRadius: "30px",
     bgcolor: "#fff",
     fontSize: 16,
-
     "& fieldset": {
       borderColor: "#8FCFC0",
     },
-
     "&:hover fieldset": {
       borderColor: "#009D7A",
     },
-
     "&.Mui-focused fieldset": {
       borderColor: "#005844",
     },
   },
 };
 
-function NavItem({ icon, label }) {
+const smallInputStyle = {
+  ...inputStyle,
+};
+
+function NavItem({ icon, label, onClick }) {
   return (
     <Box
+      onClick={onClick}
       sx={{
         width: 58,
         textAlign: "center",
-        fontSize: 13,
         color: "#005844",
+        cursor: "pointer",
       }}
     >
       <Box
         sx={{
+          height: 30,
           "& svg": {
-            fontSize: 27,
+            fontSize: 28,
           },
         }}
       >
         {icon}
       </Box>
-      <Typography sx={{ fontSize: 13, mt: "-4px" }}>{label}</Typography>
+
+      <Typography sx={{ fontSize: 13 }}>{label}</Typography>
     </Box>
   );
 }
