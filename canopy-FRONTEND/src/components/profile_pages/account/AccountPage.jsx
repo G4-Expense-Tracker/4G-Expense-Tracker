@@ -109,7 +109,6 @@ export default function AccountPage() {
                 justifyContent: "center",
               }}
             >
-              <Typography sx={{ fontSize: 48 }}>🌷</Typography>
             </Box>
 
             <IconButton
@@ -127,7 +126,7 @@ export default function AccountPage() {
         </Box>
 
         {/* First + Last Name */}
-        <Box sx={{ display: "flex", gap: "8px", mb: "20px" }}>
+        <Box sx={{ display: "flex", gap: "18px", mb: "20px" }}>
           <Box sx={{ flex: 1 }}>
             <Typography sx={labelStyle}>First Name</Typography>
             <TextField fullWidth defaultValue="Hye" sx={smallInputStyle} />
