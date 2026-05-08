@@ -4,11 +4,13 @@ import {
   TextField,
   Button,
   IconButton,
+  InputAdornment,
 } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -23,9 +25,7 @@ export default function LoginPage() {
     try {
       const res = await fetch(import.meta.env.VITE_APP_LOGIN_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ email, password }),
       });
@@ -49,22 +49,22 @@ export default function LoginPage() {
       sx={{
         width: "100%",
         minHeight: "100vh",
-        bgcolor: "#FAFCF4",
+        bgcolor: "#fff",
         display: "flex",
         justifyContent: "center",
       }}
     >
       <Box
         sx={{
-          width: "100%",
-          maxWidth: 390,
-          minHeight: "100vh",
-          px: 3,
-          pt: 2.5,
-          pb: 4,
+          width: 390,
+          minHeight: 844,
+          bgcolor: "#FAFCF4",
+          px: "22px",
+          pt: "24px",
+          pb: "36px",
           display: "flex",
           flexDirection: "column",
-          color: "#004333",
+          color: "#005844",
         }}
       >
         {/* Status Bar */}
@@ -73,39 +73,43 @@ export default function LoginPage() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            mb: 2,
+            mb: "48px",
+            px: "10px",
           }}
         >
-          <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
+          <Typography sx={{ fontWeight: 700, fontSize: 14, color: "#333" }}>
+            9:41
+          </Typography>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.3 }}>
-            <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
-            <WifiIcon sx={{ fontSize: 14 }} />
-            <BatteryFullIcon sx={{ fontSize: 16 }} />
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.4 }}>
+            <SignalCellular4BarIcon sx={{ fontSize: 18, color: "#333" }} />
+            <WifiIcon sx={{ fontSize: 18, color: "#333" }} />
+            <BatteryFullIcon sx={{ fontSize: 22, color: "#333" }} />
           </Box>
         </Box>
 
         {/* Back Button */}
-        <Box sx={{ mb: 3 }}>
+        <Box sx={{ mb: "38px" }}>
           <IconButton onClick={() => navigate("/main")} sx={{ p: 0 }}>
-            <ArrowBackIosNewIcon sx={{ fontSize: 22, color: "#6F7472" }} />
+            <ArrowBackIosNewIcon sx={{ fontSize: 31, color: "#344D59" }} />
           </IconButton>
         </Box>
 
-        {/* Main Content */}
+        {/* Content */}
         <Box sx={{ flexGrow: 1 }}>
           <Typography
             sx={{
-              fontSize: 34,
+              fontSize: 36,
               fontWeight: 800,
-              mb: 3,
-              color: "#004333",
+              mb: "30px",
+              color: "#005844",
+              lineHeight: 1.1,
             }}
           >
             Welcome back!
           </Typography>
 
-          <Typography sx={{ mb: 1, fontSize: 15, color: "#004333" }}>
+          <Typography sx={{ mb: "8px", fontSize: 17, color: "#111" }}>
             User Name or Email Address *
           </Typography>
 
@@ -117,26 +121,19 @@ export default function LoginPage() {
               setError("");
             }}
             sx={{
-              mb: 2.5,
+              mb: "25px",
               "& .MuiOutlinedInput-root": {
+                height: 58,
                 borderRadius: "30px",
-                bgcolor: "#EEEEEE",
-                height: 52,
-                color: "#004333",
-                "& fieldset": {
-                  borderColor: "#8FC5B6",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#005844",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#005844",
-                },
+                bgcolor: "transparent",
+                "& fieldset": { borderColor: "#8FCFC0" },
+                "&:hover fieldset": { borderColor: "#005844" },
+                "&.Mui-focused fieldset": { borderColor: "#005844" },
               },
             }}
           />
 
-          <Typography sx={{ mb: 1, fontSize: 15, color: "#004333" }}>
+          <Typography sx={{ mb: "8px", fontSize: 17, color: "#111" }}>
             Password *
           </Typography>
 
@@ -148,22 +145,22 @@ export default function LoginPage() {
               setPassword(e.target.value);
               setError("");
             }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <VisibilityOffOutlinedIcon sx={{ color: "#566274" }} />
+                </InputAdornment>
+              ),
+            }}
             sx={{
-              mb: 3,
+              mb: "36px",
               "& .MuiOutlinedInput-root": {
+                height: 58,
                 borderRadius: "30px",
-                bgcolor: "#EEEEEE",
-                height: 52,
-                color: "#004333",
-                "& fieldset": {
-                  borderColor: "#8FC5B6",
-                },
-                "&:hover fieldset": {
-                  borderColor: "#005844",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "#005844",
-                },
+                bgcolor: "transparent",
+                "& fieldset": { borderColor: "#009D7A" },
+                "&:hover fieldset": { borderColor: "#005844" },
+                "&.Mui-focused fieldset": { borderColor: "#005844" },
               },
             }}
           />
@@ -179,22 +176,21 @@ export default function LoginPage() {
             onClick={handleLogin}
             disabled={!email || !password}
             sx={{
-              height: 60,
+              height: 64,
               borderRadius: "30px",
-              fontSize: 16,
+              fontSize: 20,
               fontWeight: 700,
               textTransform: "none",
               bgcolor: "#005844",
-              color: "#002F26",
-              mb: 2,
+              color: "#fff",
+              mb: "22px",
               boxShadow: "none",
               "&:hover": {
                 bgcolor: "#004333",
-                color: "#fff",
               },
               "&.Mui-disabled": {
                 bgcolor: "#005844",
-                color: "#00382E",
+                color: "#fff",
                 opacity: 1,
               },
             }}
@@ -204,9 +200,10 @@ export default function LoginPage() {
 
           <Typography
             sx={{
-              fontSize: 14,
+              fontSize: 17,
               fontWeight: 700,
-              color: "#004333",
+              color: "#005844",
+              ml: "8px",
             }}
           >
             Forgot your password?
@@ -214,15 +211,15 @@ export default function LoginPage() {
         </Box>
 
         {/* Bottom Sign Up */}
-        <Box sx={{ textAlign: "center" }}>
-          <Typography sx={{ fontSize: 14, color: "#004333" }}>
+        <Box sx={{ textAlign: "center", mb: "72px" }}>
+          <Typography sx={{ fontSize: 17, color: "#111" }}>
             Don’t have an account?{" "}
             <Box
               component="span"
               onClick={() => navigate("/signup")}
               sx={{
                 color: "#0F6FFF",
-                fontWeight: 700,
+                fontWeight: 400,
                 cursor: "pointer",
               }}
             >
