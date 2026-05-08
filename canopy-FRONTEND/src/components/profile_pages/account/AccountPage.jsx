@@ -5,6 +5,7 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
+
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
@@ -12,12 +13,14 @@ import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-// Add the Emoji from the Flower side for the Placer holder of the Profile Image.
 import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
+
 import { useNavigate } from "react-router-dom";
-import profilepic from "../account/profilepic.png";
+
+/* Import profile image */
+import profilePic from "../../assets/Profile Pic.png";
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -34,7 +37,7 @@ export default function AccountPage() {
         color: "#005844",
       }}
     >
-      {/* Header */}
+      {/* ================= HEADER ================= */}
       <Box
         sx={{
           bgcolor: "#A8BF7E",
@@ -54,18 +57,47 @@ export default function AccountPage() {
             px: "10px",
           }}
         >
-          <Typography sx={{ fontWeight: 700, fontSize: 14, color: "#333" }}>
+          <Typography
+            sx={{
+              fontWeight: 700,
+              fontSize: 14,
+              color: "#333",
+            }}
+          >
             9:41
           </Typography>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 0.3 }}>
-            <SignalCellular4BarIcon sx={{ fontSize: 17, color: "#333" }} />
-            <WifiIcon sx={{ fontSize: 17, color: "#333" }} />
-            <BatteryFullIcon sx={{ fontSize: 21, color: "#333" }} />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.3,
+            }}
+          >
+            <SignalCellular4BarIcon
+              sx={{
+                fontSize: 17,
+                color: "#333",
+              }}
+            />
+
+            <WifiIcon
+              sx={{
+                fontSize: 17,
+                color: "#333",
+              }}
+            />
+
+            <BatteryFullIcon
+              sx={{
+                fontSize: 21,
+                color: "#333",
+              }}
+            />
           </Box>
         </Box>
 
-        {/* Back + Title */}
+        {/* Back Button + Title */}
         <Box
           sx={{
             position: "relative",
@@ -74,8 +106,16 @@ export default function AccountPage() {
             alignItems: "center",
           }}
         >
-          <IconButton onClick={() => navigate("/main")} sx={{ p: 0 }}>
-            <ArrowBackIosNewIcon sx={{ fontSize: 31, color: "#344D59" }} />
+          <IconButton
+            onClick={() => navigate("/dashboard")}
+            sx={{ p: 0 }}
+          >
+            <ArrowBackIosNewIcon
+              sx={{
+                fontSize: 31,
+                color: "#344D59",
+              }}
+            />
           </IconButton>
 
           <Typography
@@ -94,25 +134,50 @@ export default function AccountPage() {
         </Box>
       </Box>
 
-      {/* Main Content */}
-      <Box sx={{ flexGrow: 1, px: "22px", pt: "38px" }}>
-        {/* Profile Icon */}
-        <Box sx={{ display: "flex", justifyContent: "center", mb: "36px" }}>
+      {/* ================= MAIN CONTENT ================= */}
+      <Box
+        sx={{
+          flexGrow: 1,
+          px: "22px",
+          pt: "38px",
+        }}
+      >
+        {/* Profile Image */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mb: "36px",
+          }}
+        >
           <Box sx={{ position: "relative" }}>
+            {/* Profile Picture */}
             <Box
               sx={{
                 width: 96,
                 height: 96,
                 borderRadius: "50%",
-                bgcolor: "#005844",
+                overflow: "hidden",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
+              <Box
+                component="img"
+                src={profilePic}
+                alt="Profile"
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
             </Box>
+
+            {/* Edit Icon */}
             <IconButton
-              onClick={() => console.log("edit profile image")}
+              onClick={() => console.log("Edit profile image")}
               sx={{
                 position: "absolute",
                 top: -12,
@@ -120,47 +185,106 @@ export default function AccountPage() {
                 p: 0,
               }}
             >
-              <EditOutlinedIcon sx={{ fontSize: 23, color: "#005844" }} />
+              <EditOutlinedIcon
+                sx={{
+                  fontSize: 23,
+                  color: "#005844",
+                }}
+              />
             </IconButton>
           </Box>
         </Box>
 
         {/* First + Last Name */}
-        <Box sx={{ display: "flex", gap: "18px", mb: "20px" }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: "18px",
+            mb: "20px",
+          }}
+        >
           <Box sx={{ flex: 1 }}>
-            <Typography sx={labelStyle}>First Name</Typography>
-            <TextField fullWidth defaultValue="Hye" sx={smallInputStyle} />
+            <Typography sx={labelStyle}>
+              First Name
+            </Typography>
+
+            <TextField
+              fullWidth
+              defaultValue="Hye"
+              sx={smallInputStyle}
+            />
           </Box>
 
           <Box sx={{ flex: 1 }}>
-            <Typography sx={labelStyle}>Last Name</Typography>
-            <TextField fullWidth defaultValue="Shim" sx={smallInputStyle} />
+            <Typography sx={labelStyle}>
+              Last Name
+            </Typography>
+
+            <TextField
+              fullWidth
+              defaultValue="Shim"
+              sx={smallInputStyle}
+            />
           </Box>
         </Box>
 
-        <Box sx={{display: "flex", gap: "18px", mb: "20px" }} >
-            <Box sx={{ flex: 1}} >
-              <Typography sx={labelStyle}>Email</Typography>
-              <TextField
+        {/* Email */}
+        <Box
+          sx={{
+            display: "flex",
+            gap: "18px",
+            mb: "20px",
+          }}
+        >
+          <Box sx={{ flex: 1 }}>
+            <Typography sx={labelStyle}>
+              Email
+            </Typography>
+
+            <TextField
               fullWidth
               defaultValue="Shim_Hye_Soo@gmail.com"
-              sx={{ ...inputStyle, mb: "14px" }}
-              />
-            </Box>
+              sx={inputStyle}
+            />
+          </Box>
         </Box>
 
-        <Typography sx={labelStyle}>Phone</Typography>
-        <TextField fullWidth sx={{ ...inputStyle, mb: "16px" }} />
+        {/* Phone */}
+        <Typography sx={labelStyle}>
+          Phone
+        </Typography>
 
-        <Typography sx={labelStyle}>Password</Typography>
+        <TextField
+          fullWidth
+          sx={{
+            ...inputStyle,
+            mb: "16px",
+          }}
+        />
+
+        {/* Password */}
+        <Typography sx={labelStyle}>
+          Password
+        </Typography>
+
         <TextField
           fullWidth
           type="password"
           defaultValue="password123"
-          sx={{ ...inputStyle, mb: "36px" }}
+          sx={{
+            ...inputStyle,
+            mb: "36px",
+          }}
         />
 
-        <Box sx={{ display: "flex", justifyContent: "center" , mb: "36px", gap: "18px"}}>
+        {/* Save Button */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mb: "36px",
+          }}
+        >
           <Button
             onClick={() => navigate("/profile")}
             sx={{
@@ -173,6 +297,7 @@ export default function AccountPage() {
               fontWeight: 600,
               textTransform: "none",
               boxShadow: "none",
+
               "&:hover": {
                 bgcolor: "#004333",
               },
@@ -183,7 +308,7 @@ export default function AccountPage() {
         </Box>
       </Box>
 
-      {/* Bottom Nav */}
+      {/* ================= BOTTOM NAVIGATION ================= */}
       <Box
         sx={{
           height: 90,
@@ -195,18 +320,21 @@ export default function AccountPage() {
           color: "#005844",
         }}
       >
+        {/* Home */}
         <NavItem
           icon={<HomeOutlinedIcon />}
           label="Home"
           onClick={() => navigate("/dashboard")}
         />
 
+        {/* Expense */}
         <NavItem
           icon={<BarChartOutlinedIcon />}
           label="Expense"
           onClick={() => navigate("/expense")}
         />
 
+        {/* Add Button */}
         <Box
           onClick={() => navigate("/add")}
           sx={{
@@ -225,17 +353,25 @@ export default function AccountPage() {
             cursor: "pointer",
           }}
         >
-          <AddIcon sx={{ fontSize: 42, color: "#005844" }} />
+          <AddIcon
+            sx={{
+              fontSize: 42,
+              color: "#005844",
+            }}
+          />
         </Box>
 
+        {/* Empty Space */}
         <Box sx={{ width: 58 }} />
 
+        {/* Goal */}
         <NavItem
           icon={<EmojiEventsOutlinedIcon />}
           label="Goal"
           onClick={() => navigate("/goal")}
         />
 
+        {/* Profile */}
         <NavItem
           icon={<PersonIcon />}
           label="Profile"
@@ -246,11 +382,15 @@ export default function AccountPage() {
   );
 }
 
+/* ================= INPUT LABEL STYLE ================= */
+
 const labelStyle = {
   fontSize: 17,
   mb: "8px",
   color: "#111",
 };
+
+/* ================= INPUT STYLE ================= */
 
 const inputStyle = {
   "& .MuiOutlinedInput-root": {
@@ -258,21 +398,27 @@ const inputStyle = {
     borderRadius: "30px",
     bgcolor: "#fff",
     fontSize: 16,
+
     "& fieldset": {
       borderColor: "#8FCFC0",
     },
+
     "&:hover fieldset": {
       borderColor: "#009D7A",
     },
+
     "&.Mui-focused fieldset": {
       borderColor: "#005844",
     },
   },
 };
 
+/* Small Input Style */
 const smallInputStyle = {
   ...inputStyle,
 };
+
+/* ================= NAV ITEM COMPONENT ================= */
 
 function NavItem({ icon, label, onClick }) {
   return (
@@ -288,6 +434,7 @@ function NavItem({ icon, label, onClick }) {
       <Box
         sx={{
           height: 30,
+
           "& svg": {
             fontSize: 28,
           },
@@ -296,7 +443,13 @@ function NavItem({ icon, label, onClick }) {
         {icon}
       </Box>
 
-      <Typography sx={{ fontSize: 13 }}>{label}</Typography>
+      <Typography
+        sx={{
+          fontSize: 13,
+        }}
+      >
+        {label}
+      </Typography>
     </Box>
   );
 }
