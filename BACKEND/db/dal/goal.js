@@ -176,24 +176,121 @@ export async function deleteGoal(goal_id) {
   }
 }
 
-// I'll just do this next sprint
+export async function getUserProgress(user_id, goal_id, current_level) {
+  /*
 
-// export async function getUserProgress(user_id, goal_id) {
-//   const query1 = `
-//     SELECT * from goal
-//     WHERE user_id = :user_id AND goal_id = :goal_id
-//     `;
+Returns: {
+action_name: (times user did action)
+}
 
-//     const query2 = `
-//     SELECT
-//     from user_action_log
-//     `
+eg {
+  "Log in to Canopy": 3,
+}
 
-//   try {
-//     await database.query(query1, params);
+*/
 
-//   } catch (err) {
-//     console.log(err);
-//     return false;
-//   }
-// }
+  const query = `
+    SELECT a.name,
+    COUNT(u.user_action_log_id) AS progress
+    FROM action_type a
+      INNER JOIN user_action_log u
+      on a.action_type_id = u.action_type_id
+    WHERE user_id = :user_id AND goal_id = :goal_id AND goal_level = :current_level
+    GROUP BY u.action_type_id, a.name;
+    `;
+
+  const params = {
+    user_id,
+    goal_id,
+    current_level,
+  };
+
+  try {
+    const results = await database.query(query, params);
+    const rows = results[0];
+
+    const progressObject = {};
+
+    for (const row of rows) {
+      progressObject[row.name] = Number(row.progress);
+    }
+
+    return progressObject;
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+}
+
+export const ACTION_TYPES = {
+  LOGIN: 1,
+  LOG_EXPENSE: 2,
+  ADD_TO_SAVINGS: 3,
+  SET_DAILY_BUDGET: 4,
+  SPEND_WITHIN_BUDGET: 5,
+};
+
+export async function logUserAction(postData) {
+  const query = `
+    INSERT INTO user_action_log (user_id, action_type_id, goal_id, timestamp, goal_level)
+    VALUES (:user_id, :action_type_id, :goal_id, NOW(), :goal_level);
+    `;
+
+  //   postData MUST HAVE:
+  //     user_id
+  //     action_type_id (eg. ACTION_TYPES.LOGIN)
+  //     goal_id
+  //     goal_level
+
+  try {
+    const results = await database.query(query, postData);
+
+    const result = results[0];
+    const user_action_log_id = result.insertId;
+
+    return { success: true, user_action_log_id };
+  } catch (err) {
+    console.log(err);
+    return { success: false };
+  }
+}
+
+export async function getQuotas(goal_level) {
+  /*
+
+Returns: {
+action_name: (quota)
+}
+
+eg {
+  "Log in to Canopy": 3,
+}
+
+*/
+
+  const query = `
+    SELECT 
+      a.name,
+      q.quota
+    FROM goal_level_quota q
+    INNER JOIN action_type a
+      ON q.action_type_id = a.action_type_id
+    WHERE q.goal_level = :goal_level;
+  `;
+
+  try {
+    const results = await database.query(query, { goal_level });
+    const rows = results[0];
+
+    const quotaObject = {};
+
+    for (const row of rows) {
+      quotaObject[row.name] = Number(row.quota);
+    }
+
+    return quotaObject;
+  } catch (err) {
+    console.log(err);
+    return {};
+  }
+}
