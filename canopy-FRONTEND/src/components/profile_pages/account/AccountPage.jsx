@@ -138,12 +138,16 @@ export default function AccountPage() {
           </Box>
         </Box>
 
-        <Typography sx={labelStyle}>Email</Typography>
-        <TextField
-          fullWidth
-          defaultValue="Shim_Hye_Soo@gmail.com"
-          sx={{ ...inputStyle, mb: "14px" }}
-        />
+        <Box sx={{display: "flex", gap: "18px", mb: "20px" }} >
+            <Box sx={{ flex: 1}} >
+              <Typography sx={labelStyle}>Email</Typography>
+              <TextField
+              fullWidth
+              defaultValue="Shim_Hye_Soo@gmail.com"
+              sx={{ ...inputStyle, mb: "14px" }}
+              />
+            </Box>
+        </Box>
 
         <Typography sx={labelStyle}>Phone</Typography>
         <TextField fullWidth sx={{ ...inputStyle, mb: "16px" }} />
