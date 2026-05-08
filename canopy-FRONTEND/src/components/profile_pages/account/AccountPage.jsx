@@ -146,7 +146,7 @@ export default function AccountPage() {
         />
 
         <Typography sx={labelStyle}>Phone</Typography>
-        <TextField fullWidth sx={{ ...inputStyle, mb: "14px" }} />
+        <TextField fullWidth sx={{ ...inputStyle, mb: "16px" }} />
 
         <Typography sx={labelStyle}>Password</Typography>
         <TextField
