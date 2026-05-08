@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { Box, Typography, TextField, IconButton, Button } from "@mui/material";
-
 import {
   SignalCellular4Bar,
   Wifi,
   BatteryFull,
   ArrowBackIosNew,
-  ChevronLeft,
-  ChevronRight,
 } from "@mui/icons-material";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -27,28 +24,52 @@ import DirectionsBikeOutlinedIcon from "@mui/icons-material/DirectionsBikeOutlin
 
 import { useNavigate } from "react-router-dom";
 
+const iconList = [
+  { name: "heart", icon: FavoriteBorderIcon },
+  { name: "palette", icon: PaletteOutlinedIcon },
+  { name: "gift", icon: CardGiftcardIcon },
+  { name: "drink", icon: SportsBarIcon },
+  { name: "cake", icon: CakeOutlinedIcon },
+  { name: "computer", icon: ComputerIcon },
+  { name: "savings", icon: SavingsOutlinedIcon },
+  { name: "coffee", icon: LocalCafeOutlinedIcon },
+  { name: "basketball", icon: SportsBasketballOutlinedIcon },
+  { name: "game", icon: SportsEsportsOutlinedIcon },
+  { name: "health", icon: LocalHospitalOutlinedIcon },
+  { name: "soap", icon: SoapOutlinedIcon },
+  { name: "food", icon: FastfoodOutlinedIcon },
+  { name: "bike", icon: DirectionsBikeOutlinedIcon },
+];
+
 export default function AddCategoryPage() {
   const navigate = useNavigate();
-  const [selectedIcon, setSelectedIcon] = useState(FavoriteBorderIcon);
 
-  const icons = [
-    FavoriteBorderIcon,
-    PaletteOutlinedIcon,
-    CardGiftcardIcon,
-    SportsBarIcon,
-    CakeOutlinedIcon,
-    ComputerIcon,
-    SavingsOutlinedIcon,
-    LocalCafeOutlinedIcon,
-    SportsBasketballOutlinedIcon,
-    SportsEsportsOutlinedIcon,
-    LocalHospitalOutlinedIcon,
-    SoapOutlinedIcon,
-    FastfoodOutlinedIcon,
-    DirectionsBikeOutlinedIcon,
-  ];
+  const [categoryName, setCategoryName] = useState("");
+  const [selectedIconName, setSelectedIconName] = useState("heart");
 
-  const SelectedIcon = selectedIcon;
+  const SelectedIcon =
+    iconList.find((item) => item.name === selectedIconName)?.icon ||
+    FavoriteBorderIcon;
+
+  function handleSave() {
+    if (!categoryName.trim()) return;
+
+    const newCategory = {
+      id: Date.now(),
+      title: categoryName.trim(),
+      iconName: selectedIconName,
+    };
+
+    const oldCategories =
+      JSON.parse(localStorage.getItem("customCategories")) || [];
+
+    localStorage.setItem(
+      "customCategories",
+      JSON.stringify([...oldCategories, newCategory])
+    );
+
+    navigate("/category");
+  }
 
   return (
     <Box
@@ -91,20 +112,19 @@ export default function AddCategoryPage() {
           minHeight: "calc(100svh - 96px)",
           borderTopLeftRadius: 38,
           borderTopRightRadius: 38,
-          px: 3,
-          pt: 7,
-          pb: 5,
+          px: { xs: 2.5, sm: 3 },
+          pt: 6,
+          pb: 4,
           background: "linear-gradient(180deg, #24936d 0%, #9bc47d 100%)",
-          boxShadow: "0px -8px 24px rgba(0,0,0,0.12)",
         }}
       >
         <Typography
           sx={{
             color: "white",
-            fontSize: 42,
+            fontSize: { xs: 36, sm: 42 },
             fontWeight: 800,
             textAlign: "center",
-            mb: 5,
+            mb: 4,
           }}
         >
           Add Category
@@ -112,10 +132,13 @@ export default function AddCategoryPage() {
 
         <TextField
           fullWidth
+          value={categoryName}
+          onChange={(e) => setCategoryName(e.target.value)}
+          placeholder="Category name"
           sx={{
-            mb: 4,
+            mb: 3,
             "& .MuiOutlinedInput-root": {
-              height: 60,
+              height: 58,
               borderRadius: 10,
               bgcolor: "#f7faf2",
               "& fieldset": { border: "none" },
@@ -129,16 +152,16 @@ export default function AddCategoryPage() {
 
         <Box
           sx={{
-            height: 60,
+            height: 58,
             borderRadius: 10,
             bgcolor: "#f7faf2",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            mb: 4,
+            mb: 3,
           }}
         >
-          <SelectedIcon sx={{ fontSize: 42, color: "#004638" }} />
+          <SelectedIcon sx={{ fontSize: 40, color: "#004638" }} />
         </Box>
 
         <Box
@@ -146,29 +169,29 @@ export default function AddCategoryPage() {
             display: "grid",
             gridTemplateColumns: "repeat(4, 1fr)",
             justifyItems: "center",
-            rowGap: 4,
-            mb: 6,
+            rowGap: 2.5,
+            mb: 4,
           }}
         >
-          {icons.map((Icon, index) => (
+          {iconList.map(({ name, icon: Icon }) => (
             <IconButton
-              key={index}
-              onClick={() => setSelectedIcon(() => Icon)}
+              key={name}
+              onClick={() => setSelectedIconName(name)}
               sx={{
-                color: selectedIcon === Icon ? "#004638" : "white",
+                color: selectedIconName === name ? "#004638" : "white",
               }}
             >
-              <Icon sx={{ fontSize: 38 }} />
+              <Icon sx={{ fontSize: 34 }} />
             </IconButton>
           ))}
         </Box>
 
         <Button
           fullWidth
-          onClick={() => navigate("/category")}
+          onClick={handleSave}
           sx={{
             width: "72%",
-            height: 58,
+            height: 56,
             mx: "auto",
             display: "block",
             borderRadius: 10,
@@ -177,32 +200,14 @@ export default function AddCategoryPage() {
             fontSize: 22,
             fontWeight: 800,
             textTransform: "none",
-            boxShadow: "0px 10px 18px rgba(0,0,0,0.18)",
             "&:hover": { bgcolor: "#00352d" },
           }}
         >
           Save
         </Button>
-
-        <Box
-          sx={{
-            width: 120,
-            height: 56,
-            bgcolor: "#2f2f2f",
-            borderRadius: 5,
-            mx: "auto",
-            mt: 5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-            boxShadow: "0px 10px 20px rgba(0,0,0,0.25)",
-          }}
-        >
-          <ChevronLeft sx={{ color: "white" }} />
-          <Box sx={{ width: 1, height: 30, bgcolor: "#555" }} />
-          <ChevronRight sx={{ color: "white" }} />
-        </Box>
       </Box>
     </Box>
   );
 }
+
+export { iconList };
