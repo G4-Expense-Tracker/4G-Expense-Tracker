@@ -29,7 +29,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/expense" element={<ExpenseDashboard />} />
         <Route path="/category" element={<CategoryPage />} />
-        <Route path="/category/add" element={<AddCategoryPage />} />
+        <Route path="/add-category" element={<AddCategoryPage />} />
         <Route path="/accessibility" element={<Accessibility />} />
 
       </Routes>
