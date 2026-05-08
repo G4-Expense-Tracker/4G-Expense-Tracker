@@ -50,9 +50,7 @@ function GoalForm() {
             <Typography variant='body1' component="p">
                 Name of the Goal
             </Typography>
-            <Typography variant='body1' component="p">
-                Testing
-            </Typography>
+
             <TextField 
                 id="filled-basic" 
                 label="Goal Name" 
