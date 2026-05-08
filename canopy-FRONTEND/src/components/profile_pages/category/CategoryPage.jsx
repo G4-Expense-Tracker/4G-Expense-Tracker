@@ -1,9 +1,5 @@
-import {
-  Box,
-  Typography,
-  TextField,
-  IconButton,
-} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Typography, TextField, IconButton } from "@mui/material";
 
 import {
   SignalCellular4Bar,
@@ -27,19 +23,39 @@ import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 
 import { useNavigate } from "react-router-dom";
+import { iconList } from "./AddCategoryPage";
 
 export default function CategoryPage() {
   const navigate = useNavigate();
+  const [customCategories, setCustomCategories] = useState([]);
 
-  const categories = [
-    { title: "Food", icon: <RestaurantIcon /> },
-    { title: "Drink", icon: <LocalDrinkIcon /> },
-    { title: "Health", icon: <FitnessCenterIcon /> },
-    { title: "Groceries", icon: <ShoppingCartIcon /> },
-    { title: "Travel", icon: <FlightIcon /> },
-    { title: "Shopping", icon: <ShoppingBagIcon /> },
-    { title: "Housing", icon: <ApartmentIcon /> },
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("customCategories")) || [];
+    setCustomCategories(saved);
+  }, []);
+
+  const defaultCategories = [
+    { title: "Food", icon: RestaurantIcon },
+    { title: "Drink", icon: LocalDrinkIcon },
+    { title: "Health", icon: FitnessCenterIcon },
+    { title: "Groceries", icon: ShoppingCartIcon },
+    { title: "Travel", icon: FlightIcon },
+    { title: "Shopping", icon: ShoppingBagIcon },
+    { title: "Housing", icon: ApartmentIcon },
   ];
+
+  const savedCategories = customCategories.map((category) => {
+    const matchedIcon =
+      iconList.find((item) => item.name === category.iconName)?.icon ||
+      RestaurantIcon;
+
+    return {
+      title: category.title,
+      icon: matchedIcon,
+    };
+  });
+
+  const categories = [...defaultCategories, ...savedCategories];
 
   return (
     <Box
@@ -99,28 +115,32 @@ export default function CategoryPage() {
         <Typography sx={{ fontSize: 18, mb: 3 }}>Select categories</Typography>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
-          {categories.map((category, index) => (
-            <Box
-              key={index}
-              sx={{
-                height: 74,
-                borderRadius: 10,
-                bgcolor: "white",
-                border: "1px solid #97c596",
-                px: 3,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Box sx={{ color: "#004638" }}>{category.icon}</Box>
-                <Typography sx={{ fontSize: 18 }}>{category.title}</Typography>
-              </Box>
+          {categories.map((category, index) => {
+            const Icon = category.icon;
 
-              <MoreHoriz sx={{ color: "#7ab07b" }} />
-            </Box>
-          ))}
+            return (
+              <Box
+                key={index}
+                sx={{
+                  height: 74,
+                  borderRadius: 10,
+                  bgcolor: "white",
+                  border: "1px solid #97c596",
+                  px: 3,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  <Icon sx={{ color: "#004638" }} />
+                  <Typography sx={{ fontSize: 18 }}>{category.title}</Typography>
+                </Box>
+
+                <MoreHoriz sx={{ color: "#7ab07b" }} />
+              </Box>
+            );
+          })}
         </Box>
       </Box>
 
