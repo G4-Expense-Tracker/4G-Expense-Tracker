@@ -14,6 +14,7 @@ import CategoryPage from "./components/profile_pages/category/CategoryPage";
 import AddCategoryPage from "./components/profile_pages/category/AddCategoryPage";
 import NewGoal from "./components/goal_pages/NewGoal";
 import Accessibility from "./components/profile_pages/accessibility/Accessibility";
+import AccountPage from "./components/profile_pages/account/AccountPage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/category" element={<CategoryPage />} />
         <Route path="/add-category" element={<AddCategoryPage />} />
         <Route path="/accessibility" element={<Accessibility />} />
+        <Route path="/account" element={<AccountPage />} />
 
       </Routes>
       
