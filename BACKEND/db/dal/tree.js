@@ -1,25 +1,25 @@
 import database from "../databaseConnection.js";
 
-export async function getTreesByUser(user_id) {
-  const query = `
-    SELECT * FROM tree
-    WHERE user_id = :user_id;
-    `;
+// export async function getTreesByUser(user_id) {
+//   const query = `
+//     SELECT * FROM tree
+//     WHERE user_id = :user_id;
+//     `;
 
-  const params = {
-    user_id,
-  };
+//   const params = {
+//     user_id,
+//   };
 
-  try {
-    const results = await database.query(query, params);
-    // console.log(results[0]);
-    return results[0];
-  } catch (err) {
-    console.log("Error selecting from tree table");
-    console.log(err);
-    return null;
-  }
-}
+//   try {
+//     const results = await database.query(query, params);
+//     // console.log(results[0]);
+//     return results[0];
+//   } catch (err) {
+//     console.log("Error selecting from tree table");
+//     console.log(err);
+//     return null;
+//   }
+// }
 
 export async function getTreeByGoal(goal_id) {
   const query = `
