@@ -98,7 +98,7 @@ export default function AccountPage() {
       <Box sx={{ flexGrow: 1, px: "22px", pt: "38px" }}>
         {/* Profile Icon */}
         <Box sx={{ display: "flex", justifyContent: "center", mb: "36px" }}>
-          <Box component= "img" src={profilepic} sx={{ position: "relative" }}>
+          <Box component="img" src={profilepic} sx={{ position: "relative" }}>
             <Box
               sx={{
                 width: 96,
