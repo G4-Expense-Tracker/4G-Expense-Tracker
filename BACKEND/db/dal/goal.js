@@ -177,18 +177,6 @@ export async function deleteGoal(goal_id) {
 }
 
 export async function getUserProgress(user_id, goal_id, current_level) {
-  /*
-
-Returns: {
-action_name: (times user did action)
-}
-
-eg {
-  "Log in to Canopy": 3,
-}
-
-*/
-
   const query = `
     SELECT a.name,
     COUNT(u.user_action_log_id) AS progress
@@ -209,16 +197,10 @@ eg {
     const results = await database.query(query, params);
     const rows = results[0];
 
-    const progressObject = {};
-
-    for (const row of rows) {
-      progressObject[row.name] = Number(row.progress);
-    }
-
-    return progressObject;
+    return rows;
   } catch (err) {
     console.log(err);
-    return {};
+    return [];
   }
 }
 
@@ -256,18 +238,6 @@ export async function logUserAction(postData) {
 }
 
 export async function getQuotas(goal_level) {
-  /*
-
-Returns: {
-action_name: (quota)
-}
-
-eg {
-  "Log in to Canopy": 3,
-}
-
-*/
-
   const query = `
     SELECT 
       a.name,
@@ -282,15 +252,9 @@ eg {
     const results = await database.query(query, { goal_level });
     const rows = results[0];
 
-    const quotaObject = {};
-
-    for (const row of rows) {
-      quotaObject[row.name] = Number(row.quota);
-    }
-
-    return quotaObject;
+    return rows;
   } catch (err) {
     console.log(err);
-    return {};
+    return [];
   }
 }

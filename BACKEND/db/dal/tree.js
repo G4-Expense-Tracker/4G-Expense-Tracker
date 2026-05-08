@@ -46,7 +46,7 @@ export async function getTreesByUser(user_id) {
 export async function addTree(postData) {
   const query = `
     INSERT INTO tree (user_id, tree_type, date_earned)
-    VALUES (:user_id, :tree_type, :date_earned);
+    VALUES (:user_id, :tree_type, CURDATE());
     `;
 
   // const params = {
