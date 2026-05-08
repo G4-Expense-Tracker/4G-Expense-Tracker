@@ -12,6 +12,7 @@ import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
+// Add the Emoji from the Flower side for the Placer holder of the Profile Image.
 import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
@@ -126,7 +127,7 @@ export default function AccountPage() {
         </Box>
 
         {/* First + Last Name */}
-        <Box sx={{ display: "flex", gap: "18px", mb: "14px" }}>
+        <Box sx={{ display: "flex", gap: "18px", mb: "20px" }}>
           <Box sx={{ flex: 1 }}>
             <Typography sx={labelStyle}>First Name</Typography>
             <TextField fullWidth defaultValue="Hye" sx={smallInputStyle} />
