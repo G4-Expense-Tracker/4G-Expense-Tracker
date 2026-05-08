@@ -24,7 +24,6 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-
 import { useNavigate } from "react-router-dom";
 import { iconList } from "./AddCategoryPage";
 
@@ -47,6 +46,24 @@ export default function CategoryPage() {
     { title: "Shopping", icon: ShoppingBagIcon },
     { title: "Housing", icon: ApartmentIcon },
   ];
+
+  function handleDelete(indexToDelete) {
+    const customIndex = indexToDelete - defaultCategories.length;
+
+    if (customIndex < 0) {
+      alert("Default categories cannot be deleted.");
+      setActiveMenu(null);
+      return;
+    }
+
+    const updatedCategories = customCategories.filter(
+      (_, index) => index !== customIndex
+    );
+
+    setCustomCategories(updatedCategories);
+    localStorage.setItem("customCategories", JSON.stringify(updatedCategories));
+    setActiveMenu(null);
+  }
 
   const savedCategories = customCategories.map((category) => {
     const matchedIcon =
@@ -85,16 +102,34 @@ export default function CategoryPage() {
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <IconButton onClick={() => navigate("/expense")} sx={{ color: "#004638" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <IconButton
+            onClick={() => navigate("/expense")}
+            sx={{ color: "#004638" }}
+          >
             <ArrowBackIosNew sx={{ fontSize: 30 }} />
           </IconButton>
 
-          <Typography sx={{ fontSize: 40, fontWeight: 800, color: "#004638" }}>
+          <Typography
+            sx={{
+              fontSize: 40,
+              fontWeight: 800,
+              color: "#004638",
+            }}
+          >
             Category
           </Typography>
 
-          <IconButton onClick={() => navigate("/add-category")} sx={{ color: "#004638" }}>
+          <IconButton
+            onClick={() => navigate("/add-category")}
+            sx={{ color: "#004638" }}
+          >
             <Add sx={{ fontSize: 42 }} />
           </IconButton>
         </Box>
@@ -138,26 +173,28 @@ export default function CategoryPage() {
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                   <Icon sx={{ color: "#004638" }} />
-                  <Typography sx={{ fontSize: 18 }}>{category.title}</Typography>
+                  <Typography sx={{ fontSize: 18 }}>
+                    {category.title}
+                  </Typography>
                 </Box>
 
                 {activeMenu === index ? (
-  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-    <IconButton onClick={() => console.log("edit", category.title)}>
-      <EditIcon sx={{ color: "#004638", fontSize: 26 }} />
-    </IconButton>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <IconButton onClick={() => console.log("edit", category.title)}>
+                      <EditIcon sx={{ color: "#004638", fontSize: 26 }} />
+                    </IconButton>
 
-    <Box sx={{ width: "1px", height: 32, bgcolor: "#aaa" }} />
+                    <Box sx={{ width: "1px", height: 32, bgcolor: "#aaa" }} />
 
-    <IconButton onClick={() => handleDelete(index)}>
-      <DeleteIcon sx={{ color: "#004638", fontSize: 28 }} />
-    </IconButton>
-  </Box>
-) : (
-  <IconButton onClick={() => setActiveMenu(index)}>
-    <MoreHoriz sx={{ color: "#7ab07b", fontSize: 30 }} />
-  </IconButton>
-)}
+                    <IconButton onClick={() => handleDelete(index)}>
+                      <DeleteIcon sx={{ color: "#004638", fontSize: 28 }} />
+                    </IconButton>
+                  </Box>
+                ) : (
+                  <IconButton onClick={() => setActiveMenu(index)}>
+                    <MoreHoriz sx={{ color: "#7ab07b", fontSize: 30 }} />
+                  </IconButton>
+                )}
               </Box>
             );
           })}
@@ -189,8 +226,17 @@ function Footer({ navigate }) {
         zIndex: 20,
       }}
     >
-      <NavItem icon={<Home />} label="Home" onClick={() => navigate("/dashboard")} />
-      <NavItem icon={<BarChart />} label="Expense" onClick={() => navigate("/expense")} />
+      <NavItem
+        icon={<Home />}
+        label="Home"
+        onClick={() => navigate("/dashboard")}
+      />
+
+      <NavItem
+        icon={<BarChart />}
+        label="Expense"
+        onClick={() => navigate("/expense")}
+      />
 
       <Box
         onClick={() => navigate("/expense")}
@@ -218,23 +264,16 @@ function Footer({ navigate }) {
 
 function NavItem({ icon, label, onClick }) {
   return (
-    <Box onClick={onClick} sx={{ textAlign: "center", color: "#004638", cursor: "pointer" }}>
+    <Box
+      onClick={onClick}
+      sx={{
+        textAlign: "center",
+        color: "#004638",
+        cursor: "pointer",
+      }}
+    >
       {icon}
       <Typography sx={{ fontSize: 13 }}>{label}</Typography>
     </Box>
   );
-  function handleDelete(indexToDelete) {
-  const updatedCategories = customCategories.filter(
-    (_, index) => index !== indexToDelete - defaultCategories.length
-  );
-
-  setCustomCategories(updatedCategories);
-
-  localStorage.setItem(
-    "customCategories",
-    JSON.stringify(updatedCategories)
-  );
-
-  setActiveMenu(null);
-}
 }
