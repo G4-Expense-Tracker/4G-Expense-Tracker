@@ -22,7 +22,7 @@ import FlightIcon from "@mui/icons-material/Flight";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 
 import { useNavigate } from "react-router-dom";
