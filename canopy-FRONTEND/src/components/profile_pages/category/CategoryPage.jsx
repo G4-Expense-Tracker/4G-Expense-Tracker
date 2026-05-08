@@ -1,220 +1,292 @@
-import {
-  Box,
-  Typography,
-  TextField,
-  IconButton,
-  InputAdornment,
-} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Typography, TextField, IconButton } from "@mui/material";
 
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import AddIcon from "@mui/icons-material/Add";
-import SearchIcon from "@mui/icons-material/Search";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import {
+  SignalCellular4Bar,
+  Wifi,
+  BatteryFull,
+  ArrowBackIosNew,
+  Add,
+  MoreHoriz,
+  Home,
+  BarChart,
+  EmojiEvents,
+  Person,
+} from "@mui/icons-material";
 
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import LocalDrinkIcon from "@mui/icons-material/LocalDrink";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import FlightOutlinedIcon from "@mui/icons-material/FlightOutlined";
-import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
-import ApartmentOutlinedIcon from "@mui/icons-material/ApartmentOutlined";
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-
-import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
-import WifiIcon from "@mui/icons-material/Wifi";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
-
-// Imported the FooterNav Component from the dashboard to reuse the same footer navigation across different pages.
-import FooterNav from "../../pages/dashboard/FooterNav";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import FlightIcon from "@mui/icons-material/Flight";
+import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useNavigate } from "react-router-dom";
-import Header from "../Header";
+import { iconList } from "./AddCategoryPage";
 
 export default function CategoryPage() {
   const navigate = useNavigate();
 
-  const categories = [
-    {
-      name: "Food",
-      icon: <RestaurantIcon />,
-    },
-    {
-      name: "Drink",
-      icon: <LocalDrinkIcon />,
-    },
-    {
-      name: "Health",
-      icon: <FitnessCenterIcon />,
-    },
-    {
-      name: "Groceries",
-      icon: <ShoppingCartOutlinedIcon />,
-    },
-    {
-      name: "Travel",
-      icon: <FlightOutlinedIcon />,
-    },
-    {
-      name: "Shopping",
-      icon: <ShoppingBagOutlinedIcon />,
-    },
-    {
-      name: "Housing",
-      icon: <ApartmentOutlinedIcon />,
-    },
+  // This tracks which category row is showing edit/delete buttons
+  const [activeMenu, setActiveMenu] = useState(null);
+
+  // This stores the categories created by the user
+  const [customCategories, setCustomCategories] = useState([]);
+
+  // Load saved custom categories from localStorage when the page opens
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("customCategories")) || [];
+    setCustomCategories(saved);
+  }, []);
+
+  // These are fixed default categories
+  const defaultCategories = [
+    { title: "Food", icon: RestaurantIcon },
+    { title: "Drink", icon: LocalDrinkIcon },
+    { title: "Health", icon: FitnessCenterIcon },
+    { title: "Groceries", icon: ShoppingCartIcon },
+    { title: "Travel", icon: FlightIcon },
+    { title: "Shopping", icon: ShoppingBagIcon },
+    { title: "Housing", icon: ApartmentIcon },
   ];
+
+  // Edit only custom categories
+  function handleEdit(indexToEdit) {
+    const customIndex = indexToEdit - defaultCategories.length;
+
+    if (customIndex < 0) {
+      alert("Default categories cannot be edited.");
+      setActiveMenu(null);
+      return;
+    }
+
+    navigate(`/add-category?editIndex=${customIndex}`);
+  }
+
+  // Delete only custom categories
+  function handleDelete(indexToDelete) {
+    const customIndex = indexToDelete - defaultCategories.length;
+
+    if (customIndex < 0) {
+      alert("Default categories cannot be deleted.");
+      setActiveMenu(null);
+      return;
+    }
+
+    const updatedCategories = customCategories.filter(
+      (_, index) => index !== customIndex
+    );
+
+    setCustomCategories(updatedCategories);
+    localStorage.setItem("customCategories", JSON.stringify(updatedCategories));
+    setActiveMenu(null);
+  }
+
+  // Convert saved icon names back into actual MUI icons
+  const savedCategories = customCategories.map((category) => {
+    const matchedIcon =
+      iconList.find((item) => item.name === category.iconName)?.icon ||
+      RestaurantIcon;
+
+    return {
+      title: category.title,
+      icon: matchedIcon,
+    };
+  });
+
+  // Combine default categories with user-created categories
+  const categories = [...defaultCategories, ...savedCategories];
 
   return (
     <Box
       sx={{
         width: "100%",
-        maxWidth: "390px",
+        maxWidth: 390,
         minHeight: "100svh",
         mx: "auto",
         bgcolor: "#f8fbf2",
         position: "relative",
-        overflow: "hidden",
-        pb: "120px",
+        overflowX: "hidden",
+        pb: 13,
       }}
     >
-      {/* HEADER */}
-      <Header title="Category"></Header>
-      
+      {/* Header */}
+      <Box sx={{ bgcolor: "#a9c57b", px: 3, pt: 2, pb: 5 }}>
+        {/* Status bar */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 5 }}>
+          <Typography sx={{ fontWeight: 700 }}>9:41</Typography>
 
-      {/* CONTENT */}
-      <Box
-        sx={{
-          px: "20px",
-          pt: "18px",
-        }}
-      >
-        {/* SEARCH LABEL */}
-        <Typography
-          sx={{
-            mb: "10px",
-            fontSize: "16px",
-            color: "#1d1d1d",
-          }}
-        >
-          Search
-        </Typography>
+          <Box sx={{ display: "flex", gap: 0.5 }}>
+            <SignalCellular4Bar sx={{ fontSize: 16 }} />
+            <Wifi sx={{ fontSize: 16 }} />
+            <BatteryFull sx={{ fontSize: 18 }} />
+          </Box>
+        </Box>
 
-        {/* SEARCH BAR */}
-        <TextField
-          fullWidth
-          placeholder=""
-          sx={{
-            mb: "30px",
-
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "30px",
-              bgcolor: "#fff",
-              height: "52px",
-
-              "& fieldset": {
-                borderColor: "#9bc59d",
-              },
-
-              "&:hover fieldset": {
-                borderColor: "#9bc59d",
-              },
-
-              "&.Mui-focused fieldset": {
-                borderColor: "#9bc59d",
-              },
-            },
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <SearchIcon
-                  sx={{
-                    color: "#324054",
-                    fontSize: 34,
-                  }}
-                />
-              </InputAdornment>
-            ),
-          }}
-        />
-
-        {/* TITLE */}
-        <Typography
-          sx={{
-            mb: "24px",
-            fontSize: "18px",
-            color: "#1d1d1d",
-          }}
-        >
-          Select categories
-        </Typography>
-
-        {/* CATEGORY LIST */}
+        {/* Header row */}
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            gap: "16px",
+            alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
-          {categories.map((item, index) => (
-            <Box
-              key={index}
-              sx={{
-                height: "52px",
-                border: "1.5px solid #9bc59d",
-                borderRadius: "30px",
-                bgcolor: "#fff",
+          <IconButton
+            onClick={() => navigate("/expense")}
+            sx={{ color: "#004638" }}
+          >
+            <ArrowBackIosNew sx={{ fontSize: 30 }} />
+          </IconButton>
 
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
+          <Typography
+            sx={{
+              fontSize: 40,
+              fontWeight: 800,
+              color: "#004638",
+            }}
+          >
+            Category
+          </Typography>
 
-                px: "16px",
-              }}
-            >
-              {/* LEFT SIDE */}
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "14px",
-                }}
-              >
-                <Box
-                  sx={{
-                    color: "#004638",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  {item.icon}
-                </Box>
-
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                    color: "#1d1d1d",
-                  }}
-                >
-                  {item.name}
-                </Typography>
-              </Box>
-
-              {/* DOTS */}
-              <MoreHorizIcon
-                sx={{
-                  color: "#6fa67d",
-                }}
-              />
-            </Box>
-          ))}
+          <IconButton
+            onClick={() => navigate("/add-category")}
+            sx={{ color: "#004638" }}
+          >
+            <Add sx={{ fontSize: 42 }} />
+          </IconButton>
         </Box>
       </Box>
 
-      {/* FOOTER */}
-      <FooterNav />
+      {/* Main content */}
+      <Box sx={{ px: 2.5, pt: 4 }}>
+        <Typography sx={{ fontSize: 18, mb: 2 }}>Search</Typography>
+
+        <TextField
+          fullWidth
+          sx={{
+            mb: 5,
+            "& .MuiOutlinedInput-root": {
+              height: 54,
+              borderRadius: 10,
+              bgcolor: "white",
+              "& fieldset": { borderColor: "#97c596" },
+            },
+          }}
+        />
+
+        <Typography sx={{ fontSize: 18, mb: 3 }}>Select categories</Typography>
+
+        {/* Category list */}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
+          {categories.map((category, index) => {
+            const Icon = category.icon;
+
+            return (
+              <Box
+                key={index}
+                sx={{
+                  minHeight: 74,
+                  borderRadius: 10,
+                  bgcolor: "white",
+                  border: "1px solid #97c596",
+                  px: 3,
+                  py: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                {/* Left side: icon and category name */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  <Icon sx={{ color: "#004638" }} />
+                  <Typography sx={{ fontSize: 18 }}>{category.title}</Typography>
+                </Box>
+
+                {/* Right side: three dots OR edit/delete buttons */}
+                {activeMenu === index ? (
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <IconButton onClick={() => handleEdit(index)}>
+                      <EditIcon sx={{ color: "#004638", fontSize: 26 }} />
+                    </IconButton>
+
+                    <Box sx={{ width: "1px", height: 32, bgcolor: "#aaa" }} />
+
+                    <IconButton onClick={() => handleDelete(index)}>
+                      <DeleteIcon sx={{ color: "#004638", fontSize: 28 }} />
+                    </IconButton>
+                  </Box>
+                ) : (
+                  <IconButton onClick={() => setActiveMenu(index)}>
+                    <MoreHoriz sx={{ color: "#7ab07b", fontSize: 30 }} />
+                  </IconButton>
+                )}
+              </Box>
+            );
+          })}
+        </Box>
+      </Box>
+
+      <Footer navigate={navigate} />
+    </Box>
+  );
+}
+
+/* Footer navigation */
+function Footer({ navigate }) {
+  return (
+    <Box
+      sx={{
+        position: "fixed",
+        bottom: 0,
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "100%",
+        maxWidth: 390,
+        height: 92,
+        bgcolor: "#c7d99d",
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-around",
+        zIndex: 20,
+      }}
+    >
+      <NavItem icon={<Home />} label="Home" onClick={() => navigate("/dashboard")} />
+      <NavItem icon={<BarChart />} label="Expense" onClick={() => navigate("/expense")} />
+
+      <Box
+        onClick={() => navigate("/expense")}
+        sx={{
+          width: 70,
+          height: 70,
+          borderRadius: "50%",
+          bgcolor: "#fff7cc",
+          border: "5px solid #9ab68c",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          mt: -6,
+          cursor: "pointer",
+        }}
+      >
+        <Add sx={{ fontSize: 42, color: "#004638" }} />
+      </Box>
+
+      <NavItem icon={<EmojiEvents />} label="Goal" />
+      <NavItem icon={<Person />} label="Profile" />
+    </Box>
+  );
+}
+
+function NavItem({ icon, label, onClick }) {
+  return (
+    <Box onClick={onClick} sx={{ textAlign: "center", color: "#004638", cursor: "pointer" }}>
+      {icon}
+      <Typography sx={{ fontSize: 13 }}>{label}</Typography>
     </Box>
   );
 }
