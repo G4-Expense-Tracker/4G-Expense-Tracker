@@ -166,7 +166,7 @@ export default function AccountPage() {
               bgcolor: "#005844",
               color: "#fff",
               fontSize: 20,
-              fontWeight: 700,
+              fontWeight: 600,
               textTransform: "none",
               boxShadow: "none",
               "&:hover": {
