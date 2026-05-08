@@ -48,124 +48,188 @@ export default function LoginPage() {
     <Box
       sx={{
         width: "100%",
-        maxWidth: 390,
-        minHeight: "100svh",
-        mx: "auto",
-        bgcolor: "background.default",
-        px: 3,
-        pt: 2.5,
-        pb: 4,
+        minHeight: "100vh",
+        bgcolor: "#FAFCF4",
         display: "flex",
-        flexDirection: "column",
+        justifyContent: "center",
       }}
     >
-      {/* Status Bar */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-        <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
-
-        <Box sx={{ display: "flex", gap: 0.3 }}>
-          <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
-          <WifiIcon sx={{ fontSize: 14 }} />
-          <BatteryFullIcon sx={{ fontSize: 16 }} />
-        </Box>
-      </Box>
-
-      {/* Back Button */}
-      <Box sx={{ mb: 3 }}>
-        <IconButton onClick={() => navigate("/main")} sx={{ p: 0 }}>
-          <ArrowBackIosNewIcon sx={{ fontSize: 22 }} />
-        </IconButton>
-      </Box>
-
-      {/* Content */}
-      <Box sx={{ flexGrow: 1 }}>
-        <Typography
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: 390,
+          minHeight: "100vh",
+          px: 3,
+          pt: 2.5,
+          pb: 4,
+          display: "flex",
+          flexDirection: "column",
+          color: "#004333",
+        }}
+      >
+        {/* Status Bar */}
+        <Box
           sx={{
-            fontSize: 34,
-            fontWeight: 800,
-            mb: 3,
-          }}
-        >
-          Welcome back!
-        </Typography>
-
-        <Typography sx={{ mb: 1 }}>User Name or Email Address *</Typography>
-
-        <TextField
-          fullWidth
-          value={email}
-          onChange={(e) => { setEmail(e.target.value); setError(''); }}
-          sx={{
-            mb: 2.5,
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "30px",
-              bgcolor: "#EDEDED",
-              height: 52,
-              "& fieldset": { borderColor: "#7CB9A6" },
-            },
-          }}
-        />
-
-        <Typography sx={{ mb: 1 }}>Password *</Typography>
-
-        <TextField
-          fullWidth
-          type="password"
-          value={password}
-          onChange={(e) => { setPassword(e.target.value); setError(''); }}
-          sx={{
-            mb: 3,
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "30px",
-              bgcolor: "#EDEDED",
-              height: 52,
-              "& fieldset": { borderColor: "#7CB9A6" },
-            },
-          }}
-        />
-
-        {error && (
-          <Typography color="error" sx={{ mb: 2 }}>
-            {error}
-          </Typography>
-        )}
-        <Button
-          fullWidth
-          onClick={handleLogin}
-          disabled={!email || !password}
-          sx={{
-            height: 60,
-            borderRadius: "30px",
-            fontSize: 18,
-            fontWeight: 700,
-            textTransform: "none",
-            bgcolor: "primary.main",
-            color: "#fff",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
             mb: 2,
-            boxShadow: "0px 6px 10px rgb(251, 250, 250)",
-            "&:hover": { bgcolor: "primary.dark" },
-            color: "#fff"
           }}
         >
-          Login
-        </Button>
+          <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
 
-        <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
-          Forgot your password?
-        </Typography>
-      </Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.3 }}>
+            <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
+            <WifiIcon sx={{ fontSize: 14 }} />
+            <BatteryFullIcon sx={{ fontSize: 16 }} />
+          </Box>
+        </Box>
 
-      {/* Bottom (no absolute anymore) */}
-      <Box sx={{ mt: 4, textAlign: "center" }}>
-        <Typography sx={{ fontSize: 14 }}>
-          Don’t have an account?{" "}
-          <span
-            style={{ color: "#0F6FFF", fontWeight: 600, cursor: "pointer" }}
-            onClick={() => navigate("/signup")}
+        {/* Back Button */}
+        <Box sx={{ mb: 3 }}>
+          <IconButton onClick={() => navigate("/main")} sx={{ p: 0 }}>
+            <ArrowBackIosNewIcon sx={{ fontSize: 22, color: "#6F7472" }} />
+          </IconButton>
+        </Box>
+
+        {/* Main Content */}
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography
+            sx={{
+              fontSize: 34,
+              fontWeight: 800,
+              mb: 3,
+              color: "#004333",
+            }}
           >
-            Sign up
-          </span>
-        </Typography>
+            Welcome back!
+          </Typography>
+
+          <Typography sx={{ mb: 1, fontSize: 15, color: "#004333" }}>
+            User Name or Email Address *
+          </Typography>
+
+          <TextField
+            fullWidth
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError("");
+            }}
+            sx={{
+              mb: 2.5,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "30px",
+                bgcolor: "#EEEEEE",
+                height: 52,
+                color: "#004333",
+                "& fieldset": {
+                  borderColor: "#8FC5B6",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#005844",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#005844",
+                },
+              },
+            }}
+          />
+
+          <Typography sx={{ mb: 1, fontSize: 15, color: "#004333" }}>
+            Password *
+          </Typography>
+
+          <TextField
+            fullWidth
+            type="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError("");
+            }}
+            sx={{
+              mb: 3,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: "30px",
+                bgcolor: "#EEEEEE",
+                height: 52,
+                color: "#004333",
+                "& fieldset": {
+                  borderColor: "#8FC5B6",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#005844",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#005844",
+                },
+              },
+            }}
+          />
+
+          {error && (
+            <Typography sx={{ color: "error.main", mb: 2, fontSize: 14 }}>
+              {error}
+            </Typography>
+          )}
+
+          <Button
+            fullWidth
+            onClick={handleLogin}
+            disabled={!email || !password}
+            sx={{
+              height: 60,
+              borderRadius: "30px",
+              fontSize: 16,
+              fontWeight: 700,
+              textTransform: "none",
+              bgcolor: "#005844",
+              color: "#002F26",
+              mb: 2,
+              boxShadow: "none",
+              "&:hover": {
+                bgcolor: "#004333",
+                color: "#fff",
+              },
+              "&.Mui-disabled": {
+                bgcolor: "#005844",
+                color: "#00382E",
+                opacity: 1,
+              },
+            }}
+          >
+            Login
+          </Button>
+
+          <Typography
+            sx={{
+              fontSize: 14,
+              fontWeight: 700,
+              color: "#004333",
+            }}
+          >
+            Forgot your password?
+          </Typography>
+        </Box>
+
+        {/* Bottom Sign Up */}
+        <Box sx={{ textAlign: "center" }}>
+          <Typography sx={{ fontSize: 14, color: "#004333" }}>
+            Don’t have an account?{" "}
+            <Box
+              component="span"
+              onClick={() => navigate("/signup")}
+              sx={{
+                color: "#0F6FFF",
+                fontWeight: 700,
+                cursor: "pointer",
+              }}
+            >
+              Sign up
+            </Box>
+          </Typography>
+        </Box>
       </Box>
     </Box>
   );
