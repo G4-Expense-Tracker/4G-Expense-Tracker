@@ -17,7 +17,7 @@ import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
-import pictLogo from "../account/profilepic.png";
+import profilepic from "../account/profilepic.png";
 
 export default function AccountPage() {
   const navigate = useNavigate();
