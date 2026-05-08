@@ -1,5 +1,5 @@
 import Header from "./Header"
-
+import { useEffect, useState } from "react";
 
 
 //DATABSE CALL TO GET ALL GOALS
@@ -19,7 +19,12 @@ const goals = [
     },
 ]
 
+
+
 function Goal() {
+    // const [goals, setGoals] = useState([]);
+
+
     return (
         <>
             <Header {...goals[0]} />
