@@ -115,8 +115,8 @@ export default function AccountPage() {
               onClick={() => console.log("edit profile image")}
               sx={{
                 position: "absolute",
-                top: -8,
-                right: -25,
+                top: -12,
+                right: -30,
                 p: 0,
               }}
             >
