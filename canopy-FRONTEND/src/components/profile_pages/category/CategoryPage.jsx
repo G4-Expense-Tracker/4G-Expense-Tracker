@@ -21,12 +21,16 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FlightIcon from "@mui/icons-material/Flight";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import ApartmentIcon from "@mui/icons-material/Apartment";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 
 import { useNavigate } from "react-router-dom";
 import { iconList } from "./AddCategoryPage";
 
 export default function CategoryPage() {
   const navigate = useNavigate();
+  const [activeMenu, setActiveMenu] = useState(null);
   const [customCategories, setCustomCategories] = useState([]);
 
   useEffect(() => {
@@ -137,7 +141,23 @@ export default function CategoryPage() {
                   <Typography sx={{ fontSize: 18 }}>{category.title}</Typography>
                 </Box>
 
-                <MoreHoriz sx={{ color: "#7ab07b" }} />
+                {activeMenu === index ? (
+  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+    <IconButton onClick={() => console.log("edit", category.title)}>
+      <EditIcon sx={{ color: "#004638", fontSize: 26 }} />
+    </IconButton>
+
+    <Box sx={{ width: "1px", height: 32, bgcolor: "#aaa" }} />
+
+    <IconButton onClick={() => console.log("delete", category.title)}>
+      <DeleteOutlineIcon sx={{ color: "#004638", fontSize: 28 }} />
+    </IconButton>
+  </Box>
+) : (
+  <IconButton onClick={() => setActiveMenu(index)}>
+    <MoreHoriz sx={{ color: "#7ab07b", fontSize: 30 }} />
+  </IconButton>
+)}
               </Box>
             );
           })}
