@@ -21,11 +21,10 @@ router.get('/list', requireLogin, async (req, res) => {
 
         const goals = await getGoalsByUser(user_id)
 
-        if (!goals || goals.length === 0 ) {
-            return res.json({ goals: null })
-        }
-
-        return res.json({ goals })
+        return res.json({ 
+            success: true,
+            goals: goals || []
+         })
     } catch(err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" })
