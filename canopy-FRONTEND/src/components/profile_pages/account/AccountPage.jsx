@@ -158,7 +158,7 @@ export default function AccountPage() {
 
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           <Button
-            onClick={() => navigate("/main")}
+            onClick={() => navigate("/dashboard")}
             sx={{
               width: 210,
               height: 64,
@@ -194,7 +194,7 @@ export default function AccountPage() {
         <NavItem
           icon={<HomeOutlinedIcon />}
           label="Home"
-          onClick={() => navigate("/main")}
+          onClick={() => navigate("/dashboard")}
         />
 
         <NavItem
