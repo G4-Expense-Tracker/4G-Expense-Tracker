@@ -20,7 +20,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
 
 /* Import profile image */
-import profilePic from "../../assets/Profile Pic.png";
+import profilepic from "../../profile_pages/account/profilepic.png";
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -165,7 +165,7 @@ export default function AccountPage() {
             >
               <Box
                 component="img"
-                src={profilePic}
+                src={profilepic}
                 alt="Profile"
                 sx={{
                   width: "100%",
