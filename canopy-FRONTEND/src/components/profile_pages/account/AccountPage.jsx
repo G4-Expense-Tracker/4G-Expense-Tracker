@@ -17,6 +17,7 @@ import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
+import pictLogo from "../account/profilepic.png";
 
 export default function AccountPage() {
   const navigate = useNavigate();
@@ -110,7 +111,7 @@ export default function AccountPage() {
               }}
             >
             </Box>
-
+            <Box component="img" src={profilepic} alt="Logo" sx={{ width: 120 }} />
             <IconButton
               onClick={() => console.log("edit profile image")}
               sx={{
