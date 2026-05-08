@@ -195,7 +195,7 @@ eg {
     FROM action_type a
       INNER JOIN user_action_log u
       on a.action_type_id = u.action_type_id
-    WHERE user_id = :user_id AND goal_id = :goal_id AND goal_level = :current_level
+    WHERE u.user_id = :user_id AND goal_id = :goal_id AND goal_level = :current_level
     GROUP BY u.action_type_id, a.name;
     `;
 
