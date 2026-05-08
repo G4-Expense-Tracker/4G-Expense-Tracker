@@ -22,7 +22,7 @@ import FlightIcon from "@mui/icons-material/Flight";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 
 import { useNavigate } from "react-router-dom";
@@ -150,7 +150,7 @@ export default function CategoryPage() {
     <Box sx={{ width: "1px", height: 32, bgcolor: "#aaa" }} />
 
     <IconButton onClick={() => console.log("delete", category.title)}>
-      <DeleteOutlineIcon sx={{ color: "#004638", fontSize: 28 }} />
+      <DeleteIcon sx={{ color: "#004638", fontSize: 28 }} />
     </IconButton>
   </Box>
 ) : (
