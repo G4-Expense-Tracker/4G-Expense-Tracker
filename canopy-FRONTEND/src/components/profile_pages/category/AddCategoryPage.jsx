@@ -1,54 +1,40 @@
-import { useState } from "react";
-import { Box, Typography, TextField, IconButton, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
 
 import {
   SignalCellular4Bar,
   Wifi,
   BatteryFull,
   ArrowBackIosNew,
-  ChevronLeft,
-  ChevronRight,
+  KeyboardArrowRight,
 } from "@mui/icons-material";
-
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import PaletteOutlinedIcon from "@mui/icons-material/PaletteOutlined";
-import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
-import SportsBarIcon from "@mui/icons-material/SportsBar";
-import CakeOutlinedIcon from "@mui/icons-material/CakeOutlined";
-import ComputerIcon from "@mui/icons-material/Computer";
-import SavingsOutlinedIcon from "@mui/icons-material/SavingsOutlined";
-import LocalCafeOutlinedIcon from "@mui/icons-material/LocalCafeOutlined";
-import SportsBasketballOutlinedIcon from "@mui/icons-material/SportsBasketballOutlined";
-import SportsEsportsOutlinedIcon from "@mui/icons-material/SportsEsportsOutlined";
-import LocalHospitalOutlinedIcon from "@mui/icons-material/LocalHospitalOutlined";
-import SoapOutlinedIcon from "@mui/icons-material/SoapOutlined";
-import FastfoodOutlinedIcon from "@mui/icons-material/FastfoodOutlined";
-import DirectionsBikeOutlinedIcon from "@mui/icons-material/DirectionsBikeOutlined";
 
 import { useNavigate } from "react-router-dom";
 
-export default function AddCategoryPage() {
+export default function AddExpensePage() {
   const navigate = useNavigate();
-  const [selectedIcon, setSelectedIcon] = useState(FavoriteBorderIcon);
 
-  const icons = [
-    FavoriteBorderIcon,
-    PaletteOutlinedIcon,
-    CardGiftcardIcon,
-    SportsBarIcon,
-    CakeOutlinedIcon,
-    ComputerIcon,
-    SavingsOutlinedIcon,
-    LocalCafeOutlinedIcon,
-    SportsBasketballOutlinedIcon,
-    SportsEsportsOutlinedIcon,
-    LocalHospitalOutlinedIcon,
-    SoapOutlinedIcon,
-    FastfoodOutlinedIcon,
-    DirectionsBikeOutlinedIcon,
-  ];
-
-  const SelectedIcon = selectedIcon;
+  const inputStyle = {
+    mb: 2,
+    "& .MuiOutlinedInput-root": {
+      height: 50,
+      borderRadius: "28px",
+      bgcolor: "#f8fbf2",
+      "& fieldset": { border: "none" },
+    },
+    "& input": {
+      color: "#004638",
+      fontWeight: 600,
+    },
+  };
 
   return (
     <Box
@@ -62,7 +48,16 @@ export default function AddCategoryPage() {
         overflowX: "hidden",
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between", px: 3, pt: 2 }}>
+      {/* Status Bar */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          px: 3,
+          pt: 2,
+          color: "#23343b",
+        }}
+      >
         <Typography sx={{ fontWeight: 700 }}>9:41</Typography>
 
         <Box sx={{ display: "flex", gap: 0.5 }}>
@@ -72,8 +67,9 @@ export default function AddCategoryPage() {
         </Box>
       </Box>
 
+      {/* Back Button */}
       <IconButton
-        onClick={() => navigate("/category")}
+        onClick={() => navigate("/dashboard")}
         sx={{
           position: "absolute",
           top: 72,
@@ -85,87 +81,111 @@ export default function AddCategoryPage() {
         <ArrowBackIosNew />
       </IconButton>
 
+      {/* Dark Green Form Panel */}
       <Box
         sx={{
           mt: 10,
-          minHeight: "calc(100svh - 96px)",
+          minHeight: "calc(100svh - 80px)",
           borderTopLeftRadius: 38,
           borderTopRightRadius: 38,
           px: 3,
-          pt: 7,
+          pt: 6,
           pb: 5,
-          background: "linear-gradient(180deg, #24936d 0%, #9bc47d 100%)",
-          boxShadow: "0px -8px 24px rgba(0,0,0,0.12)",
+          background: "linear-gradient(180deg, #24936d 0%, #7db36d 100%)",
+          color: "white",
         }}
       >
-        <Typography
+        {/* Tabs */}
+        <Box
           sx={{
-            color: "white",
-            fontSize: 42,
-            fontWeight: 800,
-            textAlign: "center",
+            display: "flex",
+            justifyContent: "center",
+            gap: 8,
             mb: 5,
           }}
         >
-          Add Category
-        </Typography>
+          <Typography
+            sx={{
+              fontSize: 22,
+              fontWeight: 800,
+              borderBottom: "3px solid #fff7cc",
+              pb: 0.5,
+            }}
+          >
+            Expense
+          </Typography>
 
+          <Typography
+            sx={{
+              fontSize: 22,
+              fontWeight: 700,
+              color: "#004638",
+              opacity: 0.9,
+            }}
+          >
+            Budget
+          </Typography>
+        </Box>
+
+        <Typography sx={{ mb: 1 }}>Expense Name</Typography>
+        <TextField fullWidth sx={inputStyle} />
+
+        <Box sx={{ display: "flex", gap: 1.5 }}>
+          <Box sx={{ flex: 1 }}>
+            <Typography sx={{ mb: 1 }}>Amount</Typography>
+            <TextField fullWidth placeholder="$" sx={inputStyle} />
+          </Box>
+
+          <Box sx={{ flex: 1 }}>
+            <Typography sx={{ mb: 1 }}>Date</Typography>
+            <TextField
+              fullWidth
+              defaultValue="April 13, 2026"
+              sx={inputStyle}
+            />
+          </Box>
+        </Box>
+
+        <Typography sx={{ mb: 1 }}>Categories</Typography>
         <TextField
           fullWidth
+          onClick={() => navigate("/category")}
           sx={{
-            mb: 4,
-            "& .MuiOutlinedInput-root": {
-              height: 60,
-              borderRadius: 10,
-              bgcolor: "#f7faf2",
-              "& fieldset": { border: "none" },
-            },
+            ...inputStyle,
+            cursor: "pointer",
+          }}
+          InputProps={{
+            readOnly: true,
+            endAdornment: (
+              <InputAdornment position="end">
+                <KeyboardArrowRight sx={{ color: "#004638" }} />
+              </InputAdornment>
+            ),
           }}
         />
 
-        <Typography sx={{ color: "white", fontSize: 18, mb: 1.5 }}>
-          Icons
-        </Typography>
-
-        <Box
-          sx={{
-            height: 60,
-            borderRadius: 10,
-            bgcolor: "#f7faf2",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            mb: 4,
-          }}
-        >
-          <SelectedIcon sx={{ fontSize: 42, color: "#004638" }} />
-        </Box>
-
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            justifyItems: "center",
-            rowGap: 4,
-            mb: 6,
-          }}
-        >
-          {icons.map((Icon, index) => (
-            <IconButton
-              key={index}
-              onClick={() => setSelectedIcon(() => Icon)}
+        <FormControlLabel
+          control={
+            <Checkbox
               sx={{
-                color: selectedIcon === Icon ? "#004638" : "white",
+                color: "#f8fbf2",
+                "&.Mui-checked": {
+                  color: "#004638",
+                },
               }}
-            >
-              <Icon sx={{ fontSize: 38 }} />
-            </IconButton>
-          ))}
-        </Box>
+            />
+          }
+          label={
+            <Typography sx={{ color: "white", fontSize: 14 }}>
+              Save this as a quick expense
+            </Typography>
+          }
+          sx={{ mb: 4 }}
+        />
 
         <Button
           fullWidth
-          onClick={() => navigate("/category")}
+          onClick={() => navigate("/dashboard")}
           sx={{
             width: "72%",
             height: 58,
@@ -178,30 +198,13 @@ export default function AddCategoryPage() {
             fontWeight: 800,
             textTransform: "none",
             boxShadow: "0px 10px 18px rgba(0,0,0,0.18)",
-            "&:hover": { bgcolor: "#00352d" },
+            "&:hover": {
+              bgcolor: "#00352d",
+            },
           }}
         >
           Save
         </Button>
-
-        <Box
-          sx={{
-            width: 120,
-            height: 56,
-            bgcolor: "#2f2f2f",
-            borderRadius: 5,
-            mx: "auto",
-            mt: 5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-            boxShadow: "0px 10px 20px rgba(0,0,0,0.25)",
-          }}
-        >
-          <ChevronLeft sx={{ color: "white" }} />
-          <Box sx={{ width: 1, height: 30, bgcolor: "#555" }} />
-          <ChevronRight sx={{ color: "white" }} />
-        </Box>
       </Box>
     </Box>
   );
