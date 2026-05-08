@@ -11,6 +11,7 @@ import Goal from "./components/goal_pages/Goal";
 import DashboardPage from "./components/pages/dashboard/DashboardPage";
 import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
 import CategoryPage from "./components/profile_pages/category/CategoryPage";
+import AddCategoryPage from "./components/profile_pages/category/AddCategoryPage";
 import NewGoal from "./components/goal_pages/NewGoal";
 import Accessibility from "./components/profile_pages/accessibility/Accessibility";
 
