@@ -160,7 +160,7 @@ export default function AccountPage() {
           sx={{ ...inputStyle, mb: "36px" }}
         />
 
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{ display: "flex", justifyContent: "center" , mb: "36px", gap: "18px"}}>
           <Button
             onClick={() => navigate("/dashboard")}
             sx={{
