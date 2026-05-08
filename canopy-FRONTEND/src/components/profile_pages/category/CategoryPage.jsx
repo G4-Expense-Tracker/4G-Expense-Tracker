@@ -149,7 +149,7 @@ export default function CategoryPage() {
 
     <Box sx={{ width: "1px", height: 32, bgcolor: "#aaa" }} />
 
-    <IconButton onClick={() => console.log("delete", category.title)}>
+    <IconButton onClick={() => handleDelete(index)}>
       <DeleteIcon sx={{ color: "#004638", fontSize: 28 }} />
     </IconButton>
   </Box>
@@ -223,4 +223,18 @@ function NavItem({ icon, label, onClick }) {
       <Typography sx={{ fontSize: 13 }}>{label}</Typography>
     </Box>
   );
+  function handleDelete(indexToDelete) {
+  const updatedCategories = customCategories.filter(
+    (_, index) => index !== indexToDelete - defaultCategories.length
+  );
+
+  setCustomCategories(updatedCategories);
+
+  localStorage.setItem(
+    "customCategories",
+    JSON.stringify(updatedCategories)
+  );
+
+  setActiveMenu(null);
+}
 }
