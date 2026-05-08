@@ -161,8 +161,8 @@ export default function AccountPage() {
             onClick={() => navigate("/main")}
             sx={{
               width: 210,
-              height: 54,
-              borderRadius: "45px",
+              height: 64,
+              borderRadius: "30px",
               bgcolor: "#005844",
               color: "#fff",
               fontSize: 20,
