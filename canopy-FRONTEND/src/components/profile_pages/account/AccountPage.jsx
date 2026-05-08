@@ -162,7 +162,7 @@ export default function AccountPage() {
             sx={{
               width: 210,
               height: 54,
-              borderRadius: "40px",
+              borderRadius: "45px",
               bgcolor: "#005844",
               color: "#fff",
               fontSize: 20,
