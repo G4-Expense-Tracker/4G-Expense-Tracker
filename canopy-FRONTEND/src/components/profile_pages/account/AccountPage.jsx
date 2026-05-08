@@ -160,6 +160,7 @@ export default function AccountPage() {
           <Button
             onClick={() => navigate("/main")}
             sx={{
+              mx: "auto",
               width: 210,
               height: 64,
               borderRadius: "30px",
