@@ -133,7 +133,7 @@ export default function AccountPage() {
             <TextField fullWidth defaultValue="Hye" sx={smallInputStyle} />
           </Box>
 
-          <Box sx={{ flex: 1 }}>
+          <Box sx={{ flex: 7 }}>
             <Typography sx={labelStyle}>Last Name</Typography>
             <TextField fullWidth defaultValue="Shim" sx={smallInputStyle} />
           </Box>
