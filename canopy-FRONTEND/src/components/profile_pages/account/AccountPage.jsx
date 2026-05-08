@@ -160,7 +160,7 @@ export default function AccountPage() {
           <Button
             onClick={() => navigate("/main")}
             sx={{
-              width: 110,
+              width: 210,
               height: 64,
               borderRadius: "30px",
               bgcolor: "#005844",
