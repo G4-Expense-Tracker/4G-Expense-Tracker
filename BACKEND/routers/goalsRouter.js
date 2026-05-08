@@ -10,6 +10,9 @@ import {
     editProgress,
     levelUp,
     deleteGoal,
+    getUserProgress,
+    logUserAction,
+    getQuotas,
 } from "../db/dal/goal.js";
 
 router.get('/list', requireLogin, async (req, res) => {
@@ -155,5 +158,73 @@ router.post('/:goalId/delete', requireLogin, async (req, res) => {
         res.status(500).json({ error: "Server failure" })
     }
 })
+
+router.get('/:goalId/progress', requireLogin, async (req, res) => {
+    try {
+        const user_id = req.user.user_id;
+        const goal_id = req.params.goalId;
+
+        const goaltoCheck = await getGoalById(goal_id)
+
+        if (!goaltoCheck) {
+            return res.status(404).json({ error: "Failed to find goal" });
+        }
+
+        // const currentLevel = goaltoCheck.current_level
+
+        const progress = await getUserProgress(user_id, goal_id, goaltoCheck.current_level)
+
+        res.json({
+            progress
+        })
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server failure" })
+    }
+})
+
+router.post('/:goalId/action', requireLogin, async (req, res) => {
+    try {
+        const user_id = req.user.user_id;
+        const goal_id = req.params.goalId;
+        const { action_type_id } = req.body;
+
+        const goaltoCheck = await getGoalById(goal_id)
+
+        const goal_level = goaltoCheck.current_level
+
+        if (!goaltoCheck) {
+            return res.status(500).json({ error: "Failed to find goal" });
+        }
+
+        const newAction = await logUserAction({
+            user_id,
+            action_type_id,
+            goal_id,
+            goal_level
+        })
+
+        if (!newAction.success) {
+            return res.status(500).json({ error: "Failed to log action" });
+        }
+
+        return res.json({
+            success: true,
+            user_action_log_id: newAction.user_action_log_id
+        })
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server failure" })
+    }
+})
+
+// router.get('/quotas', requireLogin, async (req, res) => {
+//     try {
+        
+//     } catch(err) {
+//         console.error(err);
+//         res.status(500).json({ error: "Server failure" })
+//     }
+// })
 
 export default router;
