@@ -97,8 +97,8 @@ export default function AccountPage() {
       {/* Main Content */}
       <Box sx={{ flexGrow: 1, px: "22px", pt: "38px" }}>
         {/* Profile Icon */}
-        <Box sx={{ display: "flex", justifyContent: "center", mb: "36px" }}>
-          <Box component="img" src={profilepic} sx={{ position: "relative" }}>
+        <Box component="img" src={profilepic} alt="Logo" sx={{ display: "flex", justifyContent: "center", mb: "36px" }}>
+          <Box sx={{ position: "relative" }}>
             <Box
               sx={{
                 width: 96,
@@ -111,6 +111,7 @@ export default function AccountPage() {
               }}
             >
             </Box>
+            <Box component="img" src={profilepic} alt="Logo" sx={{ width: 120 }} />
             <IconButton
               onClick={() => console.log("edit profile image")}
               sx={{
