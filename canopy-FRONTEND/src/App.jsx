@@ -13,6 +13,7 @@ import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
 import CategoryPage from "./components/profile_pages/category/CategoryPage";
 import NewGoal from "./components/goal_pages/NewGoal";
 import Accessibility from "./components/profile_pages/accessibility/Accessibility";
+import AccountPage from "./components/profile_pages/account/AccountPage";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/expense" element={<ExpenseDashboard />} />
         <Route path="/category" element={<CategoryPage />} />
         <Route path="/accessibility" element={<Accessibility />} />
+        <Route path="/account" element={<AccountPage />} />
 
       </Routes>
       
