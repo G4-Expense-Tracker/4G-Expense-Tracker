@@ -12,12 +12,33 @@ export async function getTreesByUser(user_id) {
 
   try {
     const results = await database.query(query, params);
-    console.log(results[0]);
+    // console.log(results[0]);
     return results[0];
   } catch (err) {
     console.log("Error selecting from tree table");
     console.log(err);
     return null;
+  }
+}
+
+export async function getTreeByGoal(goal_id) {
+  const query = `
+    SELECT * FROM tree
+    WHERE goal_id = :goal_id;
+    `;
+
+  const params = {
+    goal_id,
+  };
+
+  try {
+    const results = await database.query(query, params);
+    const rows = results[0];
+    return rows.length > 0 ? rows[0] : null;
+  } catch (err) {
+    console.log("Error selecting from tree table");
+    console.log(err);
+    return [];
   }
 }
 
