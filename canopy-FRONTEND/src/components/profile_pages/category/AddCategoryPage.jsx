@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Typography, TextField, IconButton, Button } from "@mui/material";
+
 import {
   SignalCellular4Bar,
   Wifi,
@@ -22,8 +23,9 @@ import SoapOutlinedIcon from "@mui/icons-material/SoapOutlined";
 import FastfoodOutlinedIcon from "@mui/icons-material/FastfoodOutlined";
 import DirectionsBikeOutlinedIcon from "@mui/icons-material/DirectionsBikeOutlined";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
+// This list stores the icon name and actual MUI icon
 const iconList = [
   { name: "heart", icon: FavoriteBorderIcon },
   { name: "palette", icon: PaletteOutlinedIcon },
@@ -44,30 +46,66 @@ const iconList = [
 export default function AddCategoryPage() {
   const navigate = useNavigate();
 
+  // Reads the editIndex from the URL, for example: /add-category?editIndex=0
+  const [searchParams] = useSearchParams();
+  const editIndex = searchParams.get("editIndex");
+
+  // Checks if page is being used for editing or adding
+  const isEditMode = editIndex !== null;
+
+  // Category name input state
   const [categoryName, setCategoryName] = useState("");
+
+  // Selected icon state
   const [selectedIconName, setSelectedIconName] = useState("heart");
 
+  // Find the selected icon component
   const SelectedIcon =
     iconList.find((item) => item.name === selectedIconName)?.icon ||
     FavoriteBorderIcon;
 
-  function handleSave() {
-    if (!categoryName.trim()) return;
+  // If editing, load the old category name and icon
+  useEffect(() => {
+    if (isEditMode) {
+      const savedCategories =
+        JSON.parse(localStorage.getItem("customCategories")) || [];
 
-    const newCategory = {
-      id: Date.now(),
+      const categoryToEdit = savedCategories[Number(editIndex)];
+
+      if (categoryToEdit) {
+        setCategoryName(categoryToEdit.title);
+        setSelectedIconName(categoryToEdit.iconName);
+      }
+    }
+  }, [editIndex, isEditMode]);
+
+  // Save new category OR update existing category
+  function handleSave() {
+    if (!categoryName.trim()) {
+      alert("Please enter a category name.");
+      return;
+    }
+
+    const savedCategories =
+      JSON.parse(localStorage.getItem("customCategories")) || [];
+
+    const updatedCategory = {
+      id: isEditMode ? savedCategories[Number(editIndex)].id : Date.now(),
       title: categoryName.trim(),
       iconName: selectedIconName,
     };
 
-    const oldCategories =
-      JSON.parse(localStorage.getItem("customCategories")) || [];
+    let updatedCategories;
 
-    localStorage.setItem(
-      "customCategories",
-      JSON.stringify([...oldCategories, newCategory])
-    );
+    if (isEditMode) {
+      updatedCategories = savedCategories.map((category, index) =>
+        index === Number(editIndex) ? updatedCategory : category
+      );
+    } else {
+      updatedCategories = [...savedCategories, updatedCategory];
+    }
 
+    localStorage.setItem("customCategories", JSON.stringify(updatedCategories));
     navigate("/category");
   }
 
@@ -83,6 +121,7 @@ export default function AddCategoryPage() {
         overflowX: "hidden",
       }}
     >
+      {/* Status bar */}
       <Box sx={{ display: "flex", justifyContent: "space-between", px: 3, pt: 2 }}>
         <Typography sx={{ fontWeight: 700 }}>9:41</Typography>
 
@@ -93,6 +132,7 @@ export default function AddCategoryPage() {
         </Box>
       </Box>
 
+      {/* Back button */}
       <IconButton
         onClick={() => navigate("/category")}
         sx={{
@@ -106,30 +146,33 @@ export default function AddCategoryPage() {
         <ArrowBackIosNew />
       </IconButton>
 
+      {/* Main green panel */}
       <Box
         sx={{
           mt: 10,
           minHeight: "calc(100svh - 96px)",
           borderTopLeftRadius: 38,
           borderTopRightRadius: 38,
-          px: { xs: 2.5, sm: 3 },
+          px: 3,
           pt: 6,
-          pb: 4,
+          pb: 5,
           background: "linear-gradient(180deg, #24936d 0%, #9bc47d 100%)",
         }}
       >
+        {/* Page title changes depending on mode */}
         <Typography
           sx={{
             color: "white",
-            fontSize: { xs: 36, sm: 42 },
+            fontSize: 38,
             fontWeight: 800,
             textAlign: "center",
             mb: 4,
           }}
         >
-          Add Category
+          {isEditMode ? "Edit Category" : "Add Category"}
         </Typography>
 
+        {/* Category name input */}
         <TextField
           fullWidth
           value={categoryName}
@@ -150,6 +193,7 @@ export default function AddCategoryPage() {
           Icons
         </Typography>
 
+        {/* Selected icon preview */}
         <Box
           sx={{
             height: 58,
@@ -164,6 +208,7 @@ export default function AddCategoryPage() {
           <SelectedIcon sx={{ fontSize: 40, color: "#004638" }} />
         </Box>
 
+        {/* Icon grid */}
         <Box
           sx={{
             display: "grid",
@@ -186,6 +231,7 @@ export default function AddCategoryPage() {
           ))}
         </Box>
 
+        {/* Save/update button */}
         <Button
           fullWidth
           onClick={handleSave}
@@ -203,7 +249,7 @@ export default function AddCategoryPage() {
             "&:hover": { bgcolor: "#00352d" },
           }}
         >
-          Save
+          {isEditMode ? "Update" : "Save"}
         </Button>
       </Box>
     </Box>
