@@ -27,7 +27,7 @@ function OB_End({ onBack }) {
 
             <Typography variant="body1" component="p">Your Financial Freedom begins today!</Typography>
 
-            <Button variant="contained" sx={{ mt: "6rem" }}>Start</Button>
+            <Button onClick={() => navigate("/dashboard")} variant="contained" sx={{ mt: "6rem" }}>Start</Button>
 
 
         </div>

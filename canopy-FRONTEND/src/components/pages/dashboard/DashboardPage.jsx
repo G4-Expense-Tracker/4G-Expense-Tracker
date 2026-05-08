@@ -9,6 +9,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import FooterNav from "../../Footer/FooterNav";
 
+/* Hardcoded data for demo purposes. I am going to replace this soon. */
 const dashboards = [
   { title: "Click here", subtitle: "to set your goal", emoji: "🌱", progress: 0 },
   { title: "Nike Shoe", subtitle: "$50 / 130", emoji: "🌿", progress: 38 },
