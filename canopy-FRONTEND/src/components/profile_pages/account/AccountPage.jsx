@@ -162,7 +162,7 @@ export default function AccountPage() {
 
         <Box sx={{ display: "flex", justifyContent: "center" , mb: "36px", gap: "18px"}}>
           <Button
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/profile")}
             sx={{
               width: 210,
               height: 64,
