@@ -140,6 +140,17 @@ function Goal() {
         )
     }
 
+    /* helper variables */
+    const currentSavings = currentGoal.progress
+
+    const targetSavings = currentGoal.targetAmount
+
+    const goalCompleted =
+        currentSavings >= targetSavings
+
+    const levelFiveIncomplete =
+        currentGoal.level === 5 &&
+        currentSavings < targetSavings
 
     return (
         <Box>
@@ -157,6 +168,8 @@ function Goal() {
                 addSavings={addSavings}
                 subtractSavings={subtractSavings}
             />
+
+            {/* goal name and level */}
 
             <Box
                 sx={{
@@ -182,12 +195,30 @@ function Goal() {
 
             </Box>
 
-            {/* probably pass the tasks completed to this? */}
+            {/* task cards */}
 
-            <TaskCard
-                progress={currentGoalProgress}
-                goal={currentGoal}
-            />
+            {
+                goalCompleted
+                    ? (
+                        <VarTaskCard
+                            message="Congrats on reaching your goal!"
+                        />
+                    )
+                    : levelFiveIncomplete
+                        ? (
+                            <VarTaskCard
+                                message="Reach your goal to reveal your tree!"
+                            />
+                        )
+                        : (
+                            <TaskCard
+                                progress={currentGoalProgress}
+                                goal={currentGoal}
+                            />
+                        )
+            }
+
+
 
             <FooterNav />
         </Box>
