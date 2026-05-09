@@ -19,6 +19,7 @@ import AccountPage from "./components/profile_pages/account/AccountPage";
 import ProfilePage from "./components/profile_pages/profileandlogout/ProfilePage";
 import LogoutPage from "./components/profile_pages/profileandlogout/LogoutPage";
 import Language from "./components/profile_pages/Language";
+import Notification from "./components/profile_pages/notifications/Notification";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/language" element={<Language />} />
+        <Route path="/notifications" element={<Notification />} />
 
 
       </Routes>
