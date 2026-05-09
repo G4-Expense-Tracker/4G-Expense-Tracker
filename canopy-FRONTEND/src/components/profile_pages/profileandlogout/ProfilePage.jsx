@@ -215,7 +215,7 @@ export default function ProfilePage() {
           <SmallCard
             icon={<PieChartOutlinedIcon />}
             title="Categories"
-            onClick={() => navigate("/categories")}
+            onClick={() => navigate("/category")}
             cardBg={cardBg}
             text={text}
             green={green}
@@ -376,7 +376,7 @@ export default function ProfilePage() {
         <NavItem
           icon={<EmojiEventsOutlinedIcon />}
           label="Goal"
-          onClick={() => navigate("/goal")}
+          onClick={() => navigate("/goals")}
           green={green}
         />
 
