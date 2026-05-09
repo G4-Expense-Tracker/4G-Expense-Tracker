@@ -12,16 +12,10 @@ import Congrats from "./TaskCard/Congrats";
 //DATABASE CALLS
 //these objects are just for ui and to show the shape of the object we want from the db
 
-
-
-
-
 const goals = [
     {
         id: 1,
         name: "Tuition",
-        targetAmount: 200,
-        progress: 40,
         targetAmount: 200,
         progress: 40,
         level: 1
@@ -30,8 +24,6 @@ const goals = [
     {
         id: 2,
         name: "Korea",
-        targetAmount: 1500,
-        progress: 500,
         targetAmount: 1500,
         progress: 500,
         level: 2
@@ -51,7 +43,6 @@ const goals = [
         progress: 50,
         level: 5
     }
-
 ]
 
 const taskProgress = {
@@ -92,7 +83,6 @@ function Goal() {
 
     /* states */
     const [goalData, setGoalData] = useState(goals)
-    const [goalData, setGoalData] = useState(goals)
     const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
     const [showCongrats, setShowCongrats] = useState(false)
     const [hasShownCongratsPopUp, setHasShownCongratsPopUp] = useState(false)
@@ -100,7 +90,6 @@ function Goal() {
     /* NO GOALS TO SHOW PAGE: */
 
     if (goalData.length === 0) {
-
         return (
             <Box>
 
@@ -118,8 +107,6 @@ function Goal() {
         )
     }
 
-
-    const currentGoal = goalData[currentGoalIndex]
     const currentGoal = goalData[currentGoalIndex]
 
     const currentGoalProgress =
@@ -128,9 +115,7 @@ function Goal() {
     const nextGoal = () => {
         console.log("NEXT CLICKED")
         setCurrentGoalIndex((prevIndex) =>
-            prevIndex === goals.length - 1
-                ? 0
-                : prevIndex + 1
+            prevIndex === goals.length - 1 ? 0 : prevIndex + 1
         )
     }
 
@@ -138,23 +123,15 @@ function Goal() {
         console.log("PREV CLICKED")
 
         setCurrentGoalIndex((prevIndex) =>
-            prevIndex === 0
-                ? goals.length - 1
-                : prevIndex - 1
+            prevIndex === 0 ? goals.length - 1 : prevIndex - 1
         )
     }
 
     const addSavings = (amount) => {
 
-        //DB CALL HERE
-
-        //OPTIMISTIC UI:
         setGoalData((prevGoals) =>
-
             prevGoals.map((goal, index) =>
-
                 index === currentGoalIndex
-                    /* true = overwrite goal.progress with the added value */
                     ? {
                         ...goal,
                         progress: goal.progress + amount
@@ -166,20 +143,12 @@ function Goal() {
 
     const subtractSavings = (amount) => {
 
-        //DB CALL HERE
-
-        //OPTIMISTIC UI:
         setGoalData((prevGoals) =>
-
             prevGoals.map((goal, index) =>
-
                 index === currentGoalIndex
                     ? {
                         ...goal,
-                        progress: Math.max(
-                            0,
-                            goal.progress - amount
-                        )
+                        progress: Math.max(0, goal.progress - amount)
                     }
                     : goal
             )
@@ -188,7 +157,6 @@ function Goal() {
 
     /* helper variables */
     const currentSavings = currentGoal.progress
-
     const targetSavings = currentGoal.targetAmount
 
     const goalCompleted =
@@ -199,55 +167,12 @@ function Goal() {
         currentSavings < targetSavings
 
     /* use effect for completion pop up */
-
     useEffect(() => {
         if (goalCompleted && !hasShownCongratsPopUp) {
             setShowCongrats(true)
             setHasShownCongratsPopUp(true)
         }
     }, [goalCompleted, hasShownCongratsPopUp])
-    const addSavings = (amount) => {
-
-        //DB CALL HERE
-
-        //OPTIMISTIC UI:
-        setGoalData((prevGoals) =>
-
-            prevGoals.map((goal, index) =>
-
-                index === currentGoalIndex
-                    /* true = overwrite goal.progress with the added value */
-                    ? {
-                        ...goal,
-                        progress: goal.progress + amount
-                    }
-                    : goal
-            )
-        )
-    }
-
-    const subtractSavings = (amount) => {
-
-        //DB CALL HERE
-
-        //OPTIMISTIC UI:
-        setGoalData((prevGoals) =>
-
-            prevGoals.map((goal, index) =>
-
-                index === currentGoalIndex
-                    ? {
-                        ...goal,
-                        progress: Math.max(
-                            0,
-                            goal.progress - amount
-                        )
-                    }
-                    : goal
-            )
-        )
-    }
-
 
     return (
         <Box>
@@ -257,8 +182,7 @@ function Goal() {
                 nextGoal={nextGoal}
             />
 
-            {/*  Progress bar and savings */}
-
+            {/* Progress bar and savings */}
             <Savings
                 currentSavings={currentGoal.progress}
                 targetSavings={currentGoal.targetAmount}
@@ -267,54 +191,29 @@ function Goal() {
             />
 
             {/* goal name and level */}
-
-            {/*  Progress bar and savings */}
-
-            <Savings
-                currentSavings={currentGoal.progress}
-                targetSavings={currentGoal.targetAmount}
-                addSavings={addSavings}
-                subtractSavings={subtractSavings}
-            />
-
-            <Box
-                sx={{
-                    display: "flex",
-                    padding: "1rem"
-                }}>
+            <Box sx={{ display: "flex", padding: "1rem" }}>
                 <Typography variant="body1" component="h2">
                     {currentGoal.name}
                 </Typography>
 
-                <Box
-                    sx={{
-                        display: "flex",
-                        paddingLeft: "2rem"
-                    }}>
+                <Box sx={{ display: "flex", paddingLeft: "2rem" }}>
                     <Typography variant="body1" component="p">
                         Lv {currentGoal.level}
                     </Typography>
 
                     <InfoIcon />
-
                 </Box>
-
             </Box>
 
             {/* task cards */}
-
             {
                 goalCompleted
                     ? (
-                        <VarTaskCard
-                            message="Congrats on reaching your goal!"
-                        />
+                        <VarTaskCard message="Congrats on reaching your goal!" />
                     )
                     : levelFiveIncomplete
                         ? (
-                            <VarTaskCard
-                                message="Reach your goal to reveal your tree!"
-                            />
+                            <VarTaskCard message="Reach your goal to reveal your tree!" />
                         )
                         : (
                             <TaskCard
@@ -329,12 +228,9 @@ function Goal() {
                 onClose={() => setShowCongrats(false)}
             />
 
-
-
             <FooterNav />
         </Box>
     )
-
 }
 
 export default Goal
