@@ -311,7 +311,7 @@ export default function ProfilePage() {
           text="Logout"
           textColor={text}
           green={green}
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/logout")}
         />
       </Box>
 
