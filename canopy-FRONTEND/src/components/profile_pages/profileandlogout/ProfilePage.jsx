@@ -1,9 +1,4 @@
-import {
-  Box,
-  Typography,
-  IconButton,
-  Switch,
-} from "@mui/material";
+import { Box, Typography, Switch } from "@mui/material";
 
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
@@ -11,7 +6,7 @@ import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import ForestOutlinedIcon from "@mui/icons-material/ForestOutlined";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import PieChartOutlineIcon from "@mui/icons-material/PieChartOutline";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -64,13 +59,7 @@ export default function ProfilePage() {
       </Box>
 
       {/* Main Content */}
-      <Box
-        sx={{
-          flexGrow: 1,
-          px: "20px",
-          pt: "35px",
-        }}
-      >
+      <Box sx={{ flexGrow: 1, px: "20px", pt: "35px" }}>
         <Typography
           sx={{
             textAlign: "center",
@@ -144,7 +133,7 @@ export default function ProfilePage() {
           />
 
           <SmallCard
-            icon={<PersonOutlineIcon />}
+            icon={<PermIdentityIcon />}
             title="My Account"
             onClick={() => navigate("/account")}
           />
@@ -153,6 +142,7 @@ export default function ProfilePage() {
         <MenuItem icon={<NotificationsNoneIcon />} text="Notifications" />
         <MenuItem icon={<SettingsOutlinedIcon />} text="Accessibility" />
 
+        {/* Dark Mode */}
         <Box
           sx={{
             display: "flex",
@@ -162,6 +152,7 @@ export default function ProfilePage() {
           }}
         >
           <DarkModeOutlinedIcon sx={{ fontSize: 28, color: "#005844", mr: 3 }} />
+
           <Typography sx={{ fontSize: 20, fontWeight: 800, color: "#000" }}>
             Dark Mode
           </Typography>
@@ -270,15 +261,7 @@ function SmallCard({ icon, title, onClick }) {
         color: "#005844",
       }}
     >
-      <Box
-        sx={{
-          "& svg": {
-            fontSize: 30,
-          },
-        }}
-      >
-        {icon}
-      </Box>
+      <Box sx={{ "& svg": { fontSize: 30 } }}>{icon}</Box>
 
       <Typography
         sx={{
@@ -310,9 +293,7 @@ function MenuItem({ icon, text, onClick }) {
         sx={{
           color: "#005844",
           mr: 3,
-          "& svg": {
-            fontSize: 28,
-          },
+          "& svg": { fontSize: 28 },
         }}
       >
         {icon}
@@ -342,16 +323,7 @@ function NavItem({ icon, label, onClick }) {
         cursor: "pointer",
       }}
     >
-      <Box
-        sx={{
-          height: 30,
-          "& svg": {
-            fontSize: 28,
-          },
-        }}
-      >
-        {icon}
-      </Box>
+      <Box sx={{ height: 30, "& svg": { fontSize: 28 } }}>{icon}</Box>
 
       <Typography sx={{ fontSize: 13 }}>{label}</Typography>
     </Box>
