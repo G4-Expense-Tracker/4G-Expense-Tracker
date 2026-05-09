@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import MainPage from "./components/pages/MainPage";
 import Onboarding from "./components/onboarding/Onboarding";
+import OB_End from "./components/onboarding/OB_End";
 import LoginPage from "./components/pages/LoginPage";
 import SignupPage from "./components/pages/SignupPage";
 import LoadingPage from "./components/pages/LoadingPage";
@@ -28,6 +29,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/onboarding" element={<Onboarding />} />
+        <Route path="/onboarding-end" element={<OB_End />} />
         <Route path="/goals" element={<Goal />} />
         <Route path="/newgoal" element={<NewGoal />} />
         <Route path="/dashboard" element={<DashboardPage />} />
