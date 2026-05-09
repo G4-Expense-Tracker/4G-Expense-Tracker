@@ -303,6 +303,7 @@ export default function ProfilePage() {
           text="Language"
           textColor={text}
           green={green}
+          onClick={() => navigate("/language")}
         />
 
         {/* Logout */}
