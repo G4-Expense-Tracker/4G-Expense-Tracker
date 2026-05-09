@@ -1,189 +1,142 @@
-import { useState } from "react";
-import { Box, Typography, IconButton, LinearProgress } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Box, Typography, Button } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 
-import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
-import WifiIcon from "@mui/icons-material/Wifi";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+export default function GoalProgressDemo() {
+  // Simulated backend value
+  const [savedAmount, setSavedAmount] = useState(0);
 
-import FooterNav from "../../Footer/FooterNav";
+  const targetAmount = 1000;
 
-/* Hardcoded data for demo purposes. I am going to replace this soon. */
-const dashboards = [
-  { title: "Click here", subtitle: "to set your goal", emoji: "🌱", progress: 0 },
-  { title: "Nike Shoe", subtitle: "$50 / 130", emoji: "🌿", progress: 38 },
-  { title: "Airpods", subtitle: "$150 / 250", emoji: "🌳", progress: 60 },
-  { title: "Korea", subtitle: "$1500 / 1800", emoji: "🌲", progress: 83 },
-];
+  // Auto calculate percentage
+  const progress = Math.min((savedAmount / targetAmount) * 100, 100);
 
-export default function DashboardPage() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const current = dashboards[currentIndex];
+  // Simulate live updates every 2 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSavedAmount((prev) => {
+        if (prev >= targetAmount) {
+          return targetAmount;
+        }
 
-  function nextDashboard() {
-    setCurrentIndex((prev) => (prev + 1) % dashboards.length);
-  }
+        return prev + 50;
+      });
+    }, 2000);
 
-  function previousDashboard() {
-    setCurrentIndex((prev) =>
-      prev === 0 ? dashboards.length - 1 : prev - 1
-    );
-  }
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Box
       sx={{
-        width: "100%",
-        maxWidth: 390,
-        minHeight: "100svh",
-        mx: "auto",
-        bgcolor: "#f8fbf2",
-        position: "relative",
-        overflowX: "hidden",
-        pb: 11,
+        minHeight: "100vh",
+        bgcolor: "#F4F5EF",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between", px: 3, pt: 2 }}>
-        <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
-
-        <Box sx={{ display: "flex", gap: 0.5 }}>
-          <SignalCellular4BarIcon sx={{ fontSize: 16 }} />
-          <WifiIcon sx={{ fontSize: 16 }} />
-          <BatteryFullIcon sx={{ fontSize: 18 }} />
-        </Box>
-      </Box>
-
-      <Typography
-        sx={{
-          textAlign: "center",
-          mt: 3,
-          fontWeight: 700,
-          fontSize: 24,
-          fontFamily: "Georgia, serif",
-        }}
-      >
-        Good Morning, Hye
-      </Typography>
-
       <Box
         sx={{
-          mt: 3,
           position: "relative",
+          width: 320,
+          height: 320,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        <IconButton
-          onClick={previousDashboard}
-          sx={{ position: "absolute", left: 18, color: "#168c6c" }}
-        >
-          <ChevronLeftIcon />
-        </IconButton>
-
-        <Box
-          sx={{
-            width: 220,
-            height: 220,
-            border: "14px solid #ffdb57",
-            borderRightColor: current.progress > 0 ? "#00503f" : "#ffdb57",
-            borderRadius: "50%",
-            bgcolor: "#fff8cc",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            textAlign: "center",
-          }}
-        >
-          <Typography sx={{ fontSize: 52 }}>{current.emoji}</Typography>
-
-          <Typography sx={{ fontWeight: 800, color: "#00503f", fontSize: 22 }}>
-            {current.title}
-          </Typography>
-
-          <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
-            {current.subtitle}
-          </Typography>
-        </Box>
-
-        <IconButton
-          onClick={nextDashboard}
-          sx={{ position: "absolute", right: 18, color: "#168c6c" }}
-        >
-          <ChevronRightIcon />
-        </IconButton>
-
-        {current.progress > 0 && (
-          <Box
-            sx={{
-              position: "absolute",
-              top: 12,
-              right: 48,
-              width: 38,
-              height: 38,
-              borderRadius: "50%",
-              bgcolor: "#00503f",
-              color: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: 12,
-              fontWeight: 700,
-            }}
-          >
-            {current.progress}%
-          </Box>
-        )}
-      </Box>
-
-      <Box
-        sx={{
-          mx: 2.5,
-          mt: 4,
-          p: 2.5,
-          borderRadius: 4,
-          bgcolor: "#dff0bf",
-          boxShadow: "0px 4px 12px rgba(0,0,0,0.12)",
-        }}
-      >
-        <Typography sx={{ color: "#00503f", fontWeight: 700, fontSize: 22 }}>
-          Daily Budget
-        </Typography>
-
-        <Typography sx={{ fontWeight: 800, fontSize: 32, mt: 1 }}>
-          $50
-        </Typography>
-
-        <LinearProgress
+        {/* Background Circle */}
+        <CircularProgress
           variant="determinate"
-          value={90}
+          value={100}
+          size={300}
+          thickness={4}
           sx={{
-            mt: 2,
-            height: 10,
-            borderRadius: 10,
-            bgcolor: "#d8d8d8",
-            "& .MuiLinearProgress-bar": {
-              bgcolor: "#00503f",
-            },
+            color: "#F5E7A0",
+            position: "absolute",
           }}
         />
 
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
-          <Box>
-            <Typography sx={{ fontSize: 12 }}>Used</Typography>
-            <Typography sx={{ fontWeight: 700, color: "#00503f" }}>$45</Typography>
-          </Box>
+        {/* Live Progress Circle */}
+        <CircularProgress
+          variant="determinate"
+          value={progress}
+          size={300}
+          thickness={4}
+          sx={{
+            color: "#FFD54F",
+            position: "absolute",
+            transition: "all 0.5s ease",
+          }}
+        />
 
-          <Box sx={{ textAlign: "right" }}>
-            <Typography sx={{ fontSize: 12 }}>Remaining</Typography>
-            <Typography sx={{ fontWeight: 700, color: "#00503f" }}>$5</Typography>
-          </Box>
+        {/* Percent Bubble */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: -5,
+            bgcolor: "#004D40",
+            color: "white",
+            width: 55,
+            height: 55,
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: 700,
+            fontSize: 16,
+            zIndex: 2,
+          }}
+        >
+          {Math.round(progress)}%
+        </Box>
+
+        {/* Center Content */}
+        <Box sx={{ textAlign: "center", zIndex: 1 }}>
+          <Box
+            component="img"
+            src="https://cdn-icons-png.flaticon.com/512/2909/2909762.png"
+            alt="plant"
+            sx={{
+              width: 120,
+              mb: 2,
+            }}
+          />
+
+          <Typography
+            sx={{
+              fontSize: 32,
+              fontWeight: 700,
+              color: "#004D40",
+            }}
+          >
+            Tuition
+          </Typography>
+
+          <Typography
+            sx={{
+              fontSize: 22,
+              fontWeight: 600,
+              color: "#004D40",
+            }}
+          >
+            ${savedAmount} / {targetAmount}
+          </Typography>
+
+          {/* Demo button */}
+          <Button
+            variant="contained"
+            onClick={() => setSavedAmount(savedAmount + 100)}
+            sx={{
+              mt: 3,
+              bgcolor: "#004D40",
+            }}
+          >
+            Add $100
+          </Button>
         </Box>
       </Box>
-
-      <FooterNav />
     </Box>
   );
 }
