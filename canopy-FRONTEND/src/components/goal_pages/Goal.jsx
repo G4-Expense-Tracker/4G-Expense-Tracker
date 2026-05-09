@@ -5,6 +5,7 @@ import { Box, Typography } from "@mui/material";
 import InfoIcon from '@mui/icons-material/Info';
 import Savings from "./TaskCard/Savings";
 import FooterNav from "../Footer/FooterNav";
+import VarTaskCard from "./TaskCard/VarTaskCard";
 
 
 //DATABASE CALLS
@@ -27,7 +28,23 @@ const goals = [
         targetAmount: 1500,
         progress: 500,
         level: 2
+    },
+
+    {
+        id: 3,
+        name: "Air Pods",
+        targetAmount: 360,
+        progress: 360,
+        level: 3
+    },
+    {
+        id: 3,
+        name: "Nikes",
+        targetAmount: 90,
+        progress: 50,
+        level: 5
     }
+
 ]
 
 const taskProgress = {
@@ -44,6 +61,22 @@ const taskProgress = {
         2: 2,
         3: 1,
         4: 0,
+        5: 3
+    },
+
+    3: {
+        1: 3,
+        2: 3,
+        3: 3,
+        4: 3,
+        5: 3
+    },
+
+    4: {
+        1: 1,
+        2: 1,
+        3: 3,
+        4: 3,
         5: 3
     }
 }
@@ -117,6 +150,17 @@ function Goal() {
         )
     }
 
+    /* helper variables */
+    const currentSavings = currentGoal.progress
+
+    const targetSavings = currentGoal.targetAmount
+
+    const goalCompleted =
+        currentSavings >= targetSavings
+
+    const levelFiveIncomplete =
+        currentGoal.level === 5 &&
+        currentSavings < targetSavings
 
     return (
         <Box>
@@ -135,6 +179,8 @@ function Goal() {
                 subtractSavings={subtractSavings}
             />
 
+            {/* goal name and level */}
+
             <Box
                 sx={{
                     display: "flex",
@@ -150,7 +196,7 @@ function Goal() {
                         paddingLeft: "2rem"
                     }}>
                     <Typography variant="body1" component="p">
-                        {currentGoal.level}
+                        Lv {currentGoal.level}
                     </Typography>
 
                     <InfoIcon />
@@ -159,12 +205,30 @@ function Goal() {
 
             </Box>
 
-            {/* probably pass the tasks completed to this? */}
+            {/* task cards */}
 
-            <TaskCard
-                progress={currentGoalProgress}
-                goal={currentGoal}
-            />
+            {
+                goalCompleted
+                    ? (
+                        <VarTaskCard
+                            message="Congrats on reaching your goal!"
+                        />
+                    )
+                    : levelFiveIncomplete
+                        ? (
+                            <VarTaskCard
+                                message="Reach your goal to reveal your tree!"
+                            />
+                        )
+                        : (
+                            <TaskCard
+                                progress={currentGoalProgress}
+                                goal={currentGoal}
+                            />
+                        )
+            }
+
+
 
             <FooterNav />
         </Box>
