@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 
 function OB_End({ onBack }) {
+    const navigate = useNavigate();
 
     return (
         <div style={{ height: "100vh", position: "relative" }}>
