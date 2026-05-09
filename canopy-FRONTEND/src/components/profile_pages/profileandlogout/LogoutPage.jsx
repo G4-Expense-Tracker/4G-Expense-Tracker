@@ -463,19 +463,22 @@ export default function ProfilePage() {
             >
               {/* LOGOUT BUTTON */}
               <Button
-                onClick={() => navigate("/login")}
+                onClick={() => navigate("/main")}
                 sx={{
-                  width: 120,
-                  height: 52,
-                  borderRadius: "30px",
+                  width: 150,
+                  height: 72,
+                  borderRadius: "40px",
                   bgcolor: "#005844",
                   color: "#FFFFFF",
-                  fontSize: 18,
-                  fontWeight: 800,
+                  fontSize: 22,
+                  fontWeight: 700,
+                  fontFamily: "inherit",
                   textTransform: "none",
+                  boxShadow:"none",
 
                   "&:hover": {
                     bgcolor: "#004333",
+                    boxShadow:"none"
                   },
                 }}
               >
