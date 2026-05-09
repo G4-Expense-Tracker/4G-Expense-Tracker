@@ -465,8 +465,8 @@ export default function ProfilePage() {
               <Button
                 onClick={() => navigate("/main")}
                 sx={{
-                  width: 150,
-                  height: 72,
+                  width: 120,
+                  height: 52,
                   borderRadius: "40px",
                   bgcolor: "#005844",
                   color: "#FFFFFF",
