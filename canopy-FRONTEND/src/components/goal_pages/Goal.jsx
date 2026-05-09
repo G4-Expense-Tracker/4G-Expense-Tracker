@@ -6,6 +6,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import Savings from "./TaskCard/Savings";
 import FooterNav from "../Footer/FooterNav";
 import VarTaskCard from "./TaskCard/VarTaskCard";
+import Congrats from "./TaskCard/Congrats";
 
 
 //DATABASE CALLS
@@ -82,8 +83,12 @@ const taskProgress = {
 }
 
 function Goal() {
+
+    /* states */
     const [goalData, setGoalData] = useState(goals)
     const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
+    const [showCongrats, setShowCongrats] = useState(false)
+    const [hasShownCongratsPopUp, setHasShownCongratsPopUp] = useState(false)
 
     /* NO GOALS TO SHOW PAGE: */
 
@@ -185,6 +190,15 @@ function Goal() {
         currentGoal.level === 5 &&
         currentSavings < targetSavings
 
+    /* use effect for completion pop up */
+
+    useEffect(() => {
+        if (goalCompleted && !hasShownCongratsPopUp) {
+            setShowCongrats(true)
+            setHasShownCongratsPopUp(true)
+        }
+    }, [goalCompleted, hasShownCongratsPopUp])
+
     return (
         <Box>
             <Header
@@ -250,6 +264,11 @@ function Goal() {
                             />
                         )
             }
+
+            <Congrats
+                open={showCongrats}
+                onClose={() => setShowCongrats(false)}
+            />
 
 
 
