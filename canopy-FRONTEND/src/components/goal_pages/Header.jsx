@@ -3,14 +3,8 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 
-function Header({ name }) {
+function Header({ name, previousGoal, nextGoal }) {
 
-    const ArrowLeft = () => {
-        /* previous goal callback */
-    }
-    const ArrowRight = () => {
-        /* next goal callback */
-    }
     const handleDots = () => {
         /* dot menu */
     }
@@ -77,7 +71,7 @@ function Header({ name }) {
                         sx={{
                             fontSize: "4rem"
                         }}
-                        onClick={ArrowLeft}
+                        onClick={previousGoal}
                         />
                 </Grid>
 
@@ -112,7 +106,7 @@ function Header({ name }) {
                         sx={{
                             fontSize: "4rem"
                         }}
-                        onClick={ArrowRight}
+                        onClick={nextGoal}
                         />
                 </Grid>
 
