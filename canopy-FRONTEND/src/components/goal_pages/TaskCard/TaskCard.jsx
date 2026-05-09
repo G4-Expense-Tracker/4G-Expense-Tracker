@@ -1,84 +1,47 @@
 import { Box, Typography } from "@mui/material"
 import TaskCounter from "./TaskCounter"
+import { TASKS } from "./tasks"
 
-function TaskCard() {
+function TaskCard({ progress, goal }) {
 
-    //db call
-    const weekNumber = 2
+    const level = goal.level
+    //this isn't what they have in the mock up, but idk a cleaner way to do it...
+    const requiredCount = level + 1
 
     return (
         <Box>
-            {/* week number */}
-            <Box>
-                <Typography variant="body1" component="p">
-                    Week {weekNumber}
-                </Typography>
-            </Box>
 
-            {/* weekly task list */}
-            <Box>
-                <Box>
-                    <Typography variant="body1" component="p">
-                        Login to Canopy
-                    </Typography>
+            {TASKS.map((task) => {
 
-                    {/*  VALUES ARE HARDCODED FOR NOW */}
-                    <TaskCounter
-                        completedCount={1}
-                        requiredCount={3}
-                    />
+                /* determines # of times a task was completed */
+                const completedCount = progress?.[task.id] || 0;
 
-                </Box>
+                return (
+                    <Box
+                        key={task.id}
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            padding: "0.5rem 1rem"
+                        }}
+                    >
 
-                <Box>
-                    <Typography variant="body1" component="p">
-                        Log an Expense
-                    </Typography>
+                        {/* task name */}
+                        <Typography variant="body1">
+                            {task.name}
+                        </Typography>
 
-                    <TaskCounter
-                        completedCount={2}
-                        requiredCount={3}
-                    />
+                        {/* circles */}
+                        <TaskCounter
+                            completedCount={completedCount}
+                            requiredCount={requiredCount}
+                        />
 
-                </Box>
+                    </Box>
+                );
+            })}
 
-                <Box>
-                    <Typography variant="body1" component="p">
-                        Add to Your Savings
-                    </Typography>
-
-                    <TaskCounter
-                        completedCount={1}
-                        requiredCount={2}
-                    />
-
-                </Box>
-
-                <Box>
-                    <Typography variant="body1" component="p">
-                        Set or Adjust Daily Buget
-                    </Typography>
-
-                    <TaskCounter
-                        completedCount={0}
-                        requiredCount={2}
-                    />
-
-                </Box>
-
-                <Box>
-                    <Typography variant="body1" component="p">
-                        Spend within Daily Budget
-                    </Typography>
-
-                    <TaskCounter
-                        completedCount={0}
-                        requiredCount={2}
-                    />
-
-                </Box>
-
-            </Box>
         </Box>
     )
 }
