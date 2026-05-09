@@ -3,32 +3,34 @@ import { Box, Typography, Switch } from "@mui/material";
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
-
 import ForestOutlinedIcon from "@mui/icons-material/ForestOutlined";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-
 import PieChartOutlinedIcon from "@mui/icons-material/PieChartOutlined";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
-
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
 
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-/* Profile Image */
 import profilePic from "../../profile_pages/account/profilepic.png";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
+  const [darkMode, setDarkMode] = useState(false);
+
+  const bg = darkMode ? "#10251F" : "#FAFCF4";
+  const cardBg = darkMode ? "#1E3A31" : "#EAF7D7";
+  const navBg = darkMode ? "#345044" : "#A8BF7E";
+  const text = darkMode ? "#FFFFFF" : "#000000";
+  const green = "#005844";
 
   return (
     <Box
@@ -36,92 +38,55 @@ export default function ProfilePage() {
         width: 390,
         minHeight: 844,
         mx: "auto",
-        bgcolor: "#FAFCF4",
+        bgcolor: bg,
         display: "flex",
         flexDirection: "column",
-        color: "#005844",
+        color: green,
       }}
     >
-      {/* ================= STATUS BAR ================= */}
+      {/* Status Bar */}
       <Box
         sx={{
-          height: 70,
+          height: 74,
           px: "34px",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          bgcolor: "#FAFCF4",
+          bgcolor: bg,
         }}
       >
-        <Typography
-          sx={{
-            fontWeight: 700,
-            fontSize: 14,
-            color: "#333",
-          }}
-        >
+        <Typography sx={{ fontWeight: 700, fontSize: 14, color: text }}>
           9:41
         </Typography>
 
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 0.3,
-          }}
-        >
-          <SignalCellular4BarIcon
-            sx={{
-              fontSize: 17,
-              color: "#333",
-            }}
-          />
-
-          <WifiIcon
-            sx={{
-              fontSize: 17,
-              color: "#333",
-            }}
-          />
-
-          <BatteryFullIcon
-            sx={{
-              fontSize: 21,
-              color: "#333",
-            }}
-          />
+        <Box sx={{ display: "flex", alignItems: "center", gap: 0.3 }}>
+          <SignalCellular4BarIcon sx={{ fontSize: 17, color: text }} />
+          <WifiIcon sx={{ fontSize: 17, color: text }} />
+          <BatteryFullIcon sx={{ fontSize: 21, color: text }} />
         </Box>
       </Box>
 
-      {/* ================= MAIN CONTENT ================= */}
+      {/* Main Content */}
       <Box
         sx={{
           flexGrow: 1,
           px: "20px",
-          pt: "35px",
+          pt: "36px",
         }}
       >
-        {/* Title */}
         <Typography
           sx={{
             textAlign: "center",
             fontSize: 34,
             fontWeight: 800,
-            color: "#000",
+            color: text,
             mb: "34px",
           }}
         >
           Profile
         </Typography>
 
-        {/* Profile Image */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            mb: "12px",
-          }}
-        >
+        <Box sx={{ display: "flex", justifyContent: "center", mb: "12px" }}>
           <Box
             component="img"
             src={profilePic}
@@ -135,26 +100,25 @@ export default function ProfilePage() {
           />
         </Box>
 
-        {/* Name */}
         <Typography
           sx={{
             textAlign: "center",
             fontSize: 24,
             fontWeight: 800,
-            color: "#000",
+            color: text,
             mb: "32px",
           }}
         >
           HYE
         </Typography>
 
-        {/* ================= MY GARDEN ================= */}
+        {/* My Garden */}
         <Box
           onClick={() => navigate("/garden")}
           sx={{
             height: 86,
             borderRadius: "18px",
-            bgcolor: "#EAF7D7",
+            bgcolor: cardBg,
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
@@ -163,75 +127,39 @@ export default function ProfilePage() {
             cursor: "pointer",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: 20,
-                fontWeight: 800,
-                color: "#000",
-              }}
-            >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography sx={{ fontSize: 20, fontWeight: 800, color: text }}>
               My Garden
             </Typography>
-
-            <ForestOutlinedIcon
-              sx={{
-                color: "#344D59",
-                fontSize: 25,
-              }}
-            />
+            <ForestOutlinedIcon sx={{ color: darkMode ? "#fff" : "#344D59" }} />
           </Box>
 
-          <ArrowForwardIosIcon
-            sx={{
-              color: "#005844",
-              fontSize: 22,
-            }}
-          />
+          <ArrowForwardIosIcon sx={{ color: darkMode ? "#fff" : green }} />
         </Box>
 
-        {/* ================= CATEGORY + ACCOUNT ================= */}
-        <Box
-          sx={{
-            display: "flex",
-            gap: "18px",
-            mb: "30px",
-          }}
-        >
-          {/* Categories */}
+        {/* Cards */}
+        <Box sx={{ display: "flex", gap: "18px", mb: "30px" }}>
           <SmallCard
             icon={<PieChartOutlinedIcon />}
             title="Categories"
             onClick={() => navigate("/categories")}
+            cardBg={cardBg}
+            text={text}
           />
 
-          {/* My Account */}
           <SmallCard
             icon={<PermIdentityIcon />}
             title="My Account"
             onClick={() => navigate("/account")}
+            cardBg={cardBg}
+            text={text}
           />
         </Box>
 
-        {/* Notifications */}
-        <MenuItem
-          icon={<NotificationsNoneIcon />}
-          text="Notifications"
-        />
+        <MenuItem icon={<NotificationsNoneIcon />} text="Notifications" textColor={text} />
+        <MenuItem icon={<SettingsOutlinedIcon />} text="Accessibility" textColor={text} />
 
-        {/* Accessibility */}
-        <MenuItem
-          icon={<SettingsOutlinedIcon />}
-          text="Accessibility"
-        />
-
-        {/* ================= DARK MODE ================= */}
+        {/* Dark Mode Toggle */}
         <Box
           sx={{
             display: "flex",
@@ -240,38 +168,24 @@ export default function ProfilePage() {
             px: "22px",
           }}
         >
-          <DarkModeOutlinedIcon
-            sx={{
-              fontSize: 28,
-              color: "#005844",
-              mr: 3,
-            }}
-          />
+          <DarkModeOutlinedIcon sx={{ fontSize: 28, color: green, mr: 3 }} />
 
-          <Typography
-            sx={{
-              fontSize: 20,
-              fontWeight: 800,
-              color: "#000",
-            }}
-          >
+          <Typography sx={{ fontSize: 20, fontWeight: 800, color: text }}>
             Dark Mode
           </Typography>
 
           <Switch
-            defaultChecked
+            checked={darkMode}
+            onChange={() => setDarkMode(!darkMode)}
             sx={{
               ml: "auto",
-
               "& .MuiSwitch-switchBase.Mui-checked": {
                 color: "#EAF7D7",
               },
-
               "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
                 bgcolor: "#8FB35D",
                 opacity: 1,
               },
-
               "& .MuiSwitch-track": {
                 bgcolor: "#8FB35D",
                 opacity: 1,
@@ -280,47 +194,31 @@ export default function ProfilePage() {
           />
         </Box>
 
-        {/* Language */}
-        <MenuItem
-          icon={<LanguageOutlinedIcon />}
-          text="Language"
-        />
+        <MenuItem icon={<LanguageOutlinedIcon />} text="Language" textColor={text} />
 
-        {/* Logout */}
         <MenuItem
           icon={<LogoutOutlinedIcon />}
           text="Logout"
+          textColor={text}
           onClick={() => navigate("/login")}
         />
       </Box>
 
-      {/* ================= BOTTOM NAVIGATION ================= */}
+      {/* Bottom Nav */}
       <Box
         sx={{
           height: 90,
-          bgcolor: "#A8BF7E",
+          bgcolor: navBg,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-around",
           position: "relative",
-          color: "#005844",
+          color: green,
         }}
       >
-        {/* Home */}
-        <NavItem
-          icon={<HomeOutlinedIcon />}
-          label="Home"
-          onClick={() => navigate("/dashboard")}
-        />
+        <NavItem icon={<HomeOutlinedIcon />} label="Home" onClick={() => navigate("/dashboard")} />
+        <NavItem icon={<BarChartOutlinedIcon />} label="Expense" onClick={() => navigate("/expense")} />
 
-        {/* Expense */}
-        <NavItem
-          icon={<BarChartOutlinedIcon />}
-          label="Expense"
-          onClick={() => navigate("/expense")}
-        />
-
-        {/* Add Button */}
         <Box
           onClick={() => navigate("/add")}
           sx={{
@@ -335,42 +233,23 @@ export default function ProfilePage() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            border: "5px solid #A8BF7E",
+            border: `5px solid ${navBg}`,
             cursor: "pointer",
           }}
         >
-          <AddIcon
-            sx={{
-              fontSize: 42,
-              color: "#005844",
-            }}
-          />
+          <AddIcon sx={{ fontSize: 42, color: green }} />
         </Box>
 
-        {/* Empty Space */}
         <Box sx={{ width: 58 }} />
 
-        {/* Goal */}
-        <NavItem
-          icon={<EmojiEventsOutlinedIcon />}
-          label="Goal"
-          onClick={() => navigate("/goal")}
-        />
-
-        {/* Profile */}
-        <NavItem
-          icon={<PersonIcon />}
-          label="Profile"
-          onClick={() => navigate("/profile")}
-        />
+        <NavItem icon={<EmojiEventsOutlinedIcon />} label="Goal" onClick={() => navigate("/goal")} />
+        <NavItem icon={<PersonIcon />} label="Profile" onClick={() => navigate("/profile")} />
       </Box>
     </Box>
   );
 }
 
-/* ================= SMALL CARD ================= */
-
-function SmallCard({ icon, title, onClick }) {
+function SmallCard({ icon, title, onClick, cardBg, text }) {
   return (
     <Box
       onClick={onClick}
@@ -378,7 +257,7 @@ function SmallCard({ icon, title, onClick }) {
         flex: 1,
         height: 95,
         borderRadius: "18px",
-        bgcolor: "#EAF7D7",
+        bgcolor: cardBg,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -387,33 +266,16 @@ function SmallCard({ icon, title, onClick }) {
         color: "#005844",
       }}
     >
-      <Box
-        sx={{
-          "& svg": {
-            fontSize: 30,
-          },
-        }}
-      >
-        {icon}
-      </Box>
+      <Box sx={{ "& svg": { fontSize: 30 } }}>{icon}</Box>
 
-      <Typography
-        sx={{
-          fontSize: 20,
-          fontWeight: 800,
-          color: "#000",
-          mt: "8px",
-        }}
-      >
+      <Typography sx={{ fontSize: 20, fontWeight: 800, color: text, mt: "8px" }}>
         {title}
       </Typography>
     </Box>
   );
 }
 
-/* ================= MENU ITEM ================= */
-
-function MenuItem({ icon, text, onClick }) {
+function MenuItem({ icon, text, textColor, onClick }) {
   return (
     <Box
       onClick={onClick}
@@ -425,33 +287,16 @@ function MenuItem({ icon, text, onClick }) {
         cursor: onClick ? "pointer" : "default",
       }}
     >
-      <Box
-        sx={{
-          color: "#005844",
-          mr: 3,
-
-          "& svg": {
-            fontSize: 28,
-          },
-        }}
-      >
+      <Box sx={{ color: "#005844", mr: 3, "& svg": { fontSize: 28 } }}>
         {icon}
       </Box>
 
-      <Typography
-        sx={{
-          fontSize: 20,
-          fontWeight: 800,
-          color: "#000",
-        }}
-      >
+      <Typography sx={{ fontSize: 20, fontWeight: 800, color: textColor }}>
         {text}
       </Typography>
     </Box>
   );
 }
-
-/* ================= NAVIGATION ITEM ================= */
 
 function NavItem({ icon, label, onClick }) {
   return (
@@ -464,25 +309,8 @@ function NavItem({ icon, label, onClick }) {
         cursor: "pointer",
       }}
     >
-      <Box
-        sx={{
-          height: 30,
-
-          "& svg": {
-            fontSize: 28,
-          },
-        }}
-      >
-        {icon}
-      </Box>
-
-      <Typography
-        sx={{
-          fontSize: 13,
-        }}
-      >
-        {label}
-      </Typography>
+      <Box sx={{ height: 30, "& svg": { fontSize: 28 } }}>{icon}</Box>
+      <Typography sx={{ fontSize: 13 }}>{label}</Typography>
     </Box>
   );
 }
