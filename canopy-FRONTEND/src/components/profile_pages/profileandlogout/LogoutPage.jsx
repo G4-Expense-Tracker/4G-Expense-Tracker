@@ -470,7 +470,7 @@ export default function ProfilePage() {
                   borderRadius: "40px",
                   bgcolor: "#005844",
                   color: "#FFFFFF",
-                  fontSize: 22,
+                  fontSize: 18,
                   fontWeight: 700,
                   fontFamily: "inherit",
                   textTransform: "none",
