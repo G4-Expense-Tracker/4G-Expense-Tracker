@@ -218,7 +218,7 @@ export default function ProfilePage() {
           <SmallCard
             icon={<PieChartOutlinedIcon />}
             title="Categories"
-            onClick={() => navigate("/categories")}
+            onClick={() => navigate("/category")}
             cardBg={cardBg}
             text={text}
             green={green}
@@ -241,6 +241,7 @@ export default function ProfilePage() {
           text="Notifications"
           textColor={text}
           green={green}
+          onClick={() => navigate("/notifications")}
         />
 
         {/* Accessibility */}
@@ -249,6 +250,7 @@ export default function ProfilePage() {
           text="Accessibility"
           textColor={text}
           green={green}
+          onClick={() => navigate("/accessibility")}
         />
 
         {/* ================= DARK MODE ================= */}
@@ -307,6 +309,7 @@ export default function ProfilePage() {
           text="Language"
           textColor={text}
           green={green}
+          onClick={() => navigate("/language")}
         />
 
         {/* Logout */}
