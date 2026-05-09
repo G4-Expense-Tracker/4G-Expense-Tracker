@@ -11,6 +11,8 @@ function TaskCard({ progress, goal }) {
     return (
         <Box>
 
+            {/* do we implement the week number? */}
+
             {TASKS.map((task) => {
 
                 /* determines # of times a task was completed */

@@ -5,6 +5,7 @@ import { Box, Typography } from "@mui/material";
 import InfoIcon from '@mui/icons-material/Info';
 import Savings from "./TaskCard/Savings";
 import FooterNav from "../Footer/FooterNav";
+import VarTaskCard from "./TaskCard/VarTaskCard";
 
 
 //DATABASE CALLS
@@ -27,7 +28,23 @@ const goals = [
         targetAmount: 1500,
         progress: 500,
         level: 2
+    },
+
+    {
+        id: 3,
+        name: "Air Pods",
+        targetAmount: 360,
+        progress: 360,
+        level: 3
+    },
+    {
+        id: 3,
+        name: "Nikes",
+        targetAmount: 90,
+        progress: 50,
+        level: 5
     }
+
 ]
 
 const taskProgress = {
@@ -44,6 +61,22 @@ const taskProgress = {
         2: 2,
         3: 1,
         4: 0,
+        5: 3
+    },
+
+    3: {
+        1: 3,
+        2: 3,
+        3: 3,
+        4: 3,
+        5: 3
+    },
+
+    4: {
+        1: 1,
+        2: 1,
+        3: 3,
+        4: 3,
         5: 3
     }
 }
@@ -186,7 +219,7 @@ function Goal() {
                         paddingLeft: "2rem"
                     }}>
                     <Typography variant="body1" component="p">
-                        {currentGoal.level}
+                        Lv {currentGoal.level}
                     </Typography>
 
                     <InfoIcon />

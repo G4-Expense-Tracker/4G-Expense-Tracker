@@ -1,6 +1,12 @@
+import { Box, Typography } from "@mui/material"
+
 function VarTaskCard({ message }){
     return (
-        message
+        <Box>
+            <Typography variant="body1" component="p">
+                {message}
+            </Typography>
+        </Box>
     )
 }
 
