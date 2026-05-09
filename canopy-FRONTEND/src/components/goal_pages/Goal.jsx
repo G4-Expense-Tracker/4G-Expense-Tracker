@@ -51,29 +51,6 @@ const taskProgress = {
 function Goal() {
     const [goalData, setGoalData] = useState(goals)
     const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
-
-    /* NO GOALS TO SHOW PAGE: */
-
-    if (goalData.length === 0) {
-
-        return (
-            <Box>
-
-                <Typography variant="h1" component="h1">
-                    No Goals!
-                </Typography>
-
-                <Typography variant="body1" component="p">
-                    Add a goal using the plus icon down below!
-                </Typography>
-
-                <FooterNav />
-
-            </Box>
-        )
-    }
-
-
     const currentGoal = goalData[currentGoalIndex]
 
     const currentGoalProgress =
