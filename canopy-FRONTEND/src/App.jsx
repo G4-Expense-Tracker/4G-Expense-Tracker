@@ -17,6 +17,7 @@ import Accessibility from "./components/profile_pages/accessibility/Accessibilit
 import AccountPage from "./components/profile_pages/account/AccountPage";
 import ProfilePage from "./components/profile_pages/profileandlogout/ProfilePage";
 import LogoutPage from "./components/profile_pages/profileandlogout/LogoutPage";
+import Language from "./components/profile_pages/Language";
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
         <Route path="/account" element={<AccountPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/logout" element={<LogoutPage />} />
+        <Route path="/language" element={<Language />} />
+
 
       </Routes>
       
