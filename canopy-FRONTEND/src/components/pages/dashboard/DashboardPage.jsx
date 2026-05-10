@@ -1,10 +1,13 @@
-// Import useState to change goal slides and update amount
+// React useState reference:
+// https://react.dev/reference/react/useState
 import { useState } from "react";
 
-// Import useNavigate to connect pages
+// React Router useNavigate reference:
+// https://reactrouter.com/api/hooks/useNavigate
 import { useNavigate } from "react-router-dom";
 
-// Import Material UI components
+// MUI components reference:
+// https://mui.com/material-ui/getting-started/
 import {
   Box,
   Typography,
@@ -14,8 +17,8 @@ import {
   TextField,
 } from "@mui/material";
 
-// Import Material UI icons
-// Mui Icons from : https://mui.com/material-ui/material-icons/
+// MUI icons reference:
+// https://mui.com/material-ui/material-icons/
 import AddIcon from "@mui/icons-material/Add";
 import HomeIcon from "@mui/icons-material/Home";
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -23,26 +26,28 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PersonIcon from "@mui/icons-material/Person";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
+import WifiIcon from "@mui/icons-material/Wifi";
+import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 
-// Import plant images (D3 students images )
+// Plant images (From BCIT Design Team (Jennie, David, Alice, Hye and Gurjot))
 import seed1 from "../dashboard/plants/seed1.png";
 import phase1 from "../dashboard/plants/phase1.png";
 import phase2 from "../dashboard/plants/phase2.png";
 import phase3 from "../dashboard/plants/phase3.png";
 import phase4 from "../dashboard/plants/phase4.png";
 
-// Main Dashboard page
 export default function DashboardPage() {
-  // Used for moving to other pages
+  // This lets the footer buttons go to other pages
   const navigate = useNavigate();
 
-  // Keeps track of the current goal circle
+  // This changes the circular goal card
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Keeps track of the current bottom card dot
+  // This changes the active dot under the bottom cards
   const [cardIndex, setCardIndex] = useState(0);
 
-  // Goal data
+  // Goal data for the circular progress
   const [goals, setGoals] = useState([
     {
       title: "Click here",
@@ -72,16 +77,21 @@ export default function DashboardPage() {
     },
   ]);
 
-  // Current selected goal
+  // Current goal that is showing
   const current = goals[currentIndex];
 
-  // Calculate circular progress automatically
+  // MUI CircularProgress reference:
+  // https://mui.com/material-ui/react-progress/
+  // This calculates the slider percentage automatically
   const progress =
     current.targetAmount && current.savedAmount !== ""
       ? Math.min((Number(current.savedAmount) / current.targetAmount) * 100, 100)
       : 0;
 
-  // Update circle progress when user types amount
+  // MUI TextField reference:
+  // https://mui.com/material-ui/react-text-field/
+  // Slider from the input box, only shows if the goal has a target amount and referenced from: https://www.npmjs.com/package/@fseehawer/react-circular-slider
+  // This updates the slider when the user types a saved amount
   function handleAmountChange(event) {
     const value = event.target.value;
 
@@ -97,7 +107,7 @@ export default function DashboardPage() {
     );
   }
 
-  // Change plant picture based on progress
+  // This changes the plant image based on the progress
   function getPlantImage() {
     if (progress === 0) return seed1;
     if (progress < 40) return phase1;
@@ -106,17 +116,17 @@ export default function DashboardPage() {
     return phase4;
   }
 
-  // Go to next goal
+  // This moves to the next circular goal
   function nextGoal() {
     setCurrentIndex((prev) => (prev + 1) % goals.length);
   }
 
-  // Go to previous goal
+  // This moves to the previous circular goal
   function previousGoal() {
     setCurrentIndex((prev) => (prev === 0 ? goals.length - 1 : prev - 1));
   }
 
-  // Change dots when user scrolls cards
+  // This updates the dots when the user scrolls the bottom cards
   function handleCardScroll(event) {
     const scrollLeft = event.target.scrollLeft;
     const cardWidth = 346;
@@ -126,7 +136,6 @@ export default function DashboardPage() {
   }
 
   return (
-    // Main phone container
     <Box
       sx={{
         width: 390,
@@ -138,8 +147,16 @@ export default function DashboardPage() {
         pb: 12,
       }}
     >
-      {/* Status Bar */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+      {/* Status bar */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          px: 3,
+          pt: 2,
+          mb: 2,
+        }}
+      >
         <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
 
         <Box sx={{ display: "flex", gap: 0.3 }}>
@@ -148,6 +165,7 @@ export default function DashboardPage() {
           <BatteryFullIcon sx={{ fontSize: 17 }} />
         </Box>
       </Box>
+
       {/* Greeting */}
       <Typography
         sx={{
@@ -162,7 +180,7 @@ export default function DashboardPage() {
         Good Morning, Hye
       </Typography>
 
-      {/* Input box only shows when there is a target amount */}
+      {/* Input box only shows for goals that have target amount */}
       {current.targetAmount && (
         <Box sx={{ px: 4, mt: 3 }}>
           <TextField
@@ -182,7 +200,7 @@ export default function DashboardPage() {
         </Box>
       )}
 
-      {/* Circle progress area */}
+      {/* Circular goal progress */}
       <Box
         sx={{
           mt: 4,
@@ -215,7 +233,7 @@ export default function DashboardPage() {
             alignItems: "center",
           }}
         >
-          {/* Yellow circle */}
+          {/* Yellow full circle */}
           <CircularProgress
             variant="determinate"
             value={100}
@@ -264,7 +282,7 @@ export default function DashboardPage() {
             </Box>
           )}
 
-          {/* Inner circle */}
+          {/* Inner circle content */}
           <Box
             sx={{
               width: 195,
@@ -279,7 +297,7 @@ export default function DashboardPage() {
               zIndex: 1,
             }}
           >
-            {/* Plant image from NPM react page circular slider */}
+            {/* Animated plant */}
             <Box
               component="img"
               src={getPlantImage()}
@@ -338,7 +356,7 @@ export default function DashboardPage() {
         </IconButton>
       </Box>
 
-      {/* Cards row */}
+      {/* Bottom cards row */}
       <Box
         onScroll={handleCardScroll}
         sx={{
@@ -529,7 +547,7 @@ export default function DashboardPage() {
         ))}
       </Box>
 
-      {/* Footer navigation */}
+      {/* Footer navigation links from App.jsx routes */}
       <Box
         sx={{
           width: 390,
