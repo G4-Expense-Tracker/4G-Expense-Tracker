@@ -1,7 +1,7 @@
-// Import useState to update goal amounts and current goal
+// Import useState to change goal slides and update amount
 import { useState } from "react";
 
-// Import useNavigate to link pages
+// Import useNavigate to connect pages
 import { useNavigate } from "react-router-dom";
 
 // Import Material UI components
@@ -30,15 +30,15 @@ import phase2 from "../dashboard/plants/phase2.png";
 import phase3 from "../dashboard/plants/phase3.png";
 import phase4 from "../dashboard/plants/phase4.png";
 
-// Main dashboard page
+// Main Dashboard page
 export default function DashboardPage() {
-  // Used for page navigation
+  // Used for moving to other pages
   const navigate = useNavigate();
 
-  // Current goal slide index
+  // Keeps track of the current goal shown in the circle
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Goal data
+  // Goal data for the circle
   const [goals, setGoals] = useState([
     {
       title: "Click here",
@@ -68,7 +68,7 @@ export default function DashboardPage() {
     },
   ]);
 
-  // Current selected goal
+  // Current goal object
   const current = goals[currentIndex];
 
   // Calculate progress automatically
@@ -77,7 +77,7 @@ export default function DashboardPage() {
       ? Math.min((Number(current.savedAmount) / current.targetAmount) * 100, 100)
       : 0;
 
-  // Update saved amount when user types
+  // Updates the slider when user types amount
   function handleAmountChange(event) {
     const value = event.target.value;
 
@@ -93,7 +93,7 @@ export default function DashboardPage() {
     );
   }
 
-  // Change plant image based on progress
+  // Change plant picture based on progress percent
   function getPlantImage() {
     if (progress === 0) return seed1;
     if (progress < 40) return phase1;
@@ -102,17 +102,18 @@ export default function DashboardPage() {
     return phase4;
   }
 
-  // Move to next goal
+  // Go to the next goal
   function nextGoal() {
     setCurrentIndex((prev) => (prev + 1) % goals.length);
   }
 
-  // Move to previous goal
+  // Go to the previous goal
   function previousGoal() {
     setCurrentIndex((prev) => (prev === 0 ? goals.length - 1 : prev - 1));
   }
 
   return (
+    // Main phone container
     <Box
       sx={{
         width: 390,
@@ -133,11 +134,14 @@ export default function DashboardPage() {
           pt: 2,
         }}
       >
+        {/* Time */}
         <Typography sx={{ fontSize: 14, fontWeight: 700 }}>9:41</Typography>
+
+        {/* Simple phone icons */}
         <Typography sx={{ fontSize: 14, fontWeight: 700 }}>▴⌁▮</Typography>
       </Box>
 
-      {/* Greeting */}
+      {/* Greeting text */}
       <Typography
         sx={{
           textAlign: "center",
@@ -150,7 +154,7 @@ export default function DashboardPage() {
         Good Morning, Hye
       </Typography>
 
-      {/* Amount input */}
+      {/* Input only shows when goal has a target */}
       {current.targetAmount && (
         <Box sx={{ px: 4, mt: 3 }}>
           <TextField
@@ -170,7 +174,7 @@ export default function DashboardPage() {
         </Box>
       )}
 
-      {/* Circular progress section */}
+      {/* Circle progress area */}
       <Box
         sx={{
           mt: 4,
@@ -298,7 +302,7 @@ export default function DashboardPage() {
               {current.title}
             </Typography>
 
-            {/* Goal amount */}
+            {/* Goal amount or subtitle */}
             <Typography
               sx={{
                 fontSize: 14,
@@ -345,23 +349,24 @@ export default function DashboardPage() {
         <Box
           onClick={() => navigate("/newgoal")}
           sx={{
-            minWidth: 300,
-            height: 150,
-            borderRadius: 4,
+            minWidth: 330,
+            height: 160,
+            borderRadius: 3,
             bgcolor: "#DFF0BF",
-            boxShadow: "0px 4px 12px rgba(0,0,0,0.18)",
+            boxShadow: "0px 6px 10px rgba(0,0,0,0.25)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: 2,
+            gap: 3,
             cursor: "pointer",
             scrollSnapAlign: "center",
           }}
         >
+          {/* Plus icon circle */}
           <Box
             sx={{
-              width: 58,
-              height: 58,
+              width: 62,
+              height: 62,
               borderRadius: "50%",
               bgcolor: "#FFF8CC",
               display: "flex",
@@ -369,10 +374,11 @@ export default function DashboardPage() {
               alignItems: "center",
             }}
           >
-            <AddIcon sx={{ fontSize: 38, color: "#004D40" }} />
+            <AddIcon sx={{ fontSize: 42, color: "#004D40" }} />
           </Box>
 
-          <Typography sx={{ fontSize: 24, fontWeight: 700, color: "#004D40" }}>
+          {/* Add card text */}
+          <Typography sx={{ fontSize: 26, fontWeight: 700, color: "#004D40" }}>
             Add New Card
           </Typography>
         </Box>
@@ -380,28 +386,31 @@ export default function DashboardPage() {
         {/* Daily Budget Card */}
         <Box
           sx={{
-            minWidth: 300,
-            height: 150,
-            borderRadius: 4,
+            minWidth: 330,
+            height: 160,
+            borderRadius: 3,
             bgcolor: "#DFF0BF",
-            boxShadow: "0px 4px 12px rgba(0,0,0,0.18)",
-            p: 2,
+            boxShadow: "0px 6px 10px rgba(0,0,0,0.25)",
+            p: 3,
             boxSizing: "border-box",
             scrollSnapAlign: "center",
           }}
         >
-          <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 22 }}>
+          {/* Daily budget title */}
+          <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 24 }}>
             Daily Budget
           </Typography>
 
-          <Typography sx={{ fontWeight: 800, fontSize: 32 }}>$50</Typography>
+          {/* Daily budget amount */}
+          <Typography sx={{ fontWeight: 800, fontSize: 36 }}>$50</Typography>
 
+          {/* Budget progress bar */}
           <LinearProgress
             variant="determinate"
             value={90}
             sx={{
               mt: 1.5,
-              height: 10,
+              height: 12,
               borderRadius: 10,
               bgcolor: "#FFF8CC",
               "& .MuiLinearProgress-bar": {
@@ -410,19 +419,18 @@ export default function DashboardPage() {
             }}
           />
 
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
+          {/* Used and remaining */}
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1.5 }}>
             <Box>
-              <Typography sx={{ fontSize: 12, fontWeight: 700 }}>Used</Typography>
-              <Typography sx={{ fontSize: 18, fontWeight: 700, color: "#004D40" }}>
+              <Typography sx={{ fontSize: 14, fontWeight: 700 }}>Used</Typography>
+              <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#004D40" }}>
                 $45
               </Typography>
             </Box>
 
             <Box sx={{ textAlign: "right" }}>
-              <Typography sx={{ fontSize: 12, fontWeight: 700 }}>
-                Remaining
-              </Typography>
-              <Typography sx={{ fontSize: 18, fontWeight: 700, color: "#004D40" }}>
+              <Typography sx={{ fontSize: 14, fontWeight: 700 }}>Remaining</Typography>
+              <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#004D40" }}>
                 $5
               </Typography>
             </Box>
@@ -430,70 +438,96 @@ export default function DashboardPage() {
 
           {/* Three dots */}
           <Box sx={{ textAlign: "center", mt: -0.5 }}>
-            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>●</Box>
-            <Box component="span" sx={{ color: "#004D40", mx: 0.4 }}>●</Box>
-            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>●</Box>
+            <Box component="span" sx={{ color: "#004D40", mx: 0.4 }}>
+              ●
+            </Box>
+            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>
+              ●
+            </Box>
+            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>
+              ●
+            </Box>
           </Box>
         </Box>
 
         {/* Recent Expense Card */}
         <Box
           sx={{
-            minWidth: 300,
-            height: 150,
-            borderRadius: 4,
+            minWidth: 330,
+            height: 160,
+            borderRadius: 3,
             bgcolor: "#DFF0BF",
-            boxShadow: "0px 4px 12px rgba(0,0,0,0.18)",
-            p: 2,
+            boxShadow: "0px 6px 10px rgba(0,0,0,0.25)",
+            p: 3,
             boxSizing: "border-box",
             scrollSnapAlign: "center",
           }}
         >
-          <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 22 }}>
+          {/* Recent expense title */}
+          <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 24 }}>
             Recent Expense
           </Typography>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mt: 2 }}>
-            <Box
-              sx={{
-                width: 42,
-                height: 42,
-                borderRadius: "50%",
-                bgcolor: "#9AB46B",
-                color: "white",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              ☕
-            </Box>
-
-            <Box>
-              <Typography sx={{ fontSize: 24, fontWeight: 500 }}>
-                Starbucks
-              </Typography>
-
-              <Typography
+          {/* Expense row */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              mt: 2,
+            }}
+          >
+            {/* Expense left side */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+              <Box
                 sx={{
-                  mt: 0.5,
-                  px: 1.5,
-                  py: 0.3,
-                  borderRadius: 5,
-                  bgcolor: "#FFF8CC",
-                  fontSize: 14,
+                  width: 42,
+                  height: 42,
+                  borderRadius: "50%",
+                  bgcolor: "#9AB46B",
+                  color: "white",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                Sun, April 7 | 6:00 am
-              </Typography>
+                ☕
+              </Box>
+
+              <Typography sx={{ fontSize: 26 }}>Starbucks</Typography>
             </Box>
+
+            {/* Expense amount */}
+            <Typography sx={{ fontSize: 26, fontWeight: 700 }}>$6.00</Typography>
           </Box>
 
+          {/* Expense date */}
+          <Typography
+            sx={{
+              mt: 1,
+              ml: 6,
+              display: "inline-block",
+              px: 1.5,
+              py: 0.3,
+              borderRadius: 5,
+              bgcolor: "#FFF8CC",
+              fontSize: 14,
+            }}
+          >
+            Sun, April 7&nbsp;&nbsp; | &nbsp;&nbsp;6:00 am
+          </Typography>
+
           {/* Three dots */}
-          <Box sx={{ textAlign: "center", mt: 1.5 }}>
-            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>●</Box>
-            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>●</Box>
-            <Box component="span" sx={{ color: "#004D40", mx: 0.4 }}>●</Box>
+          <Box sx={{ textAlign: "center", mt: 2 }}>
+            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>
+              ●
+            </Box>
+            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>
+              ●
+            </Box>
+            <Box component="span" sx={{ color: "#004D40", mx: 0.4 }}>
+              ●
+            </Box>
           </Box>
         </Box>
       </Box>
@@ -514,16 +548,19 @@ export default function DashboardPage() {
           zIndex: 10,
         }}
       >
+        {/* Home link */}
         <Box onClick={() => navigate("/main")} sx={{ textAlign: "center", cursor: "pointer" }}>
           <HomeIcon sx={{ color: "#004D40" }} />
           <Typography sx={{ fontSize: 12, color: "#004D40" }}>Home</Typography>
         </Box>
 
+        {/* Expense link */}
         <Box onClick={() => navigate("/expense")} sx={{ textAlign: "center", cursor: "pointer" }}>
           <BarChartIcon sx={{ color: "#004D40" }} />
           <Typography sx={{ fontSize: 12, color: "#004D40" }}>Expense</Typography>
         </Box>
 
+        {/* Add new goal link */}
         <Box
           onClick={() => navigate("/newgoal")}
           sx={{
@@ -542,11 +579,13 @@ export default function DashboardPage() {
           <AddIcon sx={{ fontSize: 38, color: "#004D40" }} />
         </Box>
 
+        {/* Goal link */}
         <Box onClick={() => navigate("/goals")} sx={{ textAlign: "center", cursor: "pointer" }}>
           <EmojiEventsIcon sx={{ color: "#004D40" }} />
           <Typography sx={{ fontSize: 12, color: "#004D40" }}>Goal</Typography>
         </Box>
 
+        {/* Profile link */}
         <Box onClick={() => navigate("/account")} sx={{ textAlign: "center", cursor: "pointer" }}>
           <PersonIcon sx={{ color: "#004D40" }} />
           <Typography sx={{ fontSize: 12, color: "#004D40" }}>Profile</Typography>
