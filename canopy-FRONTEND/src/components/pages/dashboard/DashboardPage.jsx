@@ -22,9 +22,6 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PersonIcon from "@mui/icons-material/Person";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
-import WifiIcon from "@mui/icons-material/Wifi";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 
 // Import plant images
 import seed1 from "../dashboard/plants/seed1.png";
@@ -38,10 +35,13 @@ export default function DashboardPage() {
   // Used for moving to other pages
   const navigate = useNavigate();
 
-  // Keeps track of the current goal shown in the circle
+  // Keeps track of the current goal circle
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Goal data for the circle
+  // Keeps track of the current bottom card dot
+  const [cardIndex, setCardIndex] = useState(0);
+
+  // Goal data
   const [goals, setGoals] = useState([
     {
       title: "Click here",
@@ -71,16 +71,16 @@ export default function DashboardPage() {
     },
   ]);
 
-  // Current goal object
+  // Current selected goal
   const current = goals[currentIndex];
 
-  // Calculate progress automatically
+  // Calculate circular progress automatically
   const progress =
     current.targetAmount && current.savedAmount !== ""
       ? Math.min((Number(current.savedAmount) / current.targetAmount) * 100, 100)
       : 0;
 
-  // Updates the slider when user types amount
+  // Update circle progress when user types amount
   function handleAmountChange(event) {
     const value = event.target.value;
 
@@ -96,7 +96,7 @@ export default function DashboardPage() {
     );
   }
 
-  // Change plant picture based on progress percent
+  // Change plant picture based on progress
   function getPlantImage() {
     if (progress === 0) return seed1;
     if (progress < 40) return phase1;
@@ -105,14 +105,23 @@ export default function DashboardPage() {
     return phase4;
   }
 
-  // Go to the next goal
+  // Go to next goal
   function nextGoal() {
     setCurrentIndex((prev) => (prev + 1) % goals.length);
   }
 
-  // Go to the previous goal
+  // Go to previous goal
   function previousGoal() {
     setCurrentIndex((prev) => (prev === 0 ? goals.length - 1 : prev - 1));
+  }
+
+  // Change dots when user scrolls cards
+  function handleCardScroll(event) {
+    const scrollLeft = event.target.scrollLeft;
+    const cardWidth = 346;
+    const newIndex = Math.round(scrollLeft / cardWidth);
+
+    setCardIndex(newIndex);
   }
 
   return (
@@ -137,18 +146,11 @@ export default function DashboardPage() {
           pt: 2,
         }}
       >
-        {/* Time */}
         <Typography sx={{ fontSize: 14, fontWeight: 700 }}>9:41</Typography>
-
-        {/* Simple phone icons */}
-        <Box sx={{ display: "flex", gap: 0.3 }}>
-            <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
-            <WifiIcon sx={{ fontSize: 14 }} />
-            <BatteryFullIcon sx={{ fontSize: 17 }} />
-        </Box>
+        <Typography sx={{ fontSize: 14, fontWeight: 700 }}>▴⌁▮</Typography>
       </Box>
 
-      {/* Greeting text */}
+      {/* Greeting */}
       <Typography
         sx={{
           textAlign: "center",
@@ -156,12 +158,13 @@ export default function DashboardPage() {
           fontSize: 28,
           fontWeight: 700,
           fontFamily: "Georgia, serif",
+          color: "#004D40",
         }}
       >
         Good Morning, Hye
       </Typography>
 
-      {/* Input only shows when goal has a target */}
+      {/* Input box only shows when there is a target amount */}
       {current.targetAmount && (
         <Box sx={{ px: 4, mt: 3 }}>
           <TextField
@@ -214,7 +217,7 @@ export default function DashboardPage() {
             alignItems: "center",
           }}
         >
-          {/* Yellow full circle */}
+          {/* Yellow circle */}
           <CircularProgress
             variant="determinate"
             value={100}
@@ -263,7 +266,7 @@ export default function DashboardPage() {
             </Box>
           )}
 
-          {/* Inside circle */}
+          {/* Inner circle */}
           <Box
             sx={{
               width: 195,
@@ -309,7 +312,7 @@ export default function DashboardPage() {
               {current.title}
             </Typography>
 
-            {/* Goal amount or subtitle */}
+            {/* Goal amount */}
             <Typography
               sx={{
                 fontSize: 14,
@@ -339,6 +342,7 @@ export default function DashboardPage() {
 
       {/* Cards row */}
       <Box
+        onScroll={handleCardScroll}
         sx={{
           mt: 5,
           display: "flex",
@@ -369,7 +373,6 @@ export default function DashboardPage() {
             scrollSnapAlign: "center",
           }}
         >
-          {/* Plus icon circle */}
           <Box
             sx={{
               width: 62,
@@ -384,7 +387,6 @@ export default function DashboardPage() {
             <AddIcon sx={{ fontSize: 42, color: "#004D40" }} />
           </Box>
 
-          {/* Add card text */}
           <Typography sx={{ fontSize: 26, fontWeight: 700, color: "#004D40" }}>
             Add New Card
           </Typography>
@@ -403,15 +405,12 @@ export default function DashboardPage() {
             scrollSnapAlign: "center",
           }}
         >
-          {/* Daily budget title */}
           <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 24 }}>
             Daily Budget
           </Typography>
 
-          {/* Daily budget amount */}
           <Typography sx={{ fontWeight: 800, fontSize: 36 }}>$50</Typography>
 
-          {/* Budget progress bar */}
           <LinearProgress
             variant="determinate"
             value={90}
@@ -426,7 +425,6 @@ export default function DashboardPage() {
             }}
           />
 
-          {/* Used and remaining */}
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1.5 }}>
             <Box>
               <Typography sx={{ fontSize: 14, fontWeight: 700 }}>Used</Typography>
@@ -436,23 +434,12 @@ export default function DashboardPage() {
             </Box>
 
             <Box sx={{ textAlign: "right" }}>
-              <Typography sx={{ fontSize: 14, fontWeight: 700 }}>Remaining</Typography>
+              <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
+                Remaining
+              </Typography>
               <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#004D40" }}>
                 $5
               </Typography>
-            </Box>
-          </Box>
-
-          {/* Three dots */}
-          <Box sx={{ textAlign: "center", mt: -0.5 }}>
-            <Box component="span" sx={{ color: "#004D40", mx: 0.4 }}>
-              ●
-            </Box>
-            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>
-              ●
-            </Box>
-            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>
-              ●
             </Box>
           </Box>
         </Box>
@@ -470,12 +457,10 @@ export default function DashboardPage() {
             scrollSnapAlign: "center",
           }}
         >
-          {/* Recent expense title */}
           <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 24 }}>
             Recent Expense
           </Typography>
 
-          {/* Expense row */}
           <Box
             sx={{
               display: "flex",
@@ -484,7 +469,6 @@ export default function DashboardPage() {
               mt: 2,
             }}
           >
-            {/* Expense left side */}
             <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
               <Box
                 sx={{
@@ -504,11 +488,9 @@ export default function DashboardPage() {
               <Typography sx={{ fontSize: 26 }}>Starbucks</Typography>
             </Box>
 
-            {/* Expense amount */}
             <Typography sx={{ fontSize: 26, fontWeight: 700 }}>$6.00</Typography>
           </Box>
 
-          {/* Expense date */}
           <Typography
             sx={{
               mt: 1,
@@ -523,20 +505,30 @@ export default function DashboardPage() {
           >
             Sun, April 7&nbsp;&nbsp; | &nbsp;&nbsp;6:00 am
           </Typography>
-
-          {/* Three dots */}
-          <Box sx={{ textAlign: "center", mt: 2 }}>
-            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>
-              ●
-            </Box>
-            <Box component="span" sx={{ color: "#9AB46B", mx: 0.4 }}>
-              ●
-            </Box>
-            <Box component="span" sx={{ color: "#004D40", mx: 0.4 }}>
-              ●
-            </Box>
-          </Box>
         </Box>
+      </Box>
+
+      {/* Three dots under cards */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 1,
+          mt: 1,
+        }}
+      >
+        {[0, 1, 2].map((dot) => (
+          <Box
+            key={dot}
+            sx={{
+              width: 10,
+              height: 10,
+              borderRadius: "50%",
+              bgcolor: cardIndex === dot ? "#004D40" : "#9AB46B",
+            }}
+          />
+        ))}
       </Box>
 
       {/* Footer navigation */}
@@ -555,19 +547,16 @@ export default function DashboardPage() {
           zIndex: 10,
         }}
       >
-        {/* Home link */}
         <Box onClick={() => navigate("/main")} sx={{ textAlign: "center", cursor: "pointer" }}>
           <HomeIcon sx={{ color: "#004D40" }} />
           <Typography sx={{ fontSize: 12, color: "#004D40" }}>Home</Typography>
         </Box>
 
-        {/* Expense link */}
         <Box onClick={() => navigate("/expense")} sx={{ textAlign: "center", cursor: "pointer" }}>
           <BarChartIcon sx={{ color: "#004D40" }} />
           <Typography sx={{ fontSize: 12, color: "#004D40" }}>Expense</Typography>
         </Box>
 
-        {/* Add new goal link */}
         <Box
           onClick={() => navigate("/newgoal")}
           sx={{
@@ -586,13 +575,11 @@ export default function DashboardPage() {
           <AddIcon sx={{ fontSize: 38, color: "#004D40" }} />
         </Box>
 
-        {/* Goal link */}
         <Box onClick={() => navigate("/goals")} sx={{ textAlign: "center", cursor: "pointer" }}>
           <EmojiEventsIcon sx={{ color: "#004D40" }} />
           <Typography sx={{ fontSize: 12, color: "#004D40" }}>Goal</Typography>
         </Box>
 
-        {/* Profile link */}
         <Box onClick={() => navigate("/account")} sx={{ textAlign: "center", cursor: "pointer" }}>
           <PersonIcon sx={{ color: "#004D40" }} />
           <Typography sx={{ fontSize: 12, color: "#004D40" }}>Profile</Typography>
