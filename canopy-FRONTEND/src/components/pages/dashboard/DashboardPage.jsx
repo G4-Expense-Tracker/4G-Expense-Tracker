@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -22,8 +21,6 @@ import phase3 from "../dashboard/plants/phase3.png";
 import phase4 from "../dashboard/plants/phase4.png";
 
 export default function DashboardPage() {
-  const navigate = useNavigate();
-
   const [goals, setGoals] = useState([
     {
       title: "Tuition",
@@ -57,7 +54,7 @@ export default function DashboardPage() {
       : 0;
 
   function getPlantImage() {
-    if (progress === 0) return seed;
+    if (progress === 0) return seed1;
     if (progress < 40) return phase1;
     if (progress < 60) return phase2;
     if (progress < 85) return phase3;
@@ -84,9 +81,7 @@ export default function DashboardPage() {
   }
 
   function previousGoal() {
-    setCurrentIndex((prev) =>
-      prev === 0 ? goals.length - 1 : prev - 1
-    );
+    setCurrentIndex((prev) => (prev === 0 ? goals.length - 1 : prev - 1));
   }
 
   return (
