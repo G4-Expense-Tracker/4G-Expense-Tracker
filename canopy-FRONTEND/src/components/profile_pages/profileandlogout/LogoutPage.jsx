@@ -33,6 +33,26 @@ export default function ProfilePage() {
   const [darkMode, setDarkMode] = useState(false);
   const [openLogout, setOpenLogout] = useState(false);
 
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(import.meta.env.VITE_APP_LOGOUT_URL, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.isLoggedIn === false) {
+        navigate("/main");
+      }
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
   /* COLORS */
   const bg = darkMode ? "#16352C" : "#FAFCF4";
   const cardBg = darkMode ? "#27463C" : "#EAF7D7";
@@ -466,7 +486,7 @@ export default function ProfilePage() {
             >
               {/* LOGOUT BUTTON */}
               <Button
-                onClick={() => navigate("/main")}
+                onClick={handleLogout}
                 sx={{
                   width: 120,
                   height: 52,
