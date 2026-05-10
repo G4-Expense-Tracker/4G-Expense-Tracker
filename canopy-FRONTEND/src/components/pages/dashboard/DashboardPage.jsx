@@ -22,6 +22,9 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PersonIcon from "@mui/icons-material/Person";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
+import WifiIcon from "@mui/icons-material/Wifi";
+import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 
 // Import plant images
 import seed1 from "../dashboard/plants/seed1.png";
