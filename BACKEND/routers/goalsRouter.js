@@ -21,9 +21,19 @@ router.get('/list', requireLogin, async (req, res) => {
 
         const goals = await getGoalsByUser(user_id)
 
+        const formattedGoals = goals.map(goal => ({
+            id: goal.goal_id,
+            name: goal.name,
+            targetAmount: goal.target_amount,
+            progress: goal.progress,
+            level: goal.level,
+            startDate: goal.start_date,
+            userId: goal.user_id
+        }))
+
         return res.json({ 
             success: true,
-            goals: goals || []
+            goals: formattedGoals || []
          })
     } catch(err) {
         console.error(err);
