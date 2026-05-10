@@ -138,7 +138,11 @@ export default function DashboardPage() {
         <Typography sx={{ fontSize: 14, fontWeight: 700 }}>9:41</Typography>
 
         {/* Simple phone icons */}
-        <Typography sx={{ fontSize: 14, fontWeight: 700 }}>▴⌁▮</Typography>
+        <Box sx={{ display: "flex", gap: 0.3 }}>
+            <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
+            <WifiIcon sx={{ fontSize: 14 }} />
+            <BatteryFullIcon sx={{ fontSize: 17 }} />
+        </Box>
       </Box>
 
       {/* Greeting text */}
