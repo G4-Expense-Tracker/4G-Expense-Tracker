@@ -15,7 +15,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import FooterNav from "../../Footer/FooterNav";
 
-import seed from "../dashboard/plants/seed.png";
+import seed1 from "../dashboard/plants/seed1.png";
 import phase1 from "../dashboard/plants/phase1.png";
 import phase2 from "../dashboard/plants/phase2.png";
 import phase3 from "../dashboard/plants/phase3.png";
