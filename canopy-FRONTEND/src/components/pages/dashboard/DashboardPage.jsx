@@ -1,19 +1,20 @@
-// Import useState for changing the current goal slide
+// Import useState to update goal amounts and current goal
 import { useState } from "react";
 
-// Import useNavigate to move between pages
+// Import useNavigate to link pages
 import { useNavigate } from "react-router-dom";
 
-// Import MUI components
+// Import Material UI components
 import {
   Box,
   Typography,
   CircularProgress,
   IconButton,
   LinearProgress,
+  TextField,
 } from "@mui/material";
 
-// Import MUI icons
+// Import Material UI icons
 import AddIcon from "@mui/icons-material/Add";
 import HomeIcon from "@mui/icons-material/Home";
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -29,25 +30,25 @@ import phase2 from "../dashboard/plants/phase2.png";
 import phase3 from "../dashboard/plants/phase3.png";
 import phase4 from "../dashboard/plants/phase4.png";
 
-// Dashboard page component
+// Main dashboard page
 export default function DashboardPage() {
-  // Used to link buttons to other pages
+  // Used for page navigation
   const navigate = useNavigate();
 
-  // Keeps track of which goal is showing
+  // Current goal slide index
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Goal data for the circular progress section
-  const goals = [
+  // Goal data
+  const [goals, setGoals] = useState([
     {
       title: "Click here",
       subtitle: "to set your goal",
-      savedAmount: null,
-      targetAmount: null,
+      savedAmount: "",
+      targetAmount: "",
     },
     {
       title: "Tuition",
-      savedAmount: 0,
+      savedAmount: "",
       targetAmount: 1000,
     },
     {
@@ -65,18 +66,34 @@ export default function DashboardPage() {
       savedAmount: 1500,
       targetAmount: 1800,
     },
-  ];
+  ]);
 
-  // Get the current selected goal
+  // Current selected goal
   const current = goals[currentIndex];
 
   // Calculate progress automatically
   const progress =
-    current.targetAmount && current.savedAmount !== null
-      ? Math.min((current.savedAmount / current.targetAmount) * 100, 100)
+    current.targetAmount && current.savedAmount !== ""
+      ? Math.min((Number(current.savedAmount) / current.targetAmount) * 100, 100)
       : 0;
 
-  // Choose plant image based on progress
+  // Update saved amount when user types
+  function handleAmountChange(event) {
+    const value = event.target.value;
+
+    setGoals((prevGoals) =>
+      prevGoals.map((goal, index) =>
+        index === currentIndex
+          ? {
+              ...goal,
+              savedAmount: value === "" ? "" : Number(value),
+            }
+          : goal
+      )
+    );
+  }
+
+  // Change plant image based on progress
   function getPlantImage() {
     if (progress === 0) return seed1;
     if (progress < 40) return phase1;
@@ -85,12 +102,12 @@ export default function DashboardPage() {
     return phase4;
   }
 
-  // Go to next goal
+  // Move to next goal
   function nextGoal() {
     setCurrentIndex((prev) => (prev + 1) % goals.length);
   }
 
-  // Go to previous goal
+  // Move to previous goal
   function previousGoal() {
     setCurrentIndex((prev) => (prev === 0 ? goals.length - 1 : prev - 1));
   }
@@ -98,8 +115,7 @@ export default function DashboardPage() {
   return (
     <Box
       sx={{
-        width: "100%",
-        maxWidth: 390,
+        width: 390,
         minHeight: "100svh",
         mx: "auto",
         bgcolor: "#F7F9F2",
@@ -121,7 +137,7 @@ export default function DashboardPage() {
         <Typography sx={{ fontSize: 14, fontWeight: 700 }}>▴⌁▮</Typography>
       </Box>
 
-      {/* Greeting text */}
+      {/* Greeting */}
       <Typography
         sx={{
           textAlign: "center",
@@ -134,10 +150,30 @@ export default function DashboardPage() {
         Good Morning, Hye
       </Typography>
 
-      {/* Circular progress area */}
+      {/* Amount input */}
+      {current.targetAmount && (
+        <Box sx={{ px: 4, mt: 3 }}>
+          <TextField
+            fullWidth
+            type="number"
+            placeholder="Enter saved amount"
+            value={current.savedAmount}
+            onChange={handleAmountChange}
+            sx={{
+              bgcolor: "white",
+              borderRadius: 4,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 4,
+              },
+            }}
+          />
+        </Box>
+      )}
+
+      {/* Circular progress section */}
       <Box
         sx={{
-          mt: 5,
+          mt: 4,
           position: "relative",
           display: "flex",
           justifyContent: "center",
@@ -192,7 +228,7 @@ export default function DashboardPage() {
             }}
           />
 
-          {/* Percent bubble only shows when there is a real goal */}
+          {/* Percent bubble */}
           {current.targetAmount && (
             <Box
               sx={{
@@ -216,7 +252,7 @@ export default function DashboardPage() {
             </Box>
           )}
 
-          {/* Inner circle */}
+          {/* Inside circle */}
           <Box
             sx={{
               width: 195,
@@ -262,7 +298,7 @@ export default function DashboardPage() {
               {current.title}
             </Typography>
 
-            {/* Goal amount or subtitle */}
+            {/* Goal amount */}
             <Typography
               sx={{
                 fontSize: 14,
@@ -271,7 +307,7 @@ export default function DashboardPage() {
               }}
             >
               {current.targetAmount
-                ? `$${current.savedAmount} / ${current.targetAmount}`
+                ? `$${current.savedAmount || 0} / ${current.targetAmount}`
                 : current.subtitle}
             </Typography>
           </Box>
@@ -290,7 +326,7 @@ export default function DashboardPage() {
         </IconButton>
       </Box>
 
-      {/* Scrollable cards row */}
+      {/* Cards row */}
       <Box
         sx={{
           mt: 5,
@@ -299,6 +335,7 @@ export default function DashboardPage() {
           overflowX: "auto",
           px: 2,
           pb: 2,
+          scrollSnapType: "x mandatory",
           "&::-webkit-scrollbar": {
             display: "none",
           },
@@ -308,9 +345,9 @@ export default function DashboardPage() {
         <Box
           onClick={() => navigate("/newgoal")}
           sx={{
-            minWidth: 270,
+            minWidth: 300,
             height: 150,
-            borderRadius: 3,
+            borderRadius: 4,
             bgcolor: "#DFF0BF",
             boxShadow: "0px 4px 12px rgba(0,0,0,0.18)",
             display: "flex",
@@ -318,6 +355,7 @@ export default function DashboardPage() {
             justifyContent: "center",
             gap: 2,
             cursor: "pointer",
+            scrollSnapAlign: "center",
           }}
         >
           <Box
@@ -342,19 +380,21 @@ export default function DashboardPage() {
         {/* Daily Budget Card */}
         <Box
           sx={{
-            minWidth: 270,
+            minWidth: 300,
             height: 150,
-            borderRadius: 3,
+            borderRadius: 4,
             bgcolor: "#DFF0BF",
             boxShadow: "0px 4px 12px rgba(0,0,0,0.18)",
             p: 2,
+            boxSizing: "border-box",
+            scrollSnapAlign: "center",
           }}
         >
-          <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 24 }}>
+          <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 22 }}>
             Daily Budget
           </Typography>
 
-          <Typography sx={{ fontWeight: 800, fontSize: 34 }}>$50</Typography>
+          <Typography sx={{ fontWeight: 800, fontSize: 32 }}>$50</Typography>
 
           <LinearProgress
             variant="determinate"
@@ -372,17 +412,17 @@ export default function DashboardPage() {
 
           <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
             <Box>
-              <Typography sx={{ fontSize: 13, fontWeight: 700 }}>Used</Typography>
-              <Typography sx={{ fontSize: 20, fontWeight: 700, color: "#004D40" }}>
+              <Typography sx={{ fontSize: 12, fontWeight: 700 }}>Used</Typography>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: "#004D40" }}>
                 $45
               </Typography>
             </Box>
 
             <Box sx={{ textAlign: "right" }}>
-              <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
+              <Typography sx={{ fontSize: 12, fontWeight: 700 }}>
                 Remaining
               </Typography>
-              <Typography sx={{ fontSize: 20, fontWeight: 700, color: "#004D40" }}>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, color: "#004D40" }}>
                 $5
               </Typography>
             </Box>
@@ -399,15 +439,17 @@ export default function DashboardPage() {
         {/* Recent Expense Card */}
         <Box
           sx={{
-            minWidth: 270,
+            minWidth: 300,
             height: 150,
-            borderRadius: 3,
+            borderRadius: 4,
             bgcolor: "#DFF0BF",
             boxShadow: "0px 4px 12px rgba(0,0,0,0.18)",
             p: 2,
+            boxSizing: "border-box",
+            scrollSnapAlign: "center",
           }}
         >
-          <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 24 }}>
+          <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 22 }}>
             Recent Expense
           </Typography>
 
@@ -428,7 +470,7 @@ export default function DashboardPage() {
             </Box>
 
             <Box>
-              <Typography sx={{ fontSize: 26, fontWeight: 500 }}>
+              <Typography sx={{ fontSize: 24, fontWeight: 500 }}>
                 Starbucks
               </Typography>
 
@@ -459,8 +501,7 @@ export default function DashboardPage() {
       {/* Footer navigation */}
       <Box
         sx={{
-          width: "100%",
-          maxWidth: 390,
+          width: 390,
           height: 75,
           bgcolor: "#A8BF7D",
           position: "fixed",
