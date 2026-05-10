@@ -1,70 +1,91 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Box,
   Typography,
+  CircularProgress,
+  TextField,
   IconButton,
   LinearProgress,
-  CircularProgress,
 } from "@mui/material";
 
-import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
-import WifiIcon from "@mui/icons-material/Wifi";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import FooterNav from "../../Footer/FooterNav";
 
-const dashboards = [
-  {
-    title: "Click here",
-    subtitle: "to set your goal",
-    emoji: "🌱",
-    savedAmount: 0,
-    targetAmount: 0,
-  },
-  {
-    title: "Tuition",
-    emoji: "🌿",
-    savedAmount: 0,
-    targetAmount: 1000,
-  },
-  {
-    title: "Nike Shoe",
-    emoji: "🌿",
-    savedAmount: 50,
-    targetAmount: 130,
-  },
-  {
-    title: "Airpods",
-    emoji: "🌳",
-    savedAmount: 150,
-    targetAmount: 250,
-  },
-  {
-    title: "Korea",
-    emoji: "🌲",
-    savedAmount: 1500,
-    targetAmount: 1800,
-  },
-];
+import seed from "../dashboard/plants/seed.png";
+import phase1 from "../dashboard/plants/phase1.png";
+import phase2 from "../dashboard/plants/phase2.png";
+import phase3 from "../dashboard/plants/phase3.png";
+import phase4 from "../dashboard/plants/phase4.png";
 
 export default function DashboardPage() {
+  const navigate = useNavigate();
+
+  const [goals, setGoals] = useState([
+    {
+      title: "Tuition",
+      savedAmount: 0,
+      targetAmount: 1000,
+    },
+    {
+      title: "Nike Shoe",
+      savedAmount: 50,
+      targetAmount: 130,
+    },
+    {
+      title: "Airpods",
+      savedAmount: 150,
+      targetAmount: 250,
+    },
+    {
+      title: "Korea",
+      savedAmount: 1500,
+      targetAmount: 1800,
+    },
+  ]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
-  const current = dashboards[currentIndex];
+
+  const current = goals[currentIndex];
 
   const progress =
     current.targetAmount > 0
       ? Math.min((current.savedAmount / current.targetAmount) * 100, 100)
       : 0;
 
-  function nextDashboard() {
-    setCurrentIndex((prev) => (prev + 1) % dashboards.length);
+  function getPlantImage() {
+    if (progress === 0) return seed;
+    if (progress < 40) return phase1;
+    if (progress < 60) return phase2;
+    if (progress < 85) return phase3;
+    return phase4;
   }
 
-  function previousDashboard() {
+  function handleBudgetChange(event) {
+    const newAmount = Number(event.target.value);
+
+    setGoals((prevGoals) =>
+      prevGoals.map((goal, index) =>
+        index === currentIndex
+          ? {
+              ...goal,
+              savedAmount: newAmount,
+            }
+          : goal
+      )
+    );
+  }
+
+  function nextGoal() {
+    setCurrentIndex((prev) => (prev + 1) % goals.length);
+  }
+
+  function previousGoal() {
     setCurrentIndex((prev) =>
-      prev === 0 ? dashboards.length - 1 : prev - 1
+      prev === 0 ? goals.length - 1 : prev - 1
     );
   }
 
@@ -75,37 +96,45 @@ export default function DashboardPage() {
         maxWidth: 390,
         minHeight: "100svh",
         mx: "auto",
-        bgcolor: "#f8fbf2",
-        position: "relative",
+        bgcolor: "#F7F9F2",
         overflowX: "hidden",
-        pb: 11,
+        position: "relative",
+        pb: 12,
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between", px: 3, pt: 2 }}>
-        <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
-
-        <Box sx={{ display: "flex", gap: 0.5 }}>
-          <SignalCellular4BarIcon sx={{ fontSize: 16 }} />
-          <WifiIcon sx={{ fontSize: 16 }} />
-          <BatteryFullIcon sx={{ fontSize: 18 }} />
-        </Box>
-      </Box>
-
       <Typography
         sx={{
           textAlign: "center",
-          mt: 3,
+          pt: 7,
+          fontSize: 28,
           fontWeight: 700,
-          fontSize: 24,
+          color: "#004D40",
           fontFamily: "Georgia, serif",
         }}
       >
         Good Morning, Hye
       </Typography>
 
+      <Box sx={{ px: 3, mt: 4 }}>
+        <TextField
+          fullWidth
+          type="number"
+          label="Enter New Budget"
+          value={current.savedAmount}
+          onChange={handleBudgetChange}
+          sx={{
+            bgcolor: "white",
+            borderRadius: 3,
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 3,
+            },
+          }}
+        />
+      </Box>
+
       <Box
         sx={{
-          mt: 3,
+          mt: 5,
           position: "relative",
           display: "flex",
           justifyContent: "center",
@@ -113,8 +142,12 @@ export default function DashboardPage() {
         }}
       >
         <IconButton
-          onClick={previousDashboard}
-          sx={{ position: "absolute", left: 18, color: "#168c6c" }}
+          onClick={previousGoal}
+          sx={{
+            position: "absolute",
+            left: 10,
+            color: "#168C6C",
+          }}
         >
           <ChevronLeftIcon />
         </IconButton>
@@ -122,94 +155,119 @@ export default function DashboardPage() {
         <Box
           sx={{
             position: "relative",
-            width: 250,
-            height: 250,
+            width: 260,
+            height: 260,
             display: "flex",
-            alignItems: "center",
             justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          {/* yellow background circle */}
           <CircularProgress
             variant="determinate"
             value={100}
             size={230}
             thickness={4.5}
             sx={{
-              color: "#ffdb57",
+              color: "#FFD84D",
               position: "absolute",
             }}
           />
 
-          {/* green dynamic progress circle */}
           <CircularProgress
             variant="determinate"
             value={progress}
             size={230}
             thickness={4.5}
             sx={{
-              color: "#00503f",
+              color: "#004D40",
               position: "absolute",
-              transition: "all 0.4s ease",
+              transition: "all 0.5s ease",
             }}
           />
 
-          {/* inside circle */}
           <Box
             sx={{
-              width: 195,
-              height: 195,
+              position: "absolute",
+              top: 8,
+              right: 55,
+              width: 42,
+              height: 42,
               borderRadius: "50%",
-              bgcolor: "#fff8cc",
+              bgcolor: "#004D40",
+              color: "white",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              fontWeight: 700,
+              fontSize: 12,
+              zIndex: 2,
+            }}
+          >
+            {Math.round(progress)}%
+          </Box>
+
+          <Box
+            sx={{
+              width: 190,
+              height: 190,
+              borderRadius: "50%",
+              bgcolor: "#FFF8CC",
+              display: "flex",
               flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
               textAlign: "center",
               zIndex: 1,
             }}
           >
-            <Typography sx={{ fontSize: 52 }}>{current.emoji}</Typography>
+            <Box
+              component="img"
+              src={getPlantImage()}
+              alt="plant"
+              sx={{
+                width: 90,
+                height: 90,
+                objectFit: "contain",
+                animation: "swing 2.5s ease-in-out infinite",
+                transformOrigin: "bottom center",
+                "@keyframes swing": {
+                  "0%": { transform: "rotate(-4deg)" },
+                  "50%": { transform: "rotate(4deg)" },
+                  "100%": { transform: "rotate(-4deg)" },
+                },
+              }}
+            />
 
-            <Typography sx={{ fontWeight: 800, color: "#00503f", fontSize: 22 }}>
+            <Typography
+              sx={{
+                mt: 1,
+                fontSize: 24,
+                fontWeight: 800,
+                color: "#004D40",
+              }}
+            >
               {current.title}
             </Typography>
 
-            <Typography sx={{ fontSize: 13, fontWeight: 700, color: "#00503f" }}>
-              {current.targetAmount > 0
-                ? `$${current.savedAmount} / ${current.targetAmount}`
-                : "to set your goal"}
-            </Typography>
-          </Box>
-
-          {/* percent bubble */}
-          {current.targetAmount > 0 && (
-            <Box
+            <Typography
               sx={{
-                position: "absolute",
-                top: 5,
-                right: 70,
-                width: 38,
-                height: 38,
-                borderRadius: "50%",
-                bgcolor: "#00503f",
-                color: "white",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 12,
+                fontSize: 15,
                 fontWeight: 700,
-                zIndex: 2,
+                color: "#004D40",
               }}
             >
-              {Math.round(progress)}%
-            </Box>
-          )}
+              ${current.savedAmount} / {current.targetAmount}
+            </Typography>
+          </Box>
         </Box>
 
         <IconButton
-          onClick={nextDashboard}
-          sx={{ position: "absolute", right: 18, color: "#168c6c" }}
+          onClick={nextGoal}
+          sx={{
+            position: "absolute",
+            right: 10,
+            color: "#168C6C",
+          }}
         >
           <ChevronRightIcon />
         </IconButton>
@@ -220,16 +278,16 @@ export default function DashboardPage() {
           mx: 2.5,
           mt: 4,
           p: 2.5,
-          borderRadius: 4,
-          bgcolor: "#dff0bf",
+          borderRadius: 5,
+          bgcolor: "#DFF0BF",
           boxShadow: "0px 4px 12px rgba(0,0,0,0.12)",
         }}
       >
-        <Typography sx={{ color: "#00503f", fontWeight: 700, fontSize: 22 }}>
+        <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 22 }}>
           Daily Budget
         </Typography>
 
-        <Typography sx={{ fontWeight: 800, fontSize: 32, mt: 1 }}>
+        <Typography sx={{ fontWeight: 800, fontSize: 34, mt: 1 }}>
           $50
         </Typography>
 
@@ -240,9 +298,9 @@ export default function DashboardPage() {
             mt: 2,
             height: 10,
             borderRadius: 10,
-            bgcolor: "#f8f4d4",
+            bgcolor: "#F8F4D4",
             "& .MuiLinearProgress-bar": {
-              bgcolor: "#00503f",
+              bgcolor: "#004D40",
             },
           }}
         />
@@ -250,12 +308,16 @@ export default function DashboardPage() {
         <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1 }}>
           <Box>
             <Typography sx={{ fontSize: 12 }}>Used</Typography>
-            <Typography sx={{ fontWeight: 700, color: "#00503f" }}>$45</Typography>
+            <Typography sx={{ fontWeight: 700, color: "#004D40" }}>
+              $45
+            </Typography>
           </Box>
 
           <Box sx={{ textAlign: "right" }}>
             <Typography sx={{ fontSize: 12 }}>Remaining</Typography>
-            <Typography sx={{ fontWeight: 700, color: "#00503f" }}>$5</Typography>
+            <Typography sx={{ fontWeight: 700, color: "#004D40" }}>
+              $5
+            </Typography>
           </Box>
         </Box>
       </Box>
