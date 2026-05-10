@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 
 // Import Material UI icons
+// Mui Icons from : https://mui.com/material-ui/material-icons/
 import AddIcon from "@mui/icons-material/Add";
 import HomeIcon from "@mui/icons-material/Home";
 import BarChartIcon from "@mui/icons-material/BarChart";
@@ -23,7 +24,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-// Import plant images
+// Import plant images (D3 students images )
 import seed1 from "../dashboard/plants/seed1.png";
 import phase1 from "../dashboard/plants/phase1.png";
 import phase2 from "../dashboard/plants/phase2.png";
@@ -137,19 +138,16 @@ export default function DashboardPage() {
         pb: 12,
       }}
     >
-      {/* Top phone bar */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          px: 3,
-          pt: 2,
-        }}
-      >
-        <Typography sx={{ fontSize: 14, fontWeight: 700 }}>9:41</Typography>
-        <Typography sx={{ fontSize: 14, fontWeight: 700 }}>▴⌁▮</Typography>
-      </Box>
+      {/* Status Bar */}
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+        <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
 
+        <Box sx={{ display: "flex", gap: 0.3 }}>
+          <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
+          <WifiIcon sx={{ fontSize: 14 }} />
+          <BatteryFullIcon sx={{ fontSize: 17 }} />
+        </Box>
+      </Box>
       {/* Greeting */}
       <Typography
         sx={{
@@ -281,7 +279,7 @@ export default function DashboardPage() {
               zIndex: 1,
             }}
           >
-            {/* Plant image */}
+            {/* Plant image from NPM react page circular slider */}
             <Box
               component="img"
               src={getPlantImage()}
