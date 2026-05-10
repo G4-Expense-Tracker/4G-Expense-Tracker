@@ -5,7 +5,9 @@ import { requireLogin, requireLogout } from "../middleware/authMiddleware.js";
 import {
   addUser,
   verifyUserCredentials,
-  getUserByEmail
+  getUserByEmail,
+  editUser,
+  deleteUser
 } from "../db/dal/user.js";
 
 router.get('/session', requireLogin , (req, res) => {
@@ -85,6 +87,45 @@ router.post('/register', requireLogout ,async (req, res) => {
 router.post('/logout', requireLogin , (req, res) => {
     req.session = null;
     res.json({ message: "Logged out", isLoggedIn: false });
+})
+
+router.post('/edit', requireLogin, async (req, res) => {
+    try {
+        const user_id = req.user.user_id;
+
+        const editedUser = await editUser(user_id, req.body)
+
+        if (!editedUser.success) {
+            return res.status(400).json({ error: "Failed to edit user" });
+        }
+
+        res.json({
+            isLoggedIn: true,
+            success: true,
+        });
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
+})
+
+router.post('/delete', requireLogin, async (req, res) => {
+    try {
+        const user_id = req.user.user_id;
+
+        const deletedUser = await deleteUser(user_id);
+
+        if (!deletedUser) {
+            return res.status(500).json({ error: "Failed to delete user" });
+        }
+
+        req.session = null;
+
+        res.json({ message: "Deleted user", isLoggedIn: false });
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server error" });
+    }
 })
 
 export default router;
