@@ -12,80 +12,139 @@ import Congrats from "./TaskCard/Congrats";
 //DATABASE CALLS
 //these objects are just for ui and to show the shape of the object we want from the db
 
-const goals = [
-    {
-        id: 1,
-        name: "Tuition",
-        targetAmount: 200,
-        progress: 40,
-        level: 1
-    },
+// const goals = [
+//     {
+//         id: 1,
+//         name: "Tuition",
+//         targetAmount: 200,
+//         progress: 40,
+//         level: 1
+//     },
 
-    {
-        id: 2,
-        name: "Korea",
-        targetAmount: 1500,
-        progress: 500,
-        level: 2
-    },
+//     {
+//         id: 2,
+//         name: "Korea",
+//         targetAmount: 1500,
+//         progress: 500,
+//         level: 2
+//     },
 
-    {
-        id: 3,
-        name: "Air Pods",
-        targetAmount: 360,
-        progress: 360,
-        level: 3
-    },
-    {
-        id: 3,
-        name: "Nikes",
-        targetAmount: 90,
-        progress: 50,
-        level: 5
-    }
-]
+//     {
+//         id: 3,
+//         name: "Air Pods",
+//         targetAmount: 360,
+//         progress: 360,
+//         level: 3
+//     },
+//     {
+//         id: 3,
+//         name: "Nikes",
+//         targetAmount: 90,
+//         progress: 50,
+//         level: 5
+//     }
+// ]
 
-const taskProgress = {
-    1: {
-        1: 1,
-        2: 3,
-        3: 0,
-        4: 2,
-        5: 1
-    },
+// const taskProgress = {
+//     1: {
+//         1: 1,
+//         2: 3,
+//         3: 0,
+//         4: 2,
+//         5: 1
+//     },
 
-    2: {
-        1: 3,
-        2: 2,
-        3: 1,
-        4: 0,
-        5: 3
-    },
+//     2: {
+//         1: 3,
+//         2: 2,
+//         3: 1,
+//         4: 0,
+//         5: 3
+//     },
 
-    3: {
-        1: 3,
-        2: 3,
-        3: 3,
-        4: 3,
-        5: 3
-    },
+//     3: {
+//         1: 3,
+//         2: 3,
+//         3: 3,
+//         4: 3,
+//         5: 3
+//     },
 
-    4: {
-        1: 1,
-        2: 1,
-        3: 3,
-        4: 3,
-        5: 3
-    }
-}
+//     4: {
+//         1: 1,
+//         2: 1,
+//         3: 3,
+//         4: 3,
+//         5: 3
+//     }
+// }
 
 function Goal() {
 
     /* states */
-    const [goalData, setGoalData] = useState(goals)
+    const [goalData, setGoalData] = useState([])
     const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
     const [showCongrats, setShowCongrats] = useState(false)
     const [hasShownCongratsPopUp, setHasShownCongratsPopUp] = useState(false)
+
+    useEffect(() => {
+        const fetchGoals = async () => {
+            try {
+                const response = await fetch(import.meta.env.VITE_APP_ALLGOALS_URL, {
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                const data = await response.json();
+                console.log(data.goals)
+                console.log(data.goals)
+
+                if (data.success) {
+                    setGoalData(data.goals);
+                }
+            } catch (err) {
+                console.error("Failed to fetch goals:", err);
+            }
+        };
+
+        fetchGoals();
+    }, []);
+
+    /* helper variables */
+    const currentGoal = goalData[currentGoalIndex]
+
+    const currentSavings = currentGoal?.progress
+    const targetSavings = currentGoal?.targetAmount
+
+    const goalCompleted =
+        currentSavings >= targetSavings
+
+    const levelFiveIncomplete =
+        currentGoal?.level === 5 &&
+        currentSavings < targetSavings
+
+    /* use effect for completion pop up */
+    useEffect(() => {
+        if (goalCompleted && !hasShownCongratsPopUp) {
+            setShowCongrats(true)
+            setHasShownCongratsPopUp(true)
+        }
+    }, [goalCompleted, hasShownCongratsPopUp])
+
+    if (!currentGoal) {
+        return (
+            <Box>
+                <Typography variant="body1" component="p">
+                    Loading Goals
+                </Typography>
+            </Box>
+        )
+    }
+
+    const currentGoalProgress = currentGoal.progress
 
     /* NO GOALS TO SHOW PAGE: */
 
@@ -107,15 +166,10 @@ function Goal() {
         )
     }
 
-    const currentGoal = goalData[currentGoalIndex]
-
-    const currentGoalProgress =
-        taskProgress[currentGoal.id]
-
     const nextGoal = () => {
         console.log("NEXT CLICKED")
         setCurrentGoalIndex((prevIndex) =>
-            prevIndex === goals.length - 1 ? 0 : prevIndex + 1
+            prevIndex === goalData.length - 1 ? 0 : prevIndex + 1
         )
     }
 
@@ -123,7 +177,7 @@ function Goal() {
         console.log("PREV CLICKED")
 
         setCurrentGoalIndex((prevIndex) =>
-            prevIndex === 0 ? goals.length - 1 : prevIndex - 1
+            prevIndex === 0 ? goalData.length - 1 : prevIndex - 1
         )
     }
 
@@ -154,25 +208,6 @@ function Goal() {
             )
         )
     }
-
-    /* helper variables */
-    const currentSavings = currentGoal.progress
-    const targetSavings = currentGoal.targetAmount
-
-    const goalCompleted =
-        currentSavings >= targetSavings
-
-    const levelFiveIncomplete =
-        currentGoal.level === 5 &&
-        currentSavings < targetSavings
-
-    /* use effect for completion pop up */
-    useEffect(() => {
-        if (goalCompleted && !hasShownCongratsPopUp) {
-            setShowCongrats(true)
-            setHasShownCongratsPopUp(true)
-        }
-    }, [goalCompleted, hasShownCongratsPopUp])
 
     return (
         <Box>
