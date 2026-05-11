@@ -108,6 +108,9 @@ function Savings({
                             label="Amount"
                             type="number"
                             fullWidth
+                            slotProps={{
+                                htmlInput: { min: 0 }
+                            }}
                             value={amount}
                             onChange={(e) =>
                                 setAmount(e.target.value)
