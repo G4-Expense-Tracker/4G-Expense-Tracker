@@ -55,6 +55,7 @@ function GoalForm() {
                 id="filled-basic" 
                 label="Goal Name" 
                 variant="filled"
+                value={name}
                 onChange={(e) => setName(e.target.value)}
             />
 
@@ -65,6 +66,7 @@ function GoalForm() {
                 id="filled-basic" 
                 label="Saving Goal" 
                 variant="filled" 
+                value={targetAmount}
                 onChange={(e) => setTargetAmount(e.target.value)}
             />
 

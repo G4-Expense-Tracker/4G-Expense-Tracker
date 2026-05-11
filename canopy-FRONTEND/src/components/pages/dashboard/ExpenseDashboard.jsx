@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Typography,
@@ -9,6 +10,52 @@ import {
 import BottomNav from "./Bottomnav.jsx";
 
 export default function ExpenseDashboard() {
+  const [title, setTitle] = useState("");
+  const [amount, setAmount] = useState("");
+  const [date, setDate] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [note, setNote] = useState("");
+  const [quickExpense, setQuickExpense] = useState(false);
+
+  async function handleSubmit() {
+    try {
+      const expenseData = {
+        category_id: Number(categoryId),
+        title: title,
+        amount: Number(amount),
+        date: date,
+        note: note,
+        quick_expense: quickExpense,
+      };
+
+      const response = await fetch( import.meta.env.VITE_APP_NEWEXPENSE_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(expenseData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        console.log("Expense added!");
+        setTitle("");
+        setAmount("");
+        setDate("");
+        setCategoryId("");
+        setNote("");
+        setQuickExpense(false);
+      } else {
+        console.log(data.error);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -69,25 +116,59 @@ export default function ExpenseDashboard() {
         </Box>
 
         <Typography sx={{ mb: 1, fontSize: 13 }}>Expense Name</Typography>
-        <TextField fullWidth sx={inputStyle} />
+        <TextField 
+          fullWidth
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          sx={inputStyle} 
+        />
 
         <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
           <Box sx={{ flex: 1 }}>
             <Typography sx={{ mb: 1, fontSize: 13 }}>Amount</Typography>
-            <TextField fullWidth placeholder="$" sx={inputStyle} />
+            <TextField 
+              fullWidth
+              placeholder="$"
+              type="number"
+              slotProps={{
+                htmlInput: { min: 0 }
+              }}
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              sx={inputStyle}
+            />
           </Box>
 
           <Box sx={{ flex: 1 }}>
             <Typography sx={{ mb: 1, fontSize: 13 }}>Date</Typography>
-            <TextField fullWidth defaultValue="April 13, 2026" sx={inputStyle} />
+            <TextField
+              fullWidth
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              sx={inputStyle} 
+            />
           </Box>
         </Box>
 
         <Typography sx={{ mb: 1, fontSize: 13 }}>Categories</Typography>
-        <TextField fullWidth sx={inputStyle} />
+        <TextField
+          fullWidth
+          value={categoryId}
+          type="number"
+          slotProps={{
+            htmlInput: { min: 0 }
+          }}
+          onChange={(e) => setCategoryId(e.target.value)}
+          sx={inputStyle}
+        />
 
         <FormControlLabel
-          control={<Checkbox sx={{ color: "white" }} />}
+          control={<Checkbox
+            checked={quickExpense}
+            onChange={(e) => setQuickExpense(e.target.checked)}
+            sx={{ color: "white" }} 
+          />}
           label={
             <Typography sx={{ color: "white", fontSize: 13 }}>
               Save this as a quick expense
@@ -99,6 +180,7 @@ export default function ExpenseDashboard() {
         <Button
           fullWidth
           variant="contained"
+          onClick={handleSubmit}
           sx={{
             height: 50,
             borderRadius: 6,
