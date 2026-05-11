@@ -37,7 +37,7 @@ export default function LoginPage() {
         return;
       }
 
-      navigate("/main");
+      navigate("/dashboard");
     } catch (err) {
       console.error(err);
       setError("Something went wrong");
