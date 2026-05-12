@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import FooterNav from "../../Footer/FooterNav";
+import FooterNav from "../../../Footer/FooterNav";
 import Header from "../Header"
 import FormatSizeIcon from '@mui/icons-material/FormatSize';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
