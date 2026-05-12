@@ -345,7 +345,20 @@ export default function ProfilePage() {
       </Box>
 
       {/* ================= BOTTOM NAVIGATION ================= */}
-      <Box>
+      <Box
+        sx={{
+          height: 90,
+          bgcolor: navBg,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-around",
+          position: "relative",
+        }}
+      >
+
+        {/* EMPTY SPACE */}
+        <Box sx={{ width: 58 }} />
+
         <FooterNav />
       </Box>
 
