@@ -29,6 +29,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+import FooterNav from "../../Footer/FooterNav";
 
 // Plant images (From BCIT Design Team (Jennie, David, Alice, Hye and Gurjot))
 import seed1 from "../dashboard/plants/seed1.png";
