@@ -356,9 +356,6 @@ export default function ProfilePage() {
         }}
       >
 
-        {/* EMPTY SPACE */}
-        <Box sx={{ width: 58 }} />
-
         <FooterNav />
       </Box>
 
