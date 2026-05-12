@@ -28,9 +28,9 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {
   Eventcalendar,
   setOptions,
-} from "@mobiscroll/react";
+} from "@mobiscroll/react-lite";
 
-import "@mobiscroll/react/dist/css/mobiscroll.min.css";
+import "@mobiscroll/react-lite/dist/css/mobiscroll.min.css";
 
 // ===============================
 // Footer Navigation
