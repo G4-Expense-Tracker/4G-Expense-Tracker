@@ -45,7 +45,7 @@ function App() {
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/language" element={<Language />} />
         <Route path="/notifications" element={<Notification />} />
-        <Route path="/expenses" element={<Expense />} />
+        <Route path="/expenses" element={<ExpensePage />} />
       </Routes>
       
     </BrowserRouter>
