@@ -345,77 +345,8 @@ export default function ProfilePage() {
       </Box>
 
       {/* ================= BOTTOM NAVIGATION ================= */}
-      <Box
-        sx={{
-          height: 90,
-          bgcolor: navBg,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-around",
-          position: "relative",
-        }}
-      >
-        {/* HOME */}
-        <NavItem
-          icon={<HomeOutlinedIcon />}
-          label="Home"
-          onClick={() => navigate("/dashboard")}
-          green={green}
-        />
-
-        {/* EXPENSE */}
-        <NavItem
-          icon={<BarChartOutlinedIcon />}
-          label="Expense"
-          onClick={() => navigate("/expense")}
-          green={green}
-        />
-
-        {/* ADD BUTTON */}
-        <Box
-          onClick={() => navigate("/add")}
-          sx={{
-            position: "absolute",
-            top: -28,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 66,
-            height: 66,
-            borderRadius: "50%",
-            bgcolor: "#F7F6D5",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            border: `5px solid ${navBg}`,
-            cursor: "pointer",
-          }}
-        >
-          <AddIcon
-            sx={{
-              fontSize: 42,
-              color: "#005844",
-            }}
-          />
-        </Box>
-
-        {/* EMPTY SPACE */}
-        <Box sx={{ width: 58 }} />
-
-        {/* GOAL */}
-        <NavItem
-          icon={<EmojiEventsOutlinedIcon />}
-          label="Goal"
-          onClick={() => navigate("/goal")}
-          green={green}
-        />
-
-        {/* PROFILE */}
-        <NavItem
-          icon={<PersonIcon />}
-          label="Profile"
-          onClick={() => navigate("/profile")}
-          green={green}
-        />
+      <Box>
+        <FooterNav />
       </Box>
 
       {/* ================= LOGOUT POPUP ================= */}
