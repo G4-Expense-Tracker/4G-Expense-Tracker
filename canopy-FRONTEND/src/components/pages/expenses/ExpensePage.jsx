@@ -17,5 +17,17 @@ import {
   TextField,
 } from "@mui/material";
 
+// MUI icons reference:
+// https://mui.com/material-ui/material-icons/
+import AddIcon from "@mui/icons-material/Add";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
+import WifiIcon from "@mui/icons-material/Wifi";
+import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+
+
+
+
 /* Shared footer component */
 import FooterNav from "../../Footer/FooterNav";
