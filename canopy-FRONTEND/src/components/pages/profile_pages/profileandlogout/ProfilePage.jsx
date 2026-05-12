@@ -15,13 +15,8 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import FooterNav from "../../../Footer/FooterNav.jsx";
 
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
-import PersonIcon from "@mui/icons-material/Person";
-import AddIcon from "@mui/icons-material/Add";
+import FooterNav from "../../../Footer/FooterNav.jsx";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +31,6 @@ export default function ProfilePage() {
   /* LIGHT / DARK COLORS */
   const bg = darkMode ? "#16352C" : "#FAFCF4";
   const cardBg = darkMode ? "#27463C" : "#EAF7D7";
-  const navBg = darkMode ? "#4F6B5D" : "#A8BF7E";
   const text = darkMode ? "#FFFFFF" : "#000000";
   const green = darkMode ? "#D7F5E8" : "#005844";
 
@@ -49,6 +43,7 @@ export default function ProfilePage() {
         bgcolor: bg,
         display: "flex",
         flexDirection: "column",
+        pb: 10,
       }}
     >
       {/* ================= STATUS BAR ================= */}
@@ -79,26 +74,9 @@ export default function ProfilePage() {
             gap: 0.3,
           }}
         >
-          <SignalCellular4BarIcon
-            sx={{
-              fontSize: 17,
-              color: text,
-            }}
-          />
-
-          <WifiIcon
-            sx={{
-              fontSize: 17,
-              color: text,
-            }}
-          />
-
-          <BatteryFullIcon
-            sx={{
-              fontSize: 21,
-              color: text,
-            }}
-          />
+          <SignalCellular4BarIcon sx={{ fontSize: 17, color: text }} />
+          <WifiIcon sx={{ fontSize: 17, color: text }} />
+          <BatteryFullIcon sx={{ fontSize: 21, color: text }} />
         </Box>
       </Box>
 
@@ -172,47 +150,19 @@ export default function ProfilePage() {
             cursor: "pointer",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: 20,
-                fontWeight: 800,
-                color: text,
-              }}
-            >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography sx={{ fontSize: 20, fontWeight: 800, color: text }}>
               My Garden
             </Typography>
 
-            <ForestOutlinedIcon
-              sx={{
-                color: green,
-                fontSize: 25,
-              }}
-            />
+            <ForestOutlinedIcon sx={{ color: green, fontSize: 25 }} />
           </Box>
 
-          <ArrowForwardIosIcon
-            sx={{
-              color: green,
-              fontSize: 22,
-            }}
-          />
+          <ArrowForwardIosIcon sx={{ color: green, fontSize: 22 }} />
         </Box>
 
         {/* ================= CATEGORY + ACCOUNT ================= */}
-        <Box
-          sx={{
-            display: "flex",
-            gap: "18px",
-            mb: "30px",
-          }}
-        >
+        <Box sx={{ display: "flex", gap: "18px", mb: "30px" }}>
           <SmallCard
             icon={<PieChartOutlinedIcon />}
             title="Categories"
@@ -257,21 +207,9 @@ export default function ProfilePage() {
             px: "22px",
           }}
         >
-          <DarkModeOutlinedIcon
-            sx={{
-              fontSize: 28,
-              color: green,
-              mr: 3,
-            }}
-          />
+          <DarkModeOutlinedIcon sx={{ fontSize: 28, color: green, mr: 3 }} />
 
-          <Typography
-            sx={{
-              fontSize: 20,
-              fontWeight: 800,
-              color: text,
-            }}
-          >
+          <Typography sx={{ fontSize: 20, fontWeight: 800, color: text }}>
             Dark Mode
           </Typography>
 
@@ -317,93 +255,15 @@ export default function ProfilePage() {
         />
       </Box>
 
-      {/* ================= BOTTOM NAVIGATION ================= */}
-      <Box
-        sx={{
-          height: 90,
-          bgcolor: navBg,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-around",
-          position: "relative",
-        }}
-      >
-        {/* HOME */}
-        <NavItem
-          icon={<HomeOutlinedIcon />}
-          label="Home"
-          onClick={() => navigate("/dashboard")}
-          green={green}
-        />
-
-        {/* EXPENSE */}
-        <NavItem
-          icon={<BarChartOutlinedIcon />}
-          label="Expense"
-          onClick={() => navigate("/expense")}
-          green={green}
-        />
-
-        {/* ADD BUTTON */}
-        <Box
-          onClick={() => navigate("/add")}
-          sx={{
-            position: "absolute",
-            top: -28,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 66,
-            height: 66,
-            borderRadius: "50%",
-            bgcolor: "#F7F6D5",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            border: `5px solid ${navBg}`,
-            cursor: "pointer",
-          }}
-        >
-          <AddIcon
-            sx={{
-              fontSize: 42,
-              color: green,
-            }}
-          />
-        </Box>
-
-        {/* EMPTY SPACE */}
-        <Box sx={{ width: 58 }} />
-
-        {/* GOAL */}
-        <NavItem
-          icon={<EmojiEventsOutlinedIcon />}
-          label="Goal"
-          onClick={() => navigate("/goals")}
-          green={green}
-        />
-
-        {/* PROFILE */}
-        <NavItem
-          icon={<PersonIcon />}
-          label="Profile"
-          onClick={() => navigate("/profile")}
-          green={green}
-        />
-      </Box>
+      {/* ================= FOOTER NAV ================= */}
+      <FooterNav />
     </Box>
   );
 }
 
 /* ================= SMALL CARD ================= */
 
-function SmallCard({
-  icon,
-  title,
-  onClick,
-  cardBg,
-  text,
-  green,
-}) {
+function SmallCard({ icon, title, onClick, cardBg, text, green }) {
   return (
     <Box
       onClick={onClick}
@@ -446,13 +306,7 @@ function SmallCard({
 
 /* ================= MENU ITEM ================= */
 
-function MenuItem({
-  icon,
-  text,
-  textColor,
-  green,
-  onClick,
-}) {
+function MenuItem({ icon, text, textColor, green, onClick }) {
   return (
     <Box
       onClick={onClick}
@@ -485,47 +339,6 @@ function MenuItem({
         }}
       >
         {text}
-      </Typography>
-    </Box>
-  );
-}
-
-/* ================= NAVIGATION ITEM ================= */
-
-function NavItem({
-  icon,
-  label,
-  onClick,
-  green,
-}) {
-  return (
-    <Box
-      onClick={onClick}
-      sx={{
-        width: 58,
-        textAlign: "center",
-        color: green,
-        cursor: "pointer",
-      }}
-    >
-      <Box
-        sx={{
-          height: 30,
-
-          "& svg": {
-            fontSize: 28,
-          },
-        }}
-      >
-        {icon}
-      </Box>
-
-      <Typography
-        sx={{
-          fontSize: 13,
-        }}
-      >
-        {label}
       </Typography>
     </Box>
   );
