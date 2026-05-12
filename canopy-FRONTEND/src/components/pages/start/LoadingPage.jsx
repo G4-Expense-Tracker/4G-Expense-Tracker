@@ -3,7 +3,7 @@ import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import { useNavigate } from "react-router-dom";
-import pictLogo from "../../assets/welcomeLogo.png";
+import welcomeLogo from "../../../assets/welcomeLogo.png";
 
 export default function LoadingPage() {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ export default function LoadingPage() {
           textAlign: "center",
         }}
       >
-        <Box component="img" src={pictLogo} alt="Canopy Logo" sx={{ width: 105, mb: 2.5 }} />
+        <Box component="img" src={welcomeLogo} alt="Canopy Logo" sx={{ width: 105, mb: 2.5 }} />
 
         <Typography sx={{ color: "text.cream", fontFamily: "Georgia, serif", fontSize: 42 }}>
           Canopy
