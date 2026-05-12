@@ -36,7 +36,7 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 // Footer Navigation
 // ===============================
 
-import FooterNav from "../../../Footer/FooterNav.jsx";
+import FooterNav from "../../Footer/FooterNav";
 
 // ===============================
 // Mobiscroll Theme
