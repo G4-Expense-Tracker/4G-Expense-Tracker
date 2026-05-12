@@ -21,6 +21,8 @@ import LogoutPage from "./components/pages/profile_pages/profileandlogout/Logout
 import Language from "./components/pages/profile_pages/Language";
 import Notification from "./components/pages/profile_pages/notifications/Notification";
 
+import ExpensePage from './components/pages/expenses/ExpensePage'
+
 function App() {
   return (
     <BrowserRouter>
@@ -43,6 +45,7 @@ function App() {
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/language" element={<Language />} />
         <Route path="/notifications" element={<Notification />} />
+        <Route path="expenses" element={<Expense />} />
       </Routes>
       
     </BrowserRouter>
