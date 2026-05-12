@@ -33,7 +33,7 @@ app.use('/api/users', usersRouter)
 app.use('/api/goals', goalsRouter)
 app.use('/api/budgets', budgetsRouter)
 app.use('/api/expenses', expensesRouter)
-app.use('/api/trees', trees)
+app.use('/api/trees', treesRouter)
 
 app.listen(8000, () => {
   console.log("Backend Web Server has started 🚀");
