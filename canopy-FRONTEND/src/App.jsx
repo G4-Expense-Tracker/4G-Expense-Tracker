@@ -21,7 +21,7 @@ import LogoutPage from "./components/pages/profile_pages/profileandlogout/Logout
 import Language from "./components/pages/profile_pages/Language";
 import Notification from "./components/pages/profile_pages/notifications/Notification";
 
-import ExpensePage from './components/pages/expenses/ExpensePage'
+import ExpensePage from './components/pages/expenses/ExpensePage';
 
 function App() {
   return (
