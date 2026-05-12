@@ -22,7 +22,7 @@ import LocalHospitalOutlinedIcon from "@mui/icons-material/LocalHospitalOutlined
 import SoapOutlinedIcon from "@mui/icons-material/SoapOutlined";
 import FastfoodOutlinedIcon from "@mui/icons-material/FastfoodOutlined";
 import DirectionsBikeOutlinedIcon from "@mui/icons-material/DirectionsBikeOutlined";
-import FooterNav from "../../../Footer/FooterNav";
+import FooterNav from "../../../Footer/FooterNav.jsx";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 

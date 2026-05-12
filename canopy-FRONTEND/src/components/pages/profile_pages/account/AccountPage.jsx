@@ -16,7 +16,7 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
-import FooterNav from "../../../Footer/FooterNav";
+import FooterNav from "../../../Footer/FooterNav.jsx";
 
 import { useNavigate } from "react-router-dom"; 
 

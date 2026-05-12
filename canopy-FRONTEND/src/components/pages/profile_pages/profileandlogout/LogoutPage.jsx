@@ -3,7 +3,7 @@ import { Box, Typography, Switch, Button } from "@mui/material";
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
-import FooterNav from "../../../Footer/FooterNav";
+import FooterNav from "../../../Footer/FooterNav.jsx";
 
 
 import ForestOutlinedIcon from "@mui/icons-material/ForestOutlined";

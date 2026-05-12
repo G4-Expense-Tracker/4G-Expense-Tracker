@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import FooterNav from "../../../Footer/FooterNav";
+import FooterNav from "../../../Footer/FooterNav.jsx";
 import Header from "./Header";
 
 function Language() {
