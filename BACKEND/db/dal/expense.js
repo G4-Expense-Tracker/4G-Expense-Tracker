@@ -294,3 +294,15 @@ export async function getTotalByDateRange(user_id, startDate, endDate) {
   const results = await database.query(query, { user_id, startDate, endDate });
   return results[0][0]?.total || 0;
 }
+
+export async function getTotalByDate(user_id, date) {
+  const query = `
+    SELECT SUM(amount) as total
+    FROM expense
+    WHERE user_id = :user_id
+      AND date = :date;
+  `;
+
+  const results = await database.query(query, { user_id, date });
+  return results[0][0]?.total || 0;
+}
