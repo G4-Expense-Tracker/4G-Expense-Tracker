@@ -1,8 +1,10 @@
-import { Box, Typography, Switch } from "@mui/material";
+import { Box, Typography, Switch, Button } from "@mui/material";
 
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+import FooterNav from "../../../Footer/FooterNav";
+
 
 import ForestOutlinedIcon from "@mui/icons-material/ForestOutlined";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -31,8 +33,29 @@ export default function ProfilePage() {
   const navigate = useNavigate();
 
   const [darkMode, setDarkMode] = useState(false);
+  const [openLogout, setOpenLogout] = useState(false);
 
-  /* LIGHT / DARK COLORS */
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(import.meta.env.VITE_APP_LOGOUT_URL, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.isLoggedIn === false) {
+        navigate("/main");
+      }
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
+
+  /* COLORS */
   const bg = darkMode ? "#16352C" : "#FAFCF4";
   const cardBg = darkMode ? "#27463C" : "#EAF7D7";
   const navBg = darkMode ? "#4F6B5D" : "#A8BF7E";
@@ -48,6 +71,7 @@ export default function ProfilePage() {
         bgcolor: bg,
         display: "flex",
         flexDirection: "column",
+        position: "relative",
       }}
     >
       {/* ================= STATUS BAR ================= */}
@@ -109,7 +133,7 @@ export default function ProfilePage() {
           pt: "36px",
         }}
       >
-        {/* PAGE TITLE */}
+        {/* TITLE */}
         <Typography
           sx={{
             textAlign: "center",
@@ -143,7 +167,7 @@ export default function ProfilePage() {
           />
         </Box>
 
-        {/* USER NAME */}
+        {/* NAME */}
         <Typography
           sx={{
             textAlign: "center",
@@ -204,7 +228,7 @@ export default function ProfilePage() {
           />
         </Box>
 
-        {/* ================= CATEGORY + ACCOUNT ================= */}
+        {/* ================= CARDS ================= */}
         <Box
           sx={{
             display: "flex",
@@ -212,6 +236,7 @@ export default function ProfilePage() {
             mb: "30px",
           }}
         >
+          {/* Categories */}
           <SmallCard
             icon={<PieChartOutlinedIcon />}
             title="Categories"
@@ -221,6 +246,7 @@ export default function ProfilePage() {
             green={green}
           />
 
+          {/* My Account */}
           <SmallCard
             icon={<PermIdentityIcon />}
             title="My Account"
@@ -237,6 +263,7 @@ export default function ProfilePage() {
           text="Notifications"
           textColor={text}
           green={green}
+          onClick={() => navigate("/notifications")}
         />
 
         {/* Accessibility */}
@@ -245,6 +272,7 @@ export default function ProfilePage() {
           text="Accessibility"
           textColor={text}
           green={green}
+          onClick={() => navigate("/accessibility")}
         />
 
         {/* ================= DARK MODE ================= */}
@@ -312,7 +340,7 @@ export default function ProfilePage() {
           text="Logout"
           textColor={text}
           green={green}
-          onClick={() => navigate("/logout")}
+          onClick={() => setOpenLogout(true)}
         />
       </Box>
 
@@ -327,68 +355,127 @@ export default function ProfilePage() {
           position: "relative",
         }}
       >
-        {/* HOME */}
-        <NavItem
-          icon={<HomeOutlinedIcon />}
-          label="Home"
-          onClick={() => navigate("/dashboard")}
-          green={green}
-        />
 
-        {/* EXPENSE */}
-        <NavItem
-          icon={<BarChartOutlinedIcon />}
-          label="Expense"
-          onClick={() => navigate("/expense")}
-          green={green}
-        />
+        <FooterNav />
+      </Box>
 
-        {/* ADD BUTTON */}
+      {/* ================= LOGOUT POPUP ================= */}
+      {openLogout && (
         <Box
-          onClick={() => navigate("/add")}
           sx={{
             position: "absolute",
-            top: -28,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 66,
-            height: 66,
-            borderRadius: "50%",
-            bgcolor: "#F7F6D5",
+            inset: 0,
+            bgcolor: "rgba(0,0,0,0.45)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            border: `5px solid ${navBg}`,
-            cursor: "pointer",
+            zIndex: 999,
           }}
         >
-          <AddIcon
+          <Box
             sx={{
-              fontSize: 42,
-              color: green,
+              width: 300,
+              height: 260,
+              borderRadius: "10px",
+              background:
+                "linear-gradient(180deg, #1E9A77 0%, #A8BF7E 100%)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              px: "24px",
             }}
-          />
+          >
+            {/* EXCLAMATION ICON */}
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: "50%",
+                bgcolor: "#FFFFFF",
+                color: "#1E9A77",
+                fontSize: 28,
+                fontWeight: 800,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                mb: "26px",
+              }}
+            >
+              !
+            </Box>
+
+            {/* TEXT */}
+            <Typography
+              sx={{
+                color: "#FFFFFF",
+                fontSize: 26,
+                lineHeight: 1.3,
+                textAlign: "center",
+                mb: "34px",
+              }}
+            >
+              Are you sure
+              <br />
+              you want to log out?
+            </Typography>
+
+            {/* BUTTONS */}
+            <Box
+              sx={{
+                display: "flex",
+                gap: "18px",
+              }}
+            >
+              {/* LOGOUT BUTTON */}
+              <Button
+                onClick={handleLogout}
+                sx={{
+                  width: 120,
+                  height: 52,
+                  borderRadius: "40px",
+                  bgcolor: "#005844",
+                  color: "#FFFFFF",
+                  fontSize: 18,
+                  fontWeight: 700,
+                  fontFamily: "inherit",
+                  textTransform: "none",
+                  boxShadow:"none",
+
+                  "&:hover": {
+                    bgcolor: "#004333",
+                    boxShadow:"none"
+                  },
+                }}
+              >
+                Log Out
+              </Button>
+
+              {/* CANCEL BUTTON */}
+              <Button
+                onClick={() => setOpenLogout(false)}
+                sx={{
+                  width: 120,
+                  height: 52,
+                  borderRadius: "30px",
+                  border: "2px solid #FFFFFF",
+                  bgcolor: "rgba(255,255,255,0.25)",
+                  color: "#005844",
+                  fontSize: 18,
+                  fontWeight: 800,
+                  textTransform: "none",
+
+                  "&:hover": {
+                    bgcolor: "rgba(255,255,255,0.35)",
+                  },
+                }}
+              >
+                Cancel
+              </Button>
+            </Box>
+          </Box>
         </Box>
-
-        {/* EMPTY SPACE */}
-        <Box sx={{ width: 58 }} />
-
-        {/* GOAL */}
-        <NavItem
-          icon={<EmojiEventsOutlinedIcon />}
-          label="Goal"
-          onClick={() => navigate("/goals")}
-          green={green}
-        />
-
-        {/* PROFILE */}
-        <NavItem
-          icon={<PersonIcon />}
-          label="Profile"
-          onClick={() => navigate("/profile")}
-          green={green}
-        />
-      </Box>
+      )}
     </Box>
   );
 }
@@ -489,7 +576,7 @@ function MenuItem({
   );
 }
 
-/* ================= NAVIGATION ITEM ================= */
+/* ================= NAV ITEM ================= */
 
 function NavItem({
   icon,

@@ -20,15 +20,14 @@ import {
 // MUI icons reference:
 // https://mui.com/material-ui/material-icons/
 import AddIcon from "@mui/icons-material/Add";
-import HomeIcon from "@mui/icons-material/Home";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import PersonIcon from "@mui/icons-material/Person";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+
+/* Shared footer component */
+import FooterNav from "../../Footer/FooterNav";
 
 // Plant images (From BCIT Design Team (Jennie, David, Alice, Hye and Gurjot))
 import seed1 from "../dashboard/plants/seed1.png";
@@ -85,12 +84,14 @@ export default function DashboardPage() {
   // This calculates the slider percentage automatically
   const progress =
     current.targetAmount && current.savedAmount !== ""
-      ? Math.min((Number(current.savedAmount) / current.targetAmount) * 100, 100)
+      ? Math.min(
+          (Number(current.savedAmount) / current.targetAmount) * 100,
+          100
+        )
       : 0;
 
   // MUI TextField reference:
   // https://mui.com/material-ui/react-text-field/
-  // Slider from the input box, only shows if the goal has a target amount and referenced from: https://www.npmjs.com/package/@fseehawer/react-circular-slider
   // This updates the slider when the user types a saved amount
   function handleAmountChange(event) {
     const value = event.target.value;
@@ -113,6 +114,7 @@ export default function DashboardPage() {
     if (progress < 40) return phase1;
     if (progress < 60) return phase2;
     if (progress < 85) return phase3;
+
     return phase4;
   }
 
@@ -123,13 +125,16 @@ export default function DashboardPage() {
 
   // This moves to the previous circular goal
   function previousGoal() {
-    setCurrentIndex((prev) => (prev === 0 ? goals.length - 1 : prev - 1));
+    setCurrentIndex((prev) =>
+      prev === 0 ? goals.length - 1 : prev - 1
+    );
   }
 
   // This updates the dots when the user scrolls the bottom cards
   function handleCardScroll(event) {
     const scrollLeft = event.target.scrollLeft;
     const cardWidth = 346;
+
     const newIndex = Math.round(scrollLeft / cardWidth);
 
     setCardIndex(newIndex);
@@ -157,9 +162,21 @@ export default function DashboardPage() {
           mb: 2,
         }}
       >
-        <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
+        <Typography
+          sx={{
+            fontWeight: 700,
+            fontSize: 14,
+          }}
+        >
+          9:41
+        </Typography>
 
-        <Box sx={{ display: "flex", gap: 0.3 }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 0.3,
+          }}
+        >
           <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
           <WifiIcon sx={{ fontSize: 14 }} />
           <BatteryFullIcon sx={{ fontSize: 17 }} />
@@ -182,7 +199,12 @@ export default function DashboardPage() {
 
       {/* Input box only shows for goals that have target amount */}
       {current.targetAmount && (
-        <Box sx={{ px: 4, mt: 3 }}>
+        <Box
+          sx={{
+            px: 4,
+            mt: 3,
+          }}
+        >
           <TextField
             fullWidth
             type="number"
@@ -192,6 +214,7 @@ export default function DashboardPage() {
             sx={{
               bgcolor: "white",
               borderRadius: 4,
+
               "& .MuiOutlinedInput-root": {
                 borderRadius: 4,
               },
@@ -308,10 +331,19 @@ export default function DashboardPage() {
                 objectFit: "contain",
                 animation: "swing 2.5s ease-in-out infinite",
                 transformOrigin: "bottom center",
+
                 "@keyframes swing": {
-                  "0%": { transform: "rotate(-4deg)" },
-                  "50%": { transform: "rotate(4deg)" },
-                  "100%": { transform: "rotate(-4deg)" },
+                  "0%": {
+                    transform: "rotate(-4deg)",
+                  },
+
+                  "50%": {
+                    transform: "rotate(4deg)",
+                  },
+
+                  "100%": {
+                    transform: "rotate(-4deg)",
+                  },
                 },
               }}
             />
@@ -367,6 +399,7 @@ export default function DashboardPage() {
           px: 2,
           pb: 2,
           scrollSnapType: "x mandatory",
+
           "&::-webkit-scrollbar": {
             display: "none",
           },
@@ -400,10 +433,21 @@ export default function DashboardPage() {
               alignItems: "center",
             }}
           >
-            <AddIcon sx={{ fontSize: 42, color: "#004D40" }} />
+            <AddIcon
+              sx={{
+                fontSize: 42,
+                color: "#004D40",
+              }}
+            />
           </Box>
 
-          <Typography sx={{ fontSize: 26, fontWeight: 700, color: "#004D40" }}>
+          <Typography
+            sx={{
+              fontSize: 26,
+              fontWeight: 700,
+              color: "#004D40",
+            }}
+          >
             Add New Card
           </Typography>
         </Box>
@@ -421,11 +465,24 @@ export default function DashboardPage() {
             scrollSnapAlign: "center",
           }}
         >
-          <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 24 }}>
+          <Typography
+            sx={{
+              color: "#004D40",
+              fontWeight: 700,
+              fontSize: 24,
+            }}
+          >
             Daily Budget
           </Typography>
 
-          <Typography sx={{ fontWeight: 800, fontSize: 36 }}>$50</Typography>
+          <Typography
+            sx={{
+              fontWeight: 800,
+              fontSize: 36,
+            }}
+          >
+            $50
+          </Typography>
 
           <LinearProgress
             variant="determinate"
@@ -435,25 +492,58 @@ export default function DashboardPage() {
               height: 12,
               borderRadius: 10,
               bgcolor: "#FFF8CC",
+
               "& .MuiLinearProgress-bar": {
                 bgcolor: "#004D40",
               },
             }}
           />
 
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1.5 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              mt: 1.5,
+            }}
+          >
             <Box>
-              <Typography sx={{ fontSize: 14, fontWeight: 700 }}>Used</Typography>
-              <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#004D40" }}>
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 700,
+                }}
+              >
+                Used
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: 22,
+                  fontWeight: 700,
+                  color: "#004D40",
+                }}
+              >
                 $45
               </Typography>
             </Box>
 
             <Box sx={{ textAlign: "right" }}>
-              <Typography sx={{ fontSize: 14, fontWeight: 700 }}>
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 700,
+                }}
+              >
                 Remaining
               </Typography>
-              <Typography sx={{ fontSize: 22, fontWeight: 700, color: "#004D40" }}>
+
+              <Typography
+                sx={{
+                  fontSize: 22,
+                  fontWeight: 700,
+                  color: "#004D40",
+                }}
+              >
                 $5
               </Typography>
             </Box>
@@ -473,7 +563,13 @@ export default function DashboardPage() {
             scrollSnapAlign: "center",
           }}
         >
-          <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 24 }}>
+          <Typography
+            sx={{
+              color: "#004D40",
+              fontWeight: 700,
+              fontSize: 24,
+            }}
+          >
             Recent Expense
           </Typography>
 
@@ -485,7 +581,13 @@ export default function DashboardPage() {
               mt: 2,
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1.5,
+              }}
+            >
               <Box
                 sx={{
                   width: 42,
@@ -501,10 +603,23 @@ export default function DashboardPage() {
                 ☕
               </Box>
 
-              <Typography sx={{ fontSize: 26 }}>Starbucks</Typography>
+              <Typography
+                sx={{
+                  fontSize: 26,
+                }}
+              >
+                Starbucks
+              </Typography>
             </Box>
 
-            <Typography sx={{ fontSize: 26, fontWeight: 700 }}>$6.00</Typography>
+            <Typography
+              sx={{
+                fontSize: 26,
+                fontWeight: 700,
+              }}
+            >
+              $6.00
+            </Typography>
           </Box>
 
           <Typography
@@ -541,66 +656,17 @@ export default function DashboardPage() {
               width: 10,
               height: 10,
               borderRadius: "50%",
-              bgcolor: cardIndex === dot ? "#004D40" : "#9AB46B",
+              bgcolor:
+                cardIndex === dot
+                  ? "#004D40"
+                  : "#9AB46B",
             }}
           />
         ))}
       </Box>
 
       {/* Footer navigation links from App.jsx routes */}
-      <Box
-        sx={{
-          width: 390,
-          height: 75,
-          bgcolor: "#A8BF7D",
-          position: "fixed",
-          bottom: 0,
-          left: "50%",
-          transform: "translateX(-50%)",
-          display: "flex",
-          justifyContent: "space-around",
-          alignItems: "center",
-          zIndex: 10,
-        }}
-      >
-        <Box onClick={() => navigate("/main")} sx={{ textAlign: "center", cursor: "pointer" }}>
-          <HomeIcon sx={{ color: "#004D40" }} />
-          <Typography sx={{ fontSize: 12, color: "#004D40" }}>Home</Typography>
-        </Box>
-
-        <Box onClick={() => navigate("/expense")} sx={{ textAlign: "center", cursor: "pointer" }}>
-          <BarChartIcon sx={{ color: "#004D40" }} />
-          <Typography sx={{ fontSize: 12, color: "#004D40" }}>Expense</Typography>
-        </Box>
-
-        <Box
-          onClick={() => navigate("/newgoal")}
-          sx={{
-            width: 58,
-            height: 58,
-            borderRadius: "50%",
-            bgcolor: "#FFF8CC",
-            border: "4px solid #A8BF7D",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            mt: -5,
-            cursor: "pointer",
-          }}
-        >
-          <AddIcon sx={{ fontSize: 38, color: "#004D40" }} />
-        </Box>
-
-        <Box onClick={() => navigate("/goals")} sx={{ textAlign: "center", cursor: "pointer" }}>
-          <EmojiEventsIcon sx={{ color: "#004D40" }} />
-          <Typography sx={{ fontSize: 12, color: "#004D40" }}>Goal</Typography>
-        </Box>
-
-        <Box onClick={() => navigate("/account")} sx={{ textAlign: "center", cursor: "pointer" }}>
-          <PersonIcon sx={{ color: "#004D40" }} />
-          <Typography sx={{ fontSize: 12, color: "#004D40" }}>Profile</Typography>
-        </Box>
-      </Box>
+      <FooterNav />
     </Box>
   );
 }

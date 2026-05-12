@@ -1,25 +1,25 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import MainPage from "./components/pages/MainPage";
-import Onboarding from "./components/onboarding/Onboarding";
-import OB_End from "./components/onboarding/OB_End";
-import LoginPage from "./components/pages/LoginPage";
-import SignupPage from "./components/pages/SignupPage";
-import LoadingPage from "./components/pages/LoadingPage";
+import MainPage from "./components/pages/start/MainPage";
+import Onboarding from "./components/pages/onboarding/Onboarding";
+import OB_End from "./components/pages/onboarding/OB_End";
+import LoginPage from "./components/pages/start/LoginPage";
+import SignupPage from "./components/pages/start/SignupPage";
+import LoadingPage from "./components/pages/start/LoadingPage";
 import Goal from "./components/goal_pages/Goal";
 
 
 import DashboardPage from "./components/pages/dashboard/DashboardPage";
 import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
-import CategoryPage from "./components/profile_pages/category/CategoryPage";
-import AddCategoryPage from "./components/profile_pages/category/AddCategoryPage";
+import CategoryPage from "./components/pages/profile_pages/category/CategoryPage";
+import AddCategoryPage from "./components/pages/profile_pages/category/AddCategoryPage";
 import NewGoal from "./components/goal_pages/NewGoal/NewGoal";
-import Accessibility from "./components/profile_pages/accessibility/Accessibility";
-import AccountPage from "./components/profile_pages/account/AccountPage";
-import ProfilePage from "./components/profile_pages/profileandlogout/ProfilePage";
-import LogoutPage from "./components/profile_pages/profileandlogout/LogoutPage";
-import Language from "./components/profile_pages/Language";
-import Notification from "./components/profile_pages/notifications/Notification";
+import Accessibility from "./components/pages/profile_pages/accessibility/Accessibility";
+import AccountPage from "./components/pages/profile_pages/account/AccountPage";
+import ProfilePage from "./components/pages/profile_pages/profileandlogout/ProfilePage";
+import LogoutPage from "./components/pages/profile_pages/profileandlogout/LogoutPage";
+import Language from "./components/pages/profile_pages/Language";
+import Notification from "./components/pages/profile_pages/notifications/Notification";
 
 function App() {
   return (
@@ -43,8 +43,6 @@ function App() {
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/language" element={<Language />} />
         <Route path="/notifications" element={<Notification />} />
-
-
       </Routes>
       
     </BrowserRouter>
