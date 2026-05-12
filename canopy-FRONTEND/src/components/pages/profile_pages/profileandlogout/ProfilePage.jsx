@@ -25,7 +25,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import profilePic from "../../profile_pages/account/profilepic.png";
+import profilePic from "../account/profilepic.png";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
