@@ -204,6 +204,30 @@ export async function getUserProgress(user_id, goal_id, current_level) {
   }
 }
 
+export async function resetUserProgress(user_id, goal_id, current_level) {
+  const query = `
+    DELETE FROM user_action_log
+    WHERE goal_id = :goal_id
+    AND goal_level = :current_level;
+    `;
+
+  const params = {
+    user_id,
+    goal_id,
+    current_level,
+  };
+
+  try {
+    const results = await database.query(query, params);
+    const rows = results[0];
+
+    return rows;
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+}
+
 export const ACTION_TYPES = {
   LOGIN: 1,
   LOG_EXPENSE: 2,
