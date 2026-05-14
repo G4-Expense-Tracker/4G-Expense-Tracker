@@ -1,18 +1,11 @@
-// ===============================
-// Expense Weekly Page
-// Full MUI + Mobiscroll Version
-// ===============================
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import {
-  Box,
-  Typography,
-  IconButton,
-} from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
 
-// ===============================
-// MUI Icons
-// ===============================
-
+import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
+import WifiIcon from "@mui/icons-material/Wifi";
+import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
@@ -20,77 +13,122 @@ import LocalCafeIcon from "@mui/icons-material/LocalCafe";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-
-// ===============================
-// Mobiscroll Calendar
-// ===============================
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 import {
   Eventcalendar,
+  CalendarPrev,
+  CalendarNext,
   setOptions,
-} from "@mobiscroll/react-lite";
+} from "@mobiscroll/react";
 
-import "@mobiscroll/react-lite/dist/css/mobiscroll.min.css";
+import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 
-// ===============================
-// Footer Navigation
-// ===============================
-
-import FooterNav from "../../Footer/FooterNav";
-
-// ===============================
-// Mobiscroll Theme
-// ===============================
+import FooterNav from "../../Footer/FooterNav.jsx";
 
 setOptions({
   theme: "ios",
   themeVariant: "light",
+  firstDay: 1,
 });
 
-// ===============================
-// Component
-// ===============================
+export default function ExpensePage() {
+  const navigate = useNavigate();
 
-export default function ExpenseWeekly() {
+  const [calendarMode, setCalendarMode] = useState("week");
+  const [openMenuIndex, setOpenMenuIndex] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date(2026, 3, 7));
+  const [savedExpenses, setSavedExpenses] = useState([]);
 
-  // ===============================
-  // Expense Data
-  // ===============================
+  useEffect(() => {
+    const storedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    setSavedExpenses(storedExpenses);
+  }, []);
 
-  const expenses = [
+  const sampleExpenses = [
     {
+      id: "sample-1",
+      date: "2026-04-07",
       time: "6:00am",
       title: "Bus Fare",
       category: "Food",
       amount: "$6.00",
-      icon: <DirectionsBusIcon />,
+      iconType: "bus",
     },
     {
+      id: "sample-2",
+      date: "2026-04-07",
       time: "7:15am",
       title: "Starbucks",
       category: "Drink",
       amount: "$9.50",
-      icon: <LocalCafeIcon />,
+      iconType: "drink",
     },
     {
+      id: "sample-3",
+      date: "2026-04-07",
       time: "3:45am",
       title: "Save on Foods",
       category: "Groceries",
       amount: "$55.50",
-      icon: <ShoppingCartIcon />,
+      iconType: "groceries",
     },
     {
+      id: "sample-4",
+      date: "2026-04-06",
+      time: "3:45am",
+      title: "Save on Foods",
+      category: "Groceries",
+      amount: "$55.50",
+      iconType: "groceries",
+    },
+    {
+      id: "sample-5",
+      date: "2026-04-05",
       time: "5:35am",
       title: "Yoga",
       category: "Health",
       amount: "$22.50",
-      icon: <FitnessCenterIcon />,
+      iconType: "health",
     },
   ];
 
-  // ===============================
-  // JSX
-  // ===============================
+  const allExpenses = [...sampleExpenses, ...savedExpenses];
+
+  const formatDate = (date) => date.toISOString().split("T")[0];
+
+  const selectedDateString = formatDate(selectedDate);
+
+  const filteredExpenses = allExpenses.filter(
+    (expense) => expense.date === selectedDateString
+  );
+
+  const totalAmount = filteredExpenses.reduce((total, expense) => {
+    return total + Number(String(expense.amount).replace("$", ""));
+  }, 0);
+
+  const getExpenseIcon = (expense) => {
+    const iconType = expense.iconType || expense.category?.toLowerCase();
+
+    if (iconType?.includes("bus")) return <DirectionsBusIcon />;
+    if (iconType?.includes("drink")) return <LocalCafeIcon />;
+    if (iconType?.includes("food")) return <LocalCafeIcon />;
+    if (iconType?.includes("grocery")) return <ShoppingCartIcon />;
+    if (iconType?.includes("health")) return <FitnessCenterIcon />;
+
+    return <ShoppingCartIcon />;
+  };
+
+  const handleDeleteExpense = (expenseId) => {
+    const updatedExpenses = savedExpenses.filter(
+      (expense) => String(expense.id) !== String(expenseId)
+    );
+
+    localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
+    setSavedExpenses(updatedExpenses);
+    setOpenMenuIndex(null);
+  };
 
   return (
     <Box
@@ -102,47 +140,59 @@ export default function ExpenseWeekly() {
         justifyContent: "center",
       }}
     >
-      {/* Main Phone Container */}
       <Box
         sx={{
-          width: 390,
+          width: "100%",
+          maxWidth: 430,
           minHeight: "100vh",
           backgroundColor: "#FAFCF7",
           position: "relative",
-          overflow: "hidden",
+          overflowX: "hidden",
+          px: { xs: "18px", sm: "24px" },
+          pt: "24px",
           pb: "120px",
         }}
       >
-        {/* ===============================
-            Top Small Title
-        =============================== */}
-        <Typography
-          sx={{
-            fontSize: "20px",
-            color: "#D8D8D8",
-            ml: 2,
-            mt: 1,
-          }}
-        >
-          Expense_Weekly
-        </Typography>
-
-        {/* ===============================
-            Top Tabs
-        =============================== */}
+        {/* Status Bar */}
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-around",
+            justifyContent: "space-between",
             alignItems: "center",
-            mt: 6,
+            mb: "40px",
+            px: "4px",
           }}
         >
-          {/* Expense Active Tab */}
+          <Typography
+            sx={{
+              fontSize: "22px",
+              fontWeight: 600,
+              color: "#3D3D3D",
+            }}
+          >
+            9:41
+          </Typography>
+
+          <Box sx={{ display: "flex", gap: 0.5, color: "#3D3D3D" }}>
+            <SignalCellular4BarIcon sx={{ fontSize: 20 }} />
+            <WifiIcon sx={{ fontSize: 20 }} />
+            <BatteryFullIcon sx={{ fontSize: 23 }} />
+          </Box>
+        </Box>
+
+        {/* Tabs */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            px: { xs: "28px", sm: "35px" },
+            mb: "28px",
+          }}
+        >
           <Box sx={{ textAlign: "center" }}>
             <Typography
               sx={{
-                fontSize: "26px",
+                fontSize: { xs: "24px", sm: "26px" },
                 fontWeight: 700,
                 color: "#004B3B",
               }}
@@ -150,159 +200,177 @@ export default function ExpenseWeekly() {
               Expense
             </Typography>
 
-            {/* Active Green Line */}
             <Box
               sx={{
-                width: 145,
-                height: 6,
+                width: { xs: 130, sm: 145 },
+                height: 5,
                 borderRadius: "10px",
                 backgroundColor: "#A7C26E",
-                mt: 2,
+                mt: "12px",
               }}
             />
           </Box>
 
-          {/* Insight Tab */}
           <Typography
             sx={{
-              fontSize: "26px",
+              fontSize: { xs: "24px", sm: "26px" },
               fontWeight: 700,
-              color: "#A7C26E",
+              color: "#91AE5F",
             }}
           >
             Insight
           </Typography>
         </Box>
 
-        {/* ===============================
-            Weekly Dropdown Text
-        =============================== */}
+        {/* Weekly / Monthly Toggle */}
         <Box
+          onClick={() =>
+            setCalendarMode((prev) => (prev === "week" ? "month" : "week"))
+          }
           sx={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            gap: 1,
-            mt: 4,
-            mb: 3,
+            gap: 0.5,
+            mb: "14px",
+            cursor: "pointer",
           }}
         >
           <Typography
             sx={{
-              fontSize: "22px",
+              fontSize: "20px",
               fontWeight: 700,
               color: "#163D2B",
             }}
           >
-            Weekly
+            {calendarMode === "week" ? "Weekly" : "Monthly"}
           </Typography>
 
-          <KeyboardArrowRightIcon
-            sx={{
-              color: "#163D2B",
-            }}
-          />
+          <KeyboardArrowRightIcon sx={{ fontSize: 24, color: "#163D2B" }} />
         </Box>
 
-        {/* ===============================
-            Mobiscroll Weekly Calendar
-        =============================== */}
+        {/* Calendar */}
         <Box
           sx={{
-            mx: 3,
-            border: "1.5px solid #1C9A72",
-            borderRadius: "14px",
+            border: "1px solid #1C9A72",
+            borderRadius: "7px",
             overflow: "hidden",
+            mb: "14px",
             backgroundColor: "#FAFCF7",
-            mb: 4,
 
-            // Mobiscroll Main Background
             "& .mbsc-calendar": {
               backgroundColor: "#FAFCF7",
             },
 
-            // Month Title
-            "& .mbsc-calendar-title": {
-              color: "#005242",
-              fontWeight: 700,
-              fontSize: "22px",
+            "& .mbsc-calendar-wrapper": {
+              backgroundColor: "#FAFCF7",
             },
 
-            // Weekday Names
             "& .mbsc-calendar-week-day": {
               color: "#005242",
-              fontSize: "16px",
+              fontSize: "15px",
               fontWeight: 500,
             },
 
-            // Day Numbers
             "& .mbsc-calendar-cell-text": {
               color: "#005242",
               fontSize: "18px",
+              width: "30px",
+              height: "30px",
+              lineHeight: "30px",
             },
 
-            // Selected Day
             "& .mbsc-selected .mbsc-calendar-cell-text": {
               backgroundColor: "#005242",
               color: "#FFFFFF",
+              borderRadius: "50%",
               fontWeight: 700,
             },
 
-            // Remove Borders
-            "& .mbsc-calendar-cell": {
-              border: "none",
+            "& .mbsc-button": {
+              color: "#1C9A72",
             },
 
-            // Arrows
-            "& .mbsc-calendar-button": {
-              color: "#1C9A72",
+            "& .mbsc-calendar-cell": {
+              border: "none",
             },
           }}
         >
           <Eventcalendar
-            height="auto"
-            selectedDate={new Date(2026, 3, 7)}
+            selectedDate={selectedDate}
+            onSelectedDateChange={(event) => {
+              setSelectedDate(event.date);
+              setOpenMenuIndex(null);
+            }}
+            height={calendarMode === "week" ? 150 : 330}
             view={{
               calendar: {
-                type: "week",
+                type: calendarMode,
               },
             }}
+            renderHeader={() => (
+              <Box
+                sx={{
+                  height: 42,
+                  display: "grid",
+                  gridTemplateColumns: "40px 1fr 40px",
+                  alignItems: "center",
+                  backgroundColor: "#FAFCF7",
+                  px: 1,
+                }}
+              >
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <CalendarPrev />
+                </Box>
+
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                    fontSize: { xs: "16px", sm: "18px" },
+                    fontWeight: 700,
+                    color: "#005242",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {selectedDate.toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "2-digit",
+                    year: "numeric",
+                  })}
+                </Typography>
+
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <CalendarNext />
+                </Box>
+              </Box>
+            )}
           />
         </Box>
 
-        {/* ===============================
-            Total Section
-        =============================== */}
+        {/* Total */}
         <Box
           sx={{
             display: "flex",
             justifyContent: "flex-end",
             alignItems: "center",
             gap: 1,
-            mx: 3,
-            mb: 3,
+            mb: "18px",
           }}
         >
-          {/* Total Pill */}
           <Box
             sx={{
-              border: "1.5px solid #1C9A72",
-              borderRadius: "40px",
-              px: 2.5,
-              py: 1,
+              border: "1px solid #1C9A72",
+              borderRadius: "30px",
+              px: 1.5,
+              py: 0.6,
               display: "flex",
+              gap: 2,
               alignItems: "center",
-              gap: 3,
             }}
           >
-            <Typography
-              sx={{
-                fontSize: "18px",
-                color: "#222",
-              }}
-            >
-              Total
-            </Typography>
+            <Typography sx={{ fontSize: "18px" }}>Total</Typography>
 
             <Typography
               sx={{
@@ -311,139 +379,166 @@ export default function ExpenseWeekly() {
                 color: "#005242",
               }}
             >
-              $115.25
+              ${totalAmount.toFixed(2)}
             </Typography>
           </Box>
 
-          {/* Filter Icon */}
-          <FilterAltOutlinedIcon
-            sx={{
-              color: "#005242",
-              fontSize: 38,
-            }}
-          />
+          <FilterAltOutlinedIcon sx={{ color: "#005242", fontSize: 32 }} />
         </Box>
 
-        {/* ===============================
-            Expense Cards
-        =============================== */}
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 3,
-            px: 3,
-          }}
-        >
-          {expenses.map((expense, index) => (
-            <Box
-              key={index}
-              sx={{
-                border: "1.5px solid #1C9A72",
-                borderRadius: "14px",
-                px: 2,
-                py: 2,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                backgroundColor: "#FFFFFF",
-              }}
-            >
-              {/* Left Side */}
+        {/* Expense Cards */}
+        <Box sx={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+          {filteredExpenses.length > 0 ? (
+            filteredExpenses.map((expense, index) => (
               <Box
+                key={expense.id}
                 sx={{
+                  minHeight: 86,
+                  border: "1px solid #1C9A72",
+                  borderRadius: "7px",
+                  px: 1.5,
+                  py: 1,
                   display: "flex",
+                  justifyContent: "space-between",
                   alignItems: "center",
-                  gap: 2,
-                }}
-              >
-                {/* Icon */}
-                <Box
-                  sx={{
-                    color: "#005242",
-
-                    "& svg": {
-                      fontSize: 36,
-                    },
-                  }}
-                >
-                  {expense.icon}
-                </Box>
-
-                {/* Text */}
-                <Box>
-                  <Typography
-                    sx={{
-                      fontSize: "16px",
-                      color: "#005242",
-                    }}
-                  >
-                    {expense.time}
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      fontSize: "20px",
-                      fontWeight: 700,
-                      color: "#005242",
-                      lineHeight: 1.1,
-                    }}
-                  >
-                    {expense.title}
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      fontSize: "18px",
-                      color: "#005242",
-                    }}
-                  >
-                    {expense.category}
-                  </Typography>
-                </Box>
-              </Box>
-
-              {/* Right Side */}
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
+                  backgroundColor: "#FAFCF7",
                   gap: 1,
                 }}
               >
-                {/* Amount */}
-                <Typography
+                <Box
                   sx={{
-                    fontSize: "24px",
-                    fontWeight: 700,
-                    color: "#005242",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1.5,
+                    minWidth: 0,
                   }}
                 >
-                  {expense.amount}
-                </Typography>
+                  <Box sx={{ color: "#005242", "& svg": { fontSize: 32 } }}>
+                    {getExpenseIcon(expense)}
+                  </Box>
 
-                {/* 3 Dots */}
-                <IconButton>
-                  <MoreHorizIcon
+                  <Box sx={{ minWidth: 0 }}>
+                    <Typography sx={{ fontSize: "13px", color: "#005242" }}>
+                      {expense.time}
+                    </Typography>
+
+                    <Typography
+                      sx={{
+                        fontSize: "18px",
+                        fontWeight: 700,
+                        color: "#005242",
+                        lineHeight: 1.1,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        maxWidth: { xs: 130, sm: 160 },
+                      }}
+                    >
+                      {expense.title}
+                    </Typography>
+
+                    <Typography sx={{ fontSize: "14px", color: "#005242" }}>
+                      {expense.category}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                {openMenuIndex === index ? (
+                  <Box
                     sx={{
-                      color: "#1C9A72",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1.5,
+                      flexShrink: 0,
                     }}
-                  />
-                </IconButton>
+                  >
+                    <Box
+                      onClick={() => navigate(`/edit-expense/${expense.id}`)}
+                      sx={{
+                        textAlign: "center",
+                        color: "#005242",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <EditIcon sx={{ fontSize: 24 }} />
+                      <Typography sx={{ fontSize: "13px" }}>Edit</Typography>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        width: "1px",
+                        height: 45,
+                        backgroundColor: "#B8B8B8",
+                      }}
+                    />
+
+                    <Box
+                      onClick={() => handleDeleteExpense(expense.id)}
+                      sx={{
+                        textAlign: "center",
+                        color: "#005242",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <DeleteOutlineOutlinedIcon sx={{ fontSize: 26 }} />
+                      <Typography sx={{ fontSize: "13px" }}>Delete</Typography>
+                    </Box>
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "22px",
+                        fontWeight: 700,
+                        color: "#005242",
+                      }}
+                    >
+                      {expense.amount}
+                    </Typography>
+
+                    <IconButton
+                      size="small"
+                      onClick={() =>
+                        setOpenMenuIndex(openMenuIndex === index ? null : index)
+                      }
+                    >
+                      <MoreHorizIcon sx={{ fontSize: 20, color: "#1C9A72" }} />
+                    </IconButton>
+                  </Box>
+                )}
               </Box>
-            </Box>
-          ))}
+            ))
+          ) : (
+            <Typography
+              sx={{
+                textAlign: "center",
+                color: "#005242",
+                fontSize: "18px",
+                mt: 4,
+              }}
+            >
+              No expenses for this date.
+            </Typography>
+          )}
         </Box>
 
-        {/* ===============================
-            Footer Navigation
-        =============================== */}
+        {/* Footer */}
         <Box
           sx={{
             position: "fixed",
             bottom: 0,
-            width: 390,
-            zIndex: 1000,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "100%",
+            maxWidth: 430,
+            zIndex: 20,
           }}
         >
           <FooterNav />
