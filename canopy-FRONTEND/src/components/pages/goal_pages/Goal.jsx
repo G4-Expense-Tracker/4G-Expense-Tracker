@@ -7,7 +7,7 @@ import Savings from "./TaskCard/Savings";
 import FooterNav from "../../Footer/FooterNav";
 import VarTaskCard from "./TaskCard/VarTaskCard";
 import Congrats from "./TaskCard/Congrats";
-import { getAllGoals } from "../../api/goals";
+import { getAllGoals } from "../../../api/goals";
 
 
 //DATABASE CALLS

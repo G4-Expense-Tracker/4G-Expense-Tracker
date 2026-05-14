@@ -107,7 +107,7 @@ export default function FooterNav() {
             label="Goal"
             value="/goal"
             icon={<EmojiEventsIcon />}
-            onClick={() => navigate("/newgoals")}
+            onClick={() => navigate("/newgoal")}
             sx={{
               color: "#00503f",
             }}
