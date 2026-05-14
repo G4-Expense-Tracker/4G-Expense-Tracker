@@ -258,6 +258,8 @@ export default function ExpensePage() {
             mb: "14px",
             backgroundColor: "#FAFCF7",
 
+            // React Calender Mobiscroll Referenced from
+            // https://demo.mobiscroll.com/react/eventcalendar/event-data-structure
             "& .mbsc-calendar": {
               backgroundColor: "#FAFCF7",
             },
