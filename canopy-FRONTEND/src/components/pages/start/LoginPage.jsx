@@ -26,7 +26,7 @@ export default function LoginPage() {
     try {
       setError('')
 
-      await loginUser(email, password)
+      const data = await loginUser(email, password)
 
       navigate("/dashboard");
     } catch (err) {
