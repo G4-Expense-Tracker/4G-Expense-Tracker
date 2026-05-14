@@ -60,8 +60,23 @@ export async function getExpensesInCategory(categoryId) {
     return data.categoryExpenses;
 }
 
-export async function createNewExpense() {
+export async function createNewExpense(newExpenseData) {
+    const res = await fetch(`${API}/new`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(newExpenseData),
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to create expense");
+    }
+
+    return data;
 }
 
 export async function editExpense() {
