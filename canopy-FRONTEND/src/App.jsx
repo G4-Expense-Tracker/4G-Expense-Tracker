@@ -20,6 +20,10 @@ import LogoutPage from "./components/pages/profile_pages/profileandlogout/Logout
 import Language from "./components/pages/profile_pages/Language";
 import Notification from "./components/pages/profile_pages/notifications/Notification";
 
+import ExpensePage from "./components/pages/expenses/ExpensePage";
+import EditExpensePage from "./components/pages/expenses/EditExpensePage";
+import AddExpensePage from "./components/pages/expenses/AddExpensePage";
+
 function App() {
   return (
     <BrowserRouter>
@@ -41,6 +45,9 @@ function App() {
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/language" element={<Language />} />
         <Route path="/notifications" element={<Notification />} />
+        <Route path="/expenses" element={<ExpensePage />} />
+        <Route path="/edit-expense/:id" element={<EditExpensePage />} />
+        <Route path="/add-expense" element={<AddExpensePage />} />
       </Routes>
       
     </BrowserRouter>
