@@ -98,8 +98,19 @@ export async function editExpense(expenseId, updatedInfo) {
     return data;
 }
 
-export async function deleteExpense() {
+export async function deleteExpense(expenseId) {
+    const res = await fetch(`${API}/${expenseId}/delete`, {
+        method: "POST",
+        credentials: "include",
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to delete expense");
+    }
+
+    return data;
 }
 
 export async function getCategoryTotals() {
