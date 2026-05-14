@@ -30,7 +30,7 @@ export default function FooterNav() {
     >
       {/* Floating Add Button */}
       <Box
-        onClick={() => navigate("/expense")}
+        onClick={() => navigate("/add-expense")}
         sx={{
           position: "absolute",
           top: "-28px",
