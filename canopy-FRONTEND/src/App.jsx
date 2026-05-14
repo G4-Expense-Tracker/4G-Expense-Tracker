@@ -48,7 +48,7 @@ function App() {
         <Route path="/language" element={<Language />} />
         <Route path="/notifications" element={<Notification />} />
         <Route path="/expenses" element={<ExpensePage />} />
-        <Route path="/edit-expense" element={<EditExpensePage />} />
+        <Route path="/edit-expense/:id" element={<EditExpensePage />} />
         <Route path="/add-expense" element={<AddExpensePage />} />
       </Routes>
       
