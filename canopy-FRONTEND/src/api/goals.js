@@ -70,7 +70,18 @@ export async function editGoal(goal_id, updatedInfo) {
 }
 
 export async function getGoalProgress(goal_id) {
+    const res = await fetch(`${API}/goals/${goal_id}/progress`, {
+        method: "GET",
+        credentials: "include",
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch goal progress");
+    }
+
+    return data;
 }
 
 export async function goalLevelUp(goal_id) {
