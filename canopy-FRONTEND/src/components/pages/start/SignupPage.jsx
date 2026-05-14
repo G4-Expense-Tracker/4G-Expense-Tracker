@@ -17,6 +17,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../../api/users";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -30,9 +31,20 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [agreed, setAgreed] = useState(false);
 
   const handleSignup = async () => {
     setError("");
+
+    if (!agreed) {
+      setError("You must agree to the Terms of Service");
+      return;
+    }
+
+    if (!firstName || !lastName || !email || !password || !phone) {
+      setError("Please fill all fields");
+      return;
+    }
 
     if (password !== confirmPassword) {
       setError("Passwords do not match");
@@ -40,31 +52,11 @@ export default function SignupPage() {
     }
 
     try {
-      const res = await fetch(import.meta.env.VITE_APP_REGISTER_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          first_name: firstName,
-          last_name: lastName,
-          email,
-          password,
-          phone_number: phone,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Signup failed");
-        return;
-      }
+      const data = await registerUser(firstName, lastName, email, password, phone)
 
       navigate("/onboarding");
     } catch (err) {
-      setError("Something went wrong");
+      setError(err.message);
     }
   };
 
@@ -205,7 +197,11 @@ export default function SignupPage() {
         />
 
         <FormControlLabel
-          control={<Checkbox size="small" />}
+          control={<Checkbox 
+            size="small"
+            checked={agreed}
+            onChange={(e) => setAgreed(e.target.checked)}
+          />}
           label={
             <Typography sx={{ fontSize: 13 }}>
               I agree to the{" "}

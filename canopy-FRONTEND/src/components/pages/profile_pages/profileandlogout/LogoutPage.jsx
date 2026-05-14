@@ -28,6 +28,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import profilePic from "../../profile_pages/account/profilepic.png";
+import { logoutUser } from "../../../../api/users";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -37,18 +38,9 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(import.meta.env.VITE_APP_LOGOUT_URL, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-
+      const data = await logoutUser()
       if (data.isLoggedIn === false) {
-        navigate("/main");
+        navigate('/main')
       }
     } catch (err) {
       console.error("Logout failed:", err);

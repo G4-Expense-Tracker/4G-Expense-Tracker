@@ -4,7 +4,7 @@ import TaskCard from "./TaskCard/TaskCard";
 import { Box, Typography } from "@mui/material";
 import InfoIcon from '@mui/icons-material/Info';
 import Savings from "./TaskCard/Savings";
-import FooterNav from "../../Footer/FooterNav";
+import FooterNav from "../Footer/FooterNav";
 import VarTaskCard from "./TaskCard/VarTaskCard";
 import Congrats from "./TaskCard/Congrats";
 import { getAllGoals } from "../../api/goals";
