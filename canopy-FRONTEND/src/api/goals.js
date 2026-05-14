@@ -52,8 +52,21 @@ export async function createNewGoal(name, targetAmount) {
     return data;
 }
 
-export async function editGoal(goal_id) {
+export async function editGoal(goal_id, updatedInfo) {
+    const res = await fetch(`${API}/goals/${goal_id}/edit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(updatedInfo),
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to edit goal");
+    }
+
+    return data;
 }
 
 export async function getGoalProgress(goal_id) {
