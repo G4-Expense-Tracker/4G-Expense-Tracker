@@ -664,6 +664,13 @@ export default function DashboardPage() {
           />
         ))}
       </Box>
+      <Box>
+        <AddIcon>
+          +
+        </AddIcon>
+        <IconButton onClick={() => navigate("/expenses")} sx={{ p: 0 }}></IconButton>
+
+      </Box>
 
       {/* Footer navigation links from App.jsx routes */}
       <FooterNav />
