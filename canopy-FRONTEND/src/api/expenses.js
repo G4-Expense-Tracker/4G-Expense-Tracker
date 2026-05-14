@@ -158,8 +158,32 @@ export async function compareCategories(
     return data.comparison;
 }
 
-export async function getCategoryTopChanges() {
+export async function getCategoryTopChanges(
+    currentStart,
+    currentEnd,
+    prevStart,
+    prevEnd
+) {
+    const params = new URLSearchParams({
+        currentStart,
+        currentEnd,
+        prevStart,
+        prevEnd,
+    });
 
+    const res = await fetch(`${API}/category/top-changes?${params.toString()}`, {
+            method: "GET",
+            credentials: "include",
+        }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch top changes");
+    }
+
+    return data.topChanges;
 }
 
 export async function getDateRangeTotal() {
