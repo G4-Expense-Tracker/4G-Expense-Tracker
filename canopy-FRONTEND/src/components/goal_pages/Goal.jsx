@@ -7,6 +7,7 @@ import Savings from "./TaskCard/Savings";
 import FooterNav from "../Footer/FooterNav";
 import VarTaskCard from "./TaskCard/VarTaskCard";
 import Congrats from "./TaskCard/Congrats";
+import { getAllGoals } from "../../api/goals";
 
 
 //DATABASE CALLS
@@ -90,21 +91,8 @@ function Goal() {
     useEffect(() => {
         const fetchGoals = async () => {
             try {
-                const response = await fetch(import.meta.env.VITE_APP_ALLGOALS_URL, {
-                    method: "GET",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-
-                const data = await response.json();
-                console.log(data.goals)
-                console.log(data.goals)
-
-                if (data.success) {
-                    setGoalData(data.goals);
-                }
+                const goals = await getAllGoals();
+                setGoalData(goals);
             } catch (err) {
                 console.error("Failed to fetch goals:", err);
             }

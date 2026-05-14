@@ -21,3 +21,18 @@ export async function createNewGoal(name, targetAmount) {
 
     return data;
 }
+
+export async function getAllGoals() {
+    const res = await fetch(`${API}/goals/list`, {
+        method: "GET",
+        credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch goals");
+    }
+
+    return data.goals;
+}
