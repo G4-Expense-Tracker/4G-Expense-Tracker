@@ -46,6 +46,20 @@ export async function setBudget(postData) {
   }
 }
 
+// this might need to go in the api folder but I'm keeping it here for now and I'll let Ria decide
+
+function getBudgetRating(spending, budget) {
+  if (spending > budget) {
+    return "over budget";
+  }
+
+  if (spending >= budget * 0.9) {
+    return "near budget";
+  }
+
+  return "under budget";
+}
+
 // export async function editBudget(budget_id, postData) {
 //   const query = `
 //     UPDATE budget
