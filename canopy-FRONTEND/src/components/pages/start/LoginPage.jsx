@@ -13,6 +13,7 @@ import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { loginUser } from "../../../api/users";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -23,19 +24,9 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
     try {
-      const res = await fetch(import.meta.env.VITE_APP_LOGIN_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email, password }),
-      });
+      setError('')
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Login failed");
-        return;
-      }
+      await loginUser(email, password)
 
       navigate("/dashboard");
     } catch (err) {
