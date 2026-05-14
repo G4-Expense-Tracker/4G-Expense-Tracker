@@ -85,11 +85,33 @@ export async function getGoalProgress(goal_id) {
 }
 
 export async function goalLevelUp(goal_id) {
+    const res = await fetch(`${API}/goals/${goal_id}/levelUp`, {
+        method: "POST",
+        credentials: "include",
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to level up goal");
+    }
+
+    return data;
 }
 
 export async function deleteGoal(goal_id) {
+    const res = await fetch(`${API}/goals/${goal_id}/delete`, {
+        method: "POST",
+        credentials: "include",
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to delete goal");
+    }
+
+    return data;
 }
 
 export async function addGoalProgress(goal_id) {
