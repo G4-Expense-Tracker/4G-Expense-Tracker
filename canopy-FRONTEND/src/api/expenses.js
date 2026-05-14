@@ -16,7 +16,18 @@ export async function getAllExpenses() {
 }
 
 export async function getAllQuickExpenses() {
-    
+    const res = await fetch(`${API}/list?quickExpense=true`, {
+        method: "GET",
+        credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch quick expenses");
+    }
+
+    return data;
 }
 
 export async function getExpense() {
