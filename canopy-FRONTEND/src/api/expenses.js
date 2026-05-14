@@ -130,8 +130,32 @@ export async function getCategoryTotals(startDate, endDate) {
     return data.total;
 }
 
-export async function compareCategories() {
+export async function compareCategories(
+    categoryId,
+    currentStart,
+    currentEnd,
+    prevStart,
+    prevEnd
+) {
+    const params = new URLSearchParams({
+        currentStart,
+        currentEnd,
+        prevStart,
+        prevEnd
+    })
 
+    const res = await fetch(`${API}/category/${categoryId}/comparison?${params.toString()}`, {
+        method: "GET",
+        credentials: "include",
+    })
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch category comparison");
+    }
+
+    return data.comparison;
 }
 
 export async function getCategoryTopChanges() {
