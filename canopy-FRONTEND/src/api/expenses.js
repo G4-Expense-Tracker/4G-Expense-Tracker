@@ -12,7 +12,7 @@ export async function getAllExpenses() {
         throw new Error(data.error || "Failed to fetch expenses");
     }
 
-    return data;
+    return data.expenses;
 }
 
 export async function getAllQuickExpenses() {
@@ -27,11 +27,22 @@ export async function getAllQuickExpenses() {
         throw new Error(data.error || "Failed to fetch quick expenses");
     }
 
-    return data;
+    return data.expenses;
 }
 
 export async function getExpense() {
+    const res = await fetch(`${API}/${expenseId}/view`, {
+        method: "GET",
+        credentials: "include",
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch expense");
+    }
+
+    return data.expense;
 }
 
 export async function getExpensesInCategory() {
