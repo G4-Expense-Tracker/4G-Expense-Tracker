@@ -113,8 +113,21 @@ export async function deleteExpense(expenseId) {
     return data;
 }
 
-export async function getCategoryTotals() {
+export async function getCategoryTotals(startDate, endDate) {
+    const params = new URLSearchParams({ startDate, endDate });
 
+    const res = await fetch(`${API}/category-totals?${params.toString()}`, {
+        method: "GET",
+        credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch category totals");
+    }
+
+    return data.total;
 }
 
 export async function compareCategories() {
