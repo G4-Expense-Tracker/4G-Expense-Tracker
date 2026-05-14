@@ -1,35 +1,21 @@
-// React useState reference:
-// https://react.dev/reference/react/useState
-import { useState } from "react";
-
-// React Router useNavigate reference:
-// https://reactrouter.com/api/hooks/useNavigate
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-// MUI components reference:
-// https://mui.com/material-ui/getting-started/
 import {
   Box,
   Typography,
   CircularProgress,
   IconButton,
   LinearProgress,
-  TextField,
 } from "@mui/material";
 
-// MUI icons reference:
-// https://mui.com/material-ui/material-icons/
-import AddIcon from "@mui/icons-material/Add";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 
-/* Shared footer component */
 import FooterNav from "../../Footer/FooterNav";
 
-// Plant images (From BCIT Design Team (Jennie, David, Alice, Hye and Gurjot))
 import seed1 from "../dashboard/plants/seed1.png";
 import phase1 from "../dashboard/plants/phase1.png";
 import phase2 from "../dashboard/plants/phase2.png";
@@ -37,107 +23,67 @@ import phase3 from "../dashboard/plants/phase3.png";
 import phase4 from "../dashboard/plants/phase4.png";
 
 export default function DashboardPage() {
-  // This lets the footer buttons go to other pages
   const navigate = useNavigate();
 
-  // This changes the circular goal card
+  const [goals, setGoals] = useState([]);
+  const [dashboardCards, setDashboardCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  // This changes the active dot under the bottom cards
   const [cardIndex, setCardIndex] = useState(0);
 
-  // Goal data for the circular progress
-  const [goals, setGoals] = useState([
-    {
-      title: "Click here",
-      subtitle: "to set your goal",
-      savedAmount: "",
-      targetAmount: "",
-    },
-    {
-      title: "Tuition",
-      savedAmount: "",
-      targetAmount: 1000,
-    },
-    {
-      title: "Nike Shoe",
-      savedAmount: 50,
-      targetAmount: 130,
-    },
-    {
-      title: "Airpods",
-      savedAmount: 150,
-      targetAmount: 250,
-    },
-    {
-      title: "Korea",
-      savedAmount: 1500,
-      targetAmount: 1800,
-    },
-  ]);
+  useEffect(() => {
+    const savedGoals = JSON.parse(localStorage.getItem("goals")) || [];
+    const savedBudgets = JSON.parse(localStorage.getItem("budgets")) || {};
+    const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
-  // Current goal that is showing
-  const current = goals[currentIndex];
-
-  // MUI CircularProgress reference:
-  // https://mui.com/material-ui/react-progress/
-  // This calculates the slider percentage automatically
-  const progress =
-    current.targetAmount && current.savedAmount !== ""
-      ? Math.min(
-          (Number(current.savedAmount) / current.targetAmount) * 100,
-          100
-        )
-      : 0;
-
-  // MUI TextField reference:
-  // https://mui.com/material-ui/react-text-field/
-  // This updates the slider when the user types a saved amount
-  function handleAmountChange(event) {
-    const value = event.target.value;
-
-    setGoals((prevGoals) =>
-      prevGoals.map((goal, index) =>
-        index === currentIndex
-          ? {
-              ...goal,
-              savedAmount: value === "" ? "" : Number(value),
-            }
-          : goal
-      )
+    setGoals(savedGoals);
+    setDashboardCards(
+      createDashboardCards(savedBudgets, savedExpenses, savedGoals)
     );
-  }
+  }, []);
 
-  // This changes the plant image based on the progress
-  function getPlantImage() {
-    if (progress === 0) return seed1;
-    if (progress < 40) return phase1;
-    if (progress < 60) return phase2;
-    if (progress < 85) return phase3;
+  const currentGoal = goals[currentIndex];
 
-    return phase4;
-  }
+  // Automatically calculates circular progress
+  const progress = currentGoal
+    ? Math.min(
+        Math.round(
+          (Number(currentGoal.savedAmount || 0) /
+            Number(currentGoal.targetAmount || 1)) *
+            100
+        ),
+        100
+      )
+    : 0;
 
-  // This moves to the next circular goal
   function nextGoal() {
+    if (goals.length === 0) return;
     setCurrentIndex((prev) => (prev + 1) % goals.length);
   }
 
-  // This moves to the previous circular goal
   function previousGoal() {
-    setCurrentIndex((prev) =>
-      prev === 0 ? goals.length - 1 : prev - 1
-    );
+    if (goals.length === 0) return;
+    setCurrentIndex((prev) => (prev === 0 ? goals.length - 1 : prev - 1));
   }
 
-  // This updates the dots when the user scrolls the bottom cards
+  function handleGoalClick() {
+    if (currentGoal) {
+      navigate(`/goal/${currentGoal.id}`);
+    } else {
+      navigate("/goal");
+    }
+  }
+
   function handleCardScroll(event) {
-    const scrollLeft = event.target.scrollLeft;
-    const cardWidth = 346;
+    const cardWidth = 286;
+    setCardIndex(Math.round(event.target.scrollLeft / cardWidth));
+  }
 
-    const newIndex = Math.round(scrollLeft / cardWidth);
-
-    setCardIndex(newIndex);
+  function getPlantImage() {
+    if (!currentGoal || progress === 0) return seed1;
+    if (progress < 40) return phase1;
+    if (progress < 60) return phase2;
+    if (progress < 85) return phase3;
+    return phase4;
   }
 
   return (
@@ -149,7 +95,7 @@ export default function DashboardPage() {
         bgcolor: "#F7F9F2",
         position: "relative",
         overflowX: "hidden",
-        pb: 12,
+        pb: 13,
       }}
     >
       {/* Status bar */}
@@ -162,21 +108,9 @@ export default function DashboardPage() {
           mb: 2,
         }}
       >
-        <Typography
-          sx={{
-            fontWeight: 700,
-            fontSize: 14,
-          }}
-        >
-          9:41
-        </Typography>
+        <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
 
-        <Box
-          sx={{
-            display: "flex",
-            gap: 0.3,
-          }}
-        >
+        <Box sx={{ display: "flex", gap: 0.3 }}>
           <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
           <WifiIcon sx={{ fontSize: 14 }} />
           <BatteryFullIcon sx={{ fontSize: 17 }} />
@@ -197,43 +131,16 @@ export default function DashboardPage() {
         Good Morning, Hye
       </Typography>
 
-      {/* Input box only shows for goals that have target amount */}
-      {current.targetAmount && (
-        <Box
-          sx={{
-            px: 4,
-            mt: 3,
-          }}
-        >
-          <TextField
-            fullWidth
-            type="number"
-            placeholder="Enter saved amount"
-            value={current.savedAmount}
-            onChange={handleAmountChange}
-            sx={{
-              bgcolor: "white",
-              borderRadius: 4,
-
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 4,
-              },
-            }}
-          />
-        </Box>
-      )}
-
-      {/* Circular goal progress */}
+      {/* Goal preview circle */}
       <Box
         sx={{
-          mt: 4,
+          mt: 7,
           position: "relative",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
-        {/* Left arrow */}
         <IconButton
           onClick={previousGoal}
           sx={{
@@ -245,8 +152,8 @@ export default function DashboardPage() {
           <ChevronLeftIcon />
         </IconButton>
 
-        {/* Circle wrapper */}
         <Box
+          onClick={handleGoalClick}
           sx={{
             position: "relative",
             width: 260,
@@ -254,6 +161,7 @@ export default function DashboardPage() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            cursor: "pointer",
           }}
         >
           {/* Yellow full circle */}
@@ -268,21 +176,24 @@ export default function DashboardPage() {
             }}
           />
 
-          {/* Green progress circle */}
-          <CircularProgress
-            variant="determinate"
-            value={progress}
-            size={235}
-            thickness={4.5}
-            sx={{
-              color: "#004D40",
-              position: "absolute",
-              transition: "all 0.5s ease",
-            }}
-          />
+          {/* Green automatic progress circle */}
+          {currentGoal && (
+            <CircularProgress
+              variant="determinate"
+              value={progress}
+              size={235}
+              thickness={4.5}
+              sx={{
+                color: "#004D40",
+                position: "absolute",
+                transform: "rotate(-90deg)",
+                transition: "all 0.5s ease",
+              }}
+            />
+          )}
 
           {/* Percent bubble */}
-          {current.targetAmount && (
+          {currentGoal && (
             <Box
               sx={{
                 position: "absolute",
@@ -301,11 +212,11 @@ export default function DashboardPage() {
                 zIndex: 2,
               }}
             >
-              {Math.round(progress)}%
+              {progress}%
             </Box>
           )}
 
-          {/* Inner circle content */}
+          {/* Inner circle */}
           <Box
             sx={{
               width: 195,
@@ -320,35 +231,17 @@ export default function DashboardPage() {
               zIndex: 1,
             }}
           >
-            {/* Animated plant */}
             <Box
               component="img"
               src={getPlantImage()}
-              alt="plant"
+              alt="goal plant"
               sx={{
                 width: 95,
                 height: 95,
                 objectFit: "contain",
-                animation: "swing 2.5s ease-in-out infinite",
-                transformOrigin: "bottom center",
-
-                "@keyframes swing": {
-                  "0%": {
-                    transform: "rotate(-4deg)",
-                  },
-
-                  "50%": {
-                    transform: "rotate(4deg)",
-                  },
-
-                  "100%": {
-                    transform: "rotate(-4deg)",
-                  },
-                },
               }}
             />
 
-            {/* Goal title */}
             <Typography
               sx={{
                 mt: 1,
@@ -357,10 +250,9 @@ export default function DashboardPage() {
                 color: "#004D40",
               }}
             >
-              {current.title}
+              {currentGoal ? currentGoal.title : "Click here"}
             </Typography>
 
-            {/* Goal amount */}
             <Typography
               sx={{
                 fontSize: 14,
@@ -368,14 +260,15 @@ export default function DashboardPage() {
                 color: "#004D40",
               }}
             >
-              {current.targetAmount
-                ? `$${current.savedAmount || 0} / ${current.targetAmount}`
-                : current.subtitle}
+              {currentGoal
+                ? `$${currentGoal.savedAmount || 0} / ${
+                    currentGoal.targetAmount || 0
+                  }`
+                : "to set your goal"}
             </Typography>
           </Box>
         </Box>
 
-        {/* Right arrow */}
         <IconButton
           onClick={nextGoal}
           sx={{
@@ -388,7 +281,7 @@ export default function DashboardPage() {
         </IconButton>
       </Box>
 
-      {/* Bottom cards row */}
+      {/* Bottom cards */}
       <Box
         onScroll={handleCardScroll}
         sx={{
@@ -399,274 +292,190 @@ export default function DashboardPage() {
           px: 2,
           pb: 2,
           scrollSnapType: "x mandatory",
-
           "&::-webkit-scrollbar": {
             display: "none",
           },
         }}
       >
-        {/* Add New Card */}
-        <Box
-          onClick={() => navigate("/newgoal")}
-          sx={{
-            minWidth: 330,
-            height: 160,
-            borderRadius: 3,
-            bgcolor: "#DFF0BF",
-            boxShadow: "0px 6px 10px rgba(0,0,0,0.25)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 3,
-            cursor: "pointer",
-            scrollSnapAlign: "center",
-          }}
-        >
+        {dashboardCards.length > 0 ? (
+          dashboardCards.map((card) => (
+            <DashboardCard key={card.id} card={card} />
+          ))
+        ) : (
           <Box
             sx={{
-              width: 62,
-              height: 62,
-              borderRadius: "50%",
-              bgcolor: "#FFF8CC",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+              minWidth: 270,
+              height: 160,
+              borderRadius: 3,
+              bgcolor: "#DFF0BF",
+              boxShadow: "0px 6px 10px rgba(0,0,0,0.25)",
+              p: 3,
+              boxSizing: "border-box",
+              scrollSnapAlign: "center",
             }}
           >
-            <AddIcon
-              sx={{
-                fontSize: 42,
-                color: "#004D40",
-              }}
-            />
-          </Box>
+            <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 22 }}>
+              No saved values yet
+            </Typography>
 
-          <Typography
-            sx={{
-              fontSize: 26,
-              fontWeight: 700,
-              color: "#004D40",
-            }}
-          >
-            Add New Card
-          </Typography>
-        </Box>
-
-        {/* Daily Budget Card */}
-        <Box
-          sx={{
-            minWidth: 330,
-            height: 160,
-            borderRadius: 3,
-            bgcolor: "#DFF0BF",
-            boxShadow: "0px 6px 10px rgba(0,0,0,0.25)",
-            p: 3,
-            boxSizing: "border-box",
-            scrollSnapAlign: "center",
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#004D40",
-              fontWeight: 700,
-              fontSize: 24,
-            }}
-          >
-            Daily Budget
-          </Typography>
-
-          <Typography
-            sx={{
-              fontWeight: 800,
-              fontSize: 36,
-            }}
-          >
-            $50
-          </Typography>
-
-          <LinearProgress
-            variant="determinate"
-            value={90}
-            sx={{
-              mt: 1.5,
-              height: 12,
-              borderRadius: 10,
-              bgcolor: "#FFF8CC",
-
-              "& .MuiLinearProgress-bar": {
-                bgcolor: "#004D40",
-              },
-            }}
-          />
-
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              mt: 1.5,
-            }}
-          >
-            <Box>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 700,
-                }}
-              >
-                Used
-              </Typography>
-
-              <Typography
-                sx={{
-                  fontSize: 22,
-                  fontWeight: 700,
-                  color: "#004D40",
-                }}
-              >
-                $45
-              </Typography>
-            </Box>
-
-            <Box sx={{ textAlign: "right" }}>
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 700,
-                }}
-              >
-                Remaining
-              </Typography>
-
-              <Typography
-                sx={{
-                  fontSize: 22,
-                  fontWeight: 700,
-                  color: "#004D40",
-                }}
-              >
-                $5
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-
-        {/* Recent Expense Card */}
-        <Box
-          sx={{
-            minWidth: 330,
-            height: 160,
-            borderRadius: 3,
-            bgcolor: "#DFF0BF",
-            boxShadow: "0px 6px 10px rgba(0,0,0,0.25)",
-            p: 3,
-            boxSizing: "border-box",
-            scrollSnapAlign: "center",
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#004D40",
-              fontWeight: 700,
-              fontSize: 24,
-            }}
-          >
-            Recent Expense
-          </Typography>
-
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              mt: 2,
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1.5,
-              }}
-            >
-              <Box
-                sx={{
-                  width: 42,
-                  height: 42,
-                  borderRadius: "50%",
-                  bgcolor: "#9AB46B",
-                  color: "white",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                ☕
-              </Box>
-
-              <Typography
-                sx={{
-                  fontSize: 26,
-                }}
-              >
-                Starbucks
-              </Typography>
-            </Box>
-
-            <Typography
-              sx={{
-                fontSize: 26,
-                fontWeight: 700,
-              }}
-            >
-              $6.00
+            <Typography sx={{ mt: 2, color: "#004D40", fontSize: 15 }}>
+              Add a goal, budget, or expense to see dashboard previews.
             </Typography>
           </Box>
-
-          <Typography
-            sx={{
-              mt: 1,
-              ml: 6,
-              display: "inline-block",
-              px: 1.5,
-              py: 0.3,
-              borderRadius: 5,
-              bgcolor: "#FFF8CC",
-              fontSize: 14,
-            }}
-          >
-            Sun, April 7&nbsp;&nbsp; | &nbsp;&nbsp;6:00 am
-          </Typography>
-        </Box>
+        )}
       </Box>
 
-      {/* Three dots under cards */}
+      {/* Dots */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
-          alignItems: "center",
           gap: 1,
           mt: 1,
         }}
       >
-        {[0, 1, 2].map((dot) => (
+        {dashboardCards.map((card, index) => (
           <Box
-            key={dot}
+            key={card.id}
             sx={{
               width: 10,
               height: 10,
               borderRadius: "50%",
-              bgcolor:
-                cardIndex === dot
-                  ? "#004D40"
-                  : "#9AB46B",
+              bgcolor: cardIndex === index ? "#004D40" : "#9AB46B",
             }}
           />
         ))}
       </Box>
 
-      {/* Footer navigation links from App.jsx routes */}
       <FooterNav />
     </Box>
   );
+}
+
+function DashboardCard({ card }) {
+  const progress =
+    card.amount > 0 ? Math.min((card.used / card.amount) * 100, 100) : 0;
+
+  return (
+    <Box
+      sx={{
+        minWidth: 270,
+        height: 160,
+        borderRadius: 3,
+        bgcolor: "#DFF0BF",
+        boxShadow: "0px 6px 10px rgba(0,0,0,0.25)",
+        p: 3,
+        boxSizing: "border-box",
+        scrollSnapAlign: "center",
+      }}
+    >
+      <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 24 }}>
+        {card.title}
+      </Typography>
+
+      <Typography sx={{ fontWeight: 800, fontSize: 36, color: "#004D40" }}>
+        ${card.amount}
+      </Typography>
+
+      <LinearProgress
+        variant="determinate"
+        value={progress}
+        sx={{
+          mt: 1.5,
+          height: 12,
+          borderRadius: 10,
+          bgcolor: "#FFF8CC",
+          "& .MuiLinearProgress-bar": {
+            bgcolor: "#004D40",
+          },
+        }}
+      />
+
+      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1.5 }}>
+        <Box>
+          <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
+            {card.leftLabel || "Used"}
+          </Typography>
+
+          <Typography sx={{ fontSize: 18, fontWeight: 700, color: "#004D40" }}>
+            ${card.used}
+          </Typography>
+        </Box>
+
+        <Box sx={{ textAlign: "right" }}>
+          <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
+            {card.rightLabel || "Remaining"}
+          </Typography>
+
+          <Typography sx={{ fontSize: 18, fontWeight: 700, color: "#004D40" }}>
+            ${card.remaining}
+          </Typography>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+function createDashboardCards(budgets, expenses, goals) {
+  const cards = [];
+
+  const totalExpenses = expenses.reduce((total, expense) => {
+    return total + Number(expense.amount || 0);
+  }, 0);
+
+  if (budgets.dailyBudget) {
+    const dailyBudget = Number(budgets.dailyBudget);
+
+    cards.push({
+      id: "daily-budget",
+      title: "Daily Budget",
+      amount: dailyBudget,
+      used: totalExpenses,
+      remaining: Math.max(dailyBudget - totalExpenses, 0),
+    });
+  }
+
+  if (budgets.monthlyBudget) {
+    const monthlyBudget = Number(budgets.monthlyBudget);
+
+    cards.push({
+      id: "monthly-budget",
+      title: "Monthly Budget",
+      amount: monthlyBudget,
+      used: totalExpenses,
+      remaining: Math.max(monthlyBudget - totalExpenses, 0),
+    });
+  }
+
+  if (expenses.length > 0) {
+    const recentExpense = expenses[expenses.length - 1];
+
+    cards.push({
+      id: "recent-expense",
+      title: "Recent Expense",
+      amount: Number(recentExpense.amount || 0),
+      used: Number(recentExpense.amount || 0),
+      remaining: 0,
+      leftLabel: "Amount",
+      rightLabel: "Latest",
+    });
+  }
+
+  if (goals.length > 0) {
+    const firstGoal = goals[0];
+
+    cards.push({
+      id: "goal-progress",
+      title: "Goal Progress",
+      amount: Number(firstGoal.targetAmount || 0),
+      used: Number(firstGoal.savedAmount || 0),
+      remaining: Math.max(
+        Number(firstGoal.targetAmount || 0) -
+          Number(firstGoal.savedAmount || 0),
+        0
+      ),
+    });
+  }
+
+  return cards;
 }
