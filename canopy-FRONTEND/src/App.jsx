@@ -10,7 +10,6 @@ import Goal from "./components/pages/goal_pages/Goal";
 
 
 import DashboardPage from "./components/pages/dashboard/DashboardPage";
-import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
 import CategoryPage from "./components/pages/profile_pages/category/CategoryPage";
 import AddCategoryPage from "./components/pages/profile_pages/category/AddCategoryPage";
 import NewGoal from "./components/pages/goal_pages/NewGoal/NewGoal";
@@ -34,7 +33,6 @@ function App() {
         <Route path="/goals" element={<Goal />} />
         <Route path="/newgoal" element={<NewGoal />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/expense" element={<ExpenseDashboard />} />
         <Route path="/category" element={<CategoryPage />} />
         <Route path="/add-category" element={<AddCategoryPage />} />
         <Route path="/accessibility" element={<Accessibility />} />
