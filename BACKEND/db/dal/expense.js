@@ -2,7 +2,12 @@ import database from "../databaseConnection.js";
 
 export async function getExpensesByUser(user_id) {
   const query = `
-    SELECT * from expense
+    SELECT e.*, c.name, i.icon_name
+    FROM expense e
+    INNER JOIN category c
+      ON c.category_id = e.category_id
+    INNER JOIN icon i
+      ON i.icon_id = c.icon_id
     WHERE user_id = :user_id
     ORDER BY date DESC;
     `;
@@ -24,7 +29,12 @@ export async function getExpensesByUser(user_id) {
 
 export async function getQuickExpenses(user_id) {
   const query = `
-    SELECT * from expense
+    SELECT e.*, c.name, i.icon_name
+    FROM expense e
+    INNER JOIN category c
+      ON c.category_id = e.category_id
+    INNER JOIN icon i
+      ON i.icon_id = c.icon_id
     WHERE user_id = :user_id AND quick_expense = 1
     ORDER BY date DESC;
     `;
@@ -46,7 +56,12 @@ export async function getQuickExpenses(user_id) {
 
 export async function getOneExpense(expense_id) {
   const query = `
-    SELECT * from expense
+    SELECT e.*, c.name, i.icon_name
+    FROM expense e
+    INNER JOIN category c
+      ON c.category_id = e.category_id
+    INNER JOIN icon i
+      ON i.icon_id = c.icon_id
     WHERE expense_id = :expense_id;
     `;
 
@@ -67,7 +82,12 @@ export async function getOneExpense(expense_id) {
 
 export async function getExpensesByCategory(user_id, category_id) {
   const query = `
-    SELECT * from expense
+    SELECT e.*, c.name, i.icon_name
+    FROM expense e
+    INNER JOIN category c
+      ON c.category_id = e.category_id
+    INNER JOIN icon i
+      ON i.icon_id = c.icon_id
     WHERE user_id = :user_id AND category_id = :category_id
     ORDER BY date DESC;
     `;
