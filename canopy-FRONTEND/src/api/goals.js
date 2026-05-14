@@ -16,7 +16,18 @@ export async function getAllGoals() {
 }
 
 export async function getGoal(goal_id) {
+    const res = await fetch(`${API}/goals/${goal_id}`, {
+        method: "GET",
+        credentials: "include",
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch goal");
+    }
+
+    return data.goal;
 }
 
 export async function createNewGoal(name, targetAmount) {
