@@ -346,12 +346,12 @@ export default function DashboardPage() {
           />
         ))}
       </Box>
+      /* Adding the Expense page to the dashboard page which gets the same format */
       <Box>
         <AddIcon>
           +
         </AddIcon>
         <IconButton onClick={() => navigate("/expenses")} sx={{ p: 0 }}></IconButton>
-
       </Box>
 
       <FooterNav />
