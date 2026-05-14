@@ -115,7 +115,22 @@ export async function deleteGoal(goal_id) {
 }
 
 export async function addGoalProgress(goal_id) {
+    const res = await fetch(`${API}/goals/${goal_id}/progress/update`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ uncleanProgress }),
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to update progress");
+    }
+
+    return data;
 }
 
 export async function newGoalAction(goal_id) {
