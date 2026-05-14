@@ -2,7 +2,7 @@ import { Box, Button, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { createNewGoal } from '../../../api/goals';
+import { createNewGoal } from '../../../../api/goals';
 
 function GoalForm() {
     const navigate = useNavigate();
