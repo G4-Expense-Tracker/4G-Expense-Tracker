@@ -30,7 +30,7 @@ export async function getAllQuickExpenses() {
     return data.expenses;
 }
 
-export async function getExpense() {
+export async function getExpense(expenseId) {
     const res = await fetch(`${API}/${expenseId}/view`, {
         method: "GET",
         credentials: "include",
@@ -45,8 +45,19 @@ export async function getExpense() {
     return data.expense;
 }
 
-export async function getExpensesInCategory() {
+export async function getExpensesInCategory(categoryId) {
+    const res = await fetch(`${API}/${categoryId}/list`, {
+        method: "GET",
+        credentials: "include",
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch category expenses");
+    }
+
+    return data.categoryExpenses;
 }
 
 export async function createNewExpense() {
