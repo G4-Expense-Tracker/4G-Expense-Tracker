@@ -119,5 +119,20 @@ export async function addGoalProgress(goal_id) {
 }
 
 export async function newGoalAction(goal_id) {
-    
+    const res = await fetch(`${API}/goals/${goal_id}/action`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ action_type_id }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to log goal action");
+    }
+
+    return data;
 }
