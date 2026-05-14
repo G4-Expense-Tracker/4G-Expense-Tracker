@@ -1,5 +1,24 @@
 const API = import.meta.env.VITE_APP_BASE_URL
 
+export async function getAllGoals() {
+    const res = await fetch(`${API}/goals/list`, {
+        method: "GET",
+        credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch goals");
+    }
+
+    return data.goals;
+}
+
+export async function getGoal(goal_id) {
+
+}
+
 export async function createNewGoal(name, targetAmount) {
     const res = await fetch(`${API}/goals/new`, {
         method: "POST",
@@ -22,17 +41,26 @@ export async function createNewGoal(name, targetAmount) {
     return data;
 }
 
-export async function getAllGoals() {
-    const res = await fetch(`${API}/goals/list`, {
-        method: "GET",
-        credentials: "include",
-    });
+export async function editGoal(goal_id) {
 
-    const data = await res.json();
+}
 
-    if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch goals");
-    }
+export async function getGoalProgress(goal_id) {
 
-    return data.goals;
+}
+
+export async function goalLevelUp(goal_id) {
+
+}
+
+export async function deleteGoal(goal_id) {
+
+}
+
+export async function addGoalProgress(goal_id) {
+
+}
+
+export async function newGoalAction(goal_id) {
+    
 }

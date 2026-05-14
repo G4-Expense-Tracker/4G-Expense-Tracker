@@ -41,23 +41,6 @@ router.get('/list', requireLogin, async (req, res) => {
     }
 })
 
-router.get('/:goalId', requireLogin, async (req, res) => {
-    try {
-        const goal_id = req.params.goalId
-
-        const goal = await getGoalById(goal_id)
-
-        if (!goal) {
-            return res.status(400).json({ error: 'Goal not found' })
-        }
-
-        return res.json({ goal })
-    } catch(err) {
-        console.error(err);
-        res.status(500).json({ error: "Server failure" })
-    }
-})
-
 router.post('/new', requireLogin, async (req, res) => {
     try {
         const user_id = req.user.user_id;
@@ -110,7 +93,7 @@ router.post('/:goalId/edit', requireLogin, async (req, res) => {
     }
 })
 
-router.post('/:goalId/progress', requireLogin, async (req, res) => {
+router.post('/:goalId/progress/update', requireLogin, async (req, res) => {
     try {
         const goal_id = req.params.goalId;
         const { uncleanProgress } = req.body;
@@ -221,6 +204,23 @@ router.post('/:goalId/action', requireLogin, async (req, res) => {
             success: true,
             user_action_log_id: newAction.user_action_log_id
         })
+    } catch(err) {
+        console.error(err);
+        res.status(500).json({ error: "Server failure" })
+    }
+})
+
+router.get('/:goalId', requireLogin, async (req, res) => {
+    try {
+        const goal_id = req.params.goalId
+
+        const goal = await getGoalById(goal_id)
+
+        if (!goal) {
+            return res.status(400).json({ error: 'Goal not found' })
+        }
+
+        return res.json({ goal })
     } catch(err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" })
