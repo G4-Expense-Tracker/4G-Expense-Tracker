@@ -79,8 +79,23 @@ export async function createNewExpense(newExpenseData) {
     return data;
 }
 
-export async function editExpense() {
-    
+export async function editExpense(expenseId, updatedInfo) {
+    const res = await fetch(`${API}/${expenseId}/edit`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(updatedInfo),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to edit expense");
+    }
+
+    return data;
 }
 
 export async function deleteExpense() {
