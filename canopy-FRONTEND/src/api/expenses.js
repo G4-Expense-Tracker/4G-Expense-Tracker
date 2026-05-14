@@ -186,6 +186,19 @@ export async function getCategoryTopChanges(
     return data.topChanges;
 }
 
-export async function getDateRangeTotal() {
+export async function getDateRangeTotal(startDate, endDate) {
+    const params = new URLSearchParams({ startDate, endDate });
 
+    const res = await fetch(`${API}/total?${params.toString()}`, {
+        method: "GET",
+        credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch date range total");
+    }
+
+    return data.dateRangeTotal;
 }
