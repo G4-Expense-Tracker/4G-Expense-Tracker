@@ -6,14 +6,14 @@ import OB_End from "./components/pages/onboarding/OB_End";
 import LoginPage from "./components/pages/start/LoginPage";
 import SignupPage from "./components/pages/start/SignupPage";
 import LoadingPage from "./components/pages/start/LoadingPage";
-import Goal from "./components/goal_pages/Goal";
+import Goal from "./components/pages/goal_pages/Goal";
 
 
 import DashboardPage from "./components/pages/dashboard/DashboardPage";
 import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
 import CategoryPage from "./components/pages/profile_pages/category/CategoryPage";
 import AddCategoryPage from "./components/pages/profile_pages/category/AddCategoryPage";
-import NewGoal from "./components/goal_pages/NewGoal/NewGoal";
+import NewGoal from "./components/pages/goal_pages/NewGoal/NewGoal";
 import Accessibility from "./components/pages/profile_pages/accessibility/Accessibility";
 import AccountPage from "./components/pages/profile_pages/account/AccountPage";
 import ProfilePage from "./components/pages/profile_pages/profileandlogout/ProfilePage";
