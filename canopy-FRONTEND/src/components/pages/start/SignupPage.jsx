@@ -31,9 +31,15 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [agreed, setAgreed] = useState(false);
 
   const handleSignup = async () => {
     setError("");
+
+    if (!agreed) {
+      setError("You must agree to the Terms of Service");
+      return;
+    }
 
     if (!firstName || !lastName || !email || !password || !phone) {
       setError("Please fill all fields");
@@ -191,7 +197,11 @@ export default function SignupPage() {
         />
 
         <FormControlLabel
-          control={<Checkbox size="small" />}
+          control={<Checkbox 
+            size="small"
+            checked={agreed}
+            onChange={(e) => setAgreed(e.target.checked)}
+          />}
           label={
             <Typography sx={{ fontSize: 13 }}>
               I agree to the{" "}
