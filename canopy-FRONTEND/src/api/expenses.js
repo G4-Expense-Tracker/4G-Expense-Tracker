@@ -1,7 +1,7 @@
 const API = import.meta.env.VITE_APP_BASE_URL
 
 export async function getAllExpenses() {
-    const res = await fetch(`${API}/list?quickExpense=false`, {
+    const res = await fetch(`${API}/expenses/list?quickExpense=false`, {
         method: "GET",
         credentials: "include",
     });
@@ -16,7 +16,7 @@ export async function getAllExpenses() {
 }
 
 export async function getAllQuickExpenses() {
-    const res = await fetch(`${API}/list?quickExpense=true`, {
+    const res = await fetch(`${API}/expenses/list?quickExpense=true`, {
         method: "GET",
         credentials: "include",
     });
@@ -31,7 +31,7 @@ export async function getAllQuickExpenses() {
 }
 
 export async function getExpense(expenseId) {
-    const res = await fetch(`${API}/${expenseId}/view`, {
+    const res = await fetch(`${API}/expenses/${expenseId}/view`, {
         method: "GET",
         credentials: "include",
     });
@@ -46,7 +46,7 @@ export async function getExpense(expenseId) {
 }
 
 export async function getExpensesInCategory(categoryId) {
-    const res = await fetch(`${API}/${categoryId}/list`, {
+    const res = await fetch(`${API}/expenses/${categoryId}/list`, {
         method: "GET",
         credentials: "include",
     });
@@ -61,7 +61,7 @@ export async function getExpensesInCategory(categoryId) {
 }
 
 export async function createNewExpense(newExpenseData) {
-    const res = await fetch(`${API}/new`, {
+    const res = await fetch(`${API}/expenses/new`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export async function createNewExpense(newExpenseData) {
 }
 
 export async function editExpense(expenseId, updatedInfo) {
-    const res = await fetch(`${API}/${expenseId}/edit`, {
+    const res = await fetch(`${API}/expenses/${expenseId}/edit`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export async function editExpense(expenseId, updatedInfo) {
 }
 
 export async function deleteExpense(expenseId) {
-    const res = await fetch(`${API}/${expenseId}/delete`, {
+    const res = await fetch(`${API}/expenses/${expenseId}/delete`, {
         method: "POST",
         credentials: "include",
     });
@@ -116,7 +116,7 @@ export async function deleteExpense(expenseId) {
 export async function getCategoryTotals(startDate, endDate) {
     const params = new URLSearchParams({ startDate, endDate });
 
-    const res = await fetch(`${API}/category-totals?${params.toString()}`, {
+    const res = await fetch(`${API}/expenses/category-totals?${params.toString()}`, {
         method: "GET",
         credentials: "include",
     });
@@ -144,7 +144,7 @@ export async function compareCategories(
         prevEnd
     })
 
-    const res = await fetch(`${API}/category/${categoryId}/comparison?${params.toString()}`, {
+    const res = await fetch(`${API}/expenses/category/${categoryId}/comparison?${params.toString()}`, {
         method: "GET",
         credentials: "include",
     })
@@ -171,7 +171,7 @@ export async function getCategoryTopChanges(
         prevEnd,
     });
 
-    const res = await fetch(`${API}/category/top-changes?${params.toString()}`, {
+    const res = await fetch(`${API}/expenses/category/top-changes?${params.toString()}`, {
             method: "GET",
             credentials: "include",
         }
@@ -189,7 +189,7 @@ export async function getCategoryTopChanges(
 export async function getDateRangeTotal(startDate, endDate) {
     const params = new URLSearchParams({ startDate, endDate });
 
-    const res = await fetch(`${API}/total?${params.toString()}`, {
+    const res = await fetch(`${API}/expenses/total?${params.toString()}`, {
         method: "GET",
         credentials: "include",
     });
