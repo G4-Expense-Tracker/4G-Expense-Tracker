@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography, IconButton, Button } from "@mui/material";
 
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
@@ -36,14 +36,36 @@ setOptions({
 export default function ExpensePage() {
   const navigate = useNavigate();
 
+  const categories = [
+    "Food",
+    "Drink",
+    "Transport",
+    "Groceries",
+    "Health",
+    "Shopping",
+    "Housing",
+  ];
+
   const [calendarMode, setCalendarMode] = useState("week");
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date(2026, 3, 7));
   const [savedExpenses, setSavedExpenses] = useState([]);
+  const [deletedSampleIds, setDeletedSampleIds] = useState([]);
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedExpenseToDelete, setSelectedExpenseToDelete] = useState(null);
+
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("");
 
   useEffect(() => {
     const storedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    const storedDeletedIds =
+      JSON.parse(localStorage.getItem("deletedSampleIds")) || [];
+
     setSavedExpenses(storedExpenses);
+    setDeletedSampleIds(storedDeletedIds);
   }, []);
 
   const sampleExpenses = [
@@ -52,7 +74,7 @@ export default function ExpensePage() {
       date: "2026-04-07",
       time: "6:00am",
       title: "Bus Fare",
-      category: "Food",
+      category: "Transport",
       amount: "$6.00",
       iconType: "bus",
     },
@@ -94,15 +116,24 @@ export default function ExpensePage() {
     },
   ];
 
-  const allExpenses = [...sampleExpenses, ...savedExpenses];
+  const visibleSampleExpenses = sampleExpenses.filter(
+    (expense) => !deletedSampleIds.includes(expense.id)
+  );
+
+  const allExpenses = [...visibleSampleExpenses, ...savedExpenses];
 
   const formatDate = (date) => date.toISOString().split("T")[0];
-
   const selectedDateString = formatDate(selectedDate);
 
-  const filteredExpenses = allExpenses.filter(
-    (expense) => expense.date === selectedDateString
-  );
+  const filteredExpenses = allExpenses.filter((expense) => {
+    const matchesDate = expense.date === selectedDateString;
+
+    const matchesCategory =
+      !selectedCategoryFilter ||
+      expense.category?.toLowerCase() === selectedCategoryFilter.toLowerCase();
+
+    return matchesDate && matchesCategory;
+  });
 
   const totalAmount = filteredExpenses.reduce((total, expense) => {
     return total + Number(String(expense.amount).replace("$", ""));
@@ -111,22 +142,69 @@ export default function ExpensePage() {
   const getExpenseIcon = (expense) => {
     const iconType = expense.iconType || expense.category?.toLowerCase();
 
-    if (iconType?.includes("bus")) return <DirectionsBusIcon />;
-    if (iconType?.includes("drink")) return <LocalCafeIcon />;
-    if (iconType?.includes("food")) return <LocalCafeIcon />;
-    if (iconType?.includes("grocery")) return <ShoppingCartIcon />;
+    if (iconType?.includes("bus") || iconType?.includes("transport"))
+      return <DirectionsBusIcon />;
+
+    if (iconType?.includes("drink") || iconType?.includes("food"))
+      return <LocalCafeIcon />;
+
+    if (iconType?.includes("grocery") || iconType?.includes("shopping"))
+      return <ShoppingCartIcon />;
+
     if (iconType?.includes("health")) return <FitnessCenterIcon />;
 
     return <ShoppingCartIcon />;
   };
 
-  const handleDeleteExpense = (expenseId) => {
-    const updatedExpenses = savedExpenses.filter(
-      (expense) => String(expense.id) !== String(expenseId)
-    );
+  const handleEditExpense = (expense) => {
+    const isSampleExpense = String(expense.id).startsWith("sample");
 
-    localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
-    setSavedExpenses(updatedExpenses);
+    if (isSampleExpense) {
+      const editableExpense = {
+        ...expense,
+        id: Date.now(),
+        originalSampleId: expense.id,
+      };
+
+      const updatedSavedExpenses = [...savedExpenses, editableExpense];
+      const updatedDeletedIds = [...deletedSampleIds, expense.id];
+
+      localStorage.setItem("expenses", JSON.stringify(updatedSavedExpenses));
+      localStorage.setItem(
+        "deletedSampleIds",
+        JSON.stringify(updatedDeletedIds)
+      );
+
+      setSavedExpenses(updatedSavedExpenses);
+      setDeletedSampleIds(updatedDeletedIds);
+
+      navigate(`/edit-expense/${editableExpense.id}`);
+    } else {
+      navigate(`/edit-expense/${expense.id}`);
+    }
+  };
+
+  const handleDeleteExpense = (expenseId) => {
+    const isSampleExpense = String(expenseId).startsWith("sample");
+
+    if (isSampleExpense) {
+      const updatedDeletedIds = [...deletedSampleIds, expenseId];
+
+      localStorage.setItem(
+        "deletedSampleIds",
+        JSON.stringify(updatedDeletedIds)
+      );
+
+      setDeletedSampleIds(updatedDeletedIds);
+    } else {
+      const updatedExpenses = savedExpenses.filter(
+        (expense) => String(expense.id) !== String(expenseId)
+      );
+
+      localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
+      setSavedExpenses(updatedExpenses);
+    }
+
     setOpenMenuIndex(null);
   };
 
@@ -163,13 +241,7 @@ export default function ExpensePage() {
             px: "4px",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: "22px",
-              fontWeight: 600,
-              color: "#3D3D3D",
-            }}
-          >
+          <Typography sx={{ fontSize: "22px", fontWeight: 600 }}>
             9:41
           </Typography>
 
@@ -258,22 +330,17 @@ export default function ExpensePage() {
             mb: "14px",
             backgroundColor: "#FAFCF7",
 
-            // React Calender Mobiscroll Referenced from
-            // https://demo.mobiscroll.com/react/eventcalendar/event-data-structure
             "& .mbsc-calendar": {
               backgroundColor: "#FAFCF7",
             },
-
             "& .mbsc-calendar-wrapper": {
               backgroundColor: "#FAFCF7",
             },
-
             "& .mbsc-calendar-week-day": {
               color: "#005242",
               fontSize: "15px",
               fontWeight: 500,
             },
-
             "& .mbsc-calendar-cell-text": {
               color: "#005242",
               fontSize: "18px",
@@ -281,18 +348,15 @@ export default function ExpensePage() {
               height: "30px",
               lineHeight: "30px",
             },
-
             "& .mbsc-selected .mbsc-calendar-cell-text": {
               backgroundColor: "#005242",
               color: "#FFFFFF",
               borderRadius: "50%",
               fontWeight: 700,
             },
-
             "& .mbsc-button": {
               color: "#1C9A72",
             },
-
             "& .mbsc-calendar-cell": {
               border: "none",
             },
@@ -385,7 +449,10 @@ export default function ExpensePage() {
             </Typography>
           </Box>
 
-          <FilterAltOutlinedIcon sx={{ color: "#005242", fontSize: 32 }} />
+          <FilterAltOutlinedIcon
+            onClick={() => setFilterModalOpen(true)}
+            sx={{ color: "#005242", fontSize: 32, cursor: "pointer" }}
+          />
         </Box>
 
         {/* Expense Cards */}
@@ -455,7 +522,7 @@ export default function ExpensePage() {
                     }}
                   >
                     <Box
-                      onClick={() => navigate(`/edit-expense/${expense.id}`)}
+                      onClick={() => handleEditExpense(expense)}
                       sx={{
                         textAlign: "center",
                         color: "#005242",
@@ -475,7 +542,10 @@ export default function ExpensePage() {
                     />
 
                     <Box
-                      onClick={() => handleDeleteExpense(expense.id)}
+                      onClick={() => {
+                        setSelectedExpenseToDelete(expense);
+                        setDeleteModalOpen(true);
+                      }}
                       sx={{
                         textAlign: "center",
                         color: "#005242",
@@ -530,6 +600,278 @@ export default function ExpensePage() {
             </Typography>
           )}
         </Box>
+
+        {/* Filter Modal */}
+        {filterModalOpen && (
+          <Box
+            sx={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.35)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 100,
+            }}
+          >
+            <Box
+              sx={{
+                width: 340,
+                minHeight: categoryDropdownOpen ? 390 : 260,
+                borderRadius: "35px",
+                background:
+                  "linear-gradient(180deg, #289173 0%, #A6C178 100%)",
+                color: "#fff",
+                px: 4,
+                py: 4,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mb: 4,
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <FilterAltOutlinedIcon sx={{ fontSize: 34, color: "#fff" }} />
+
+                  <Typography sx={{ fontSize: 28, fontWeight: 700 }}>
+                    Filter
+                  </Typography>
+                </Box>
+
+                <Typography
+                  onClick={() => setFilterModalOpen(false)}
+                  sx={{
+                    fontSize: 34,
+                    color: "#005242",
+                    cursor: "pointer",
+                    lineHeight: 1,
+                  }}
+                >
+                  ×
+                </Typography>
+              </Box>
+
+              {/* Category Dropdown */}
+              <Box sx={{ mb: 5 }}>
+                <Box
+                  onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+                  sx={{
+                    height: 48,
+                    borderRadius: 30,
+                    backgroundColor: "#fff",
+                    color: "#005242",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    px: 2,
+                    cursor: "pointer",
+                  }}
+                >
+                  <Typography sx={{ fontSize: 18 }}>
+                    {selectedCategoryFilter || "Category"}
+                  </Typography>
+
+                  <Typography sx={{ fontSize: 28 }}>
+                    {categoryDropdownOpen ? "▾" : "▸"}
+                  </Typography>
+                </Box>
+
+                {categoryDropdownOpen && (
+                  <Box
+                    sx={{
+                      mt: 2,
+                      borderRadius: "22px",
+                      backgroundColor: "#fff",
+                      p: 2,
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 1,
+                    }}
+                  >
+                    {categories.map((cat) => (
+                      <Button
+                        key={cat}
+                        onClick={() => setSelectedCategoryFilter(cat)}
+                        sx={{
+                          minWidth: 95,
+                          borderRadius: 2,
+                          border: "1px solid #93AF58",
+                          backgroundColor:
+                            selectedCategoryFilter === cat
+                              ? "#005242"
+                              : "#EAF4D4",
+                          color:
+                            selectedCategoryFilter === cat ? "#fff" : "#000",
+                          textTransform: "none",
+                          fontSize: 15,
+                          "&:hover": {
+                            backgroundColor:
+                              selectedCategoryFilter === cat
+                                ? "#005242"
+                                : "#EAF4D4",
+                          },
+                        }}
+                      >
+                        {cat}
+                      </Button>
+                    ))}
+                  </Box>
+                )}
+              </Box>
+
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Button
+                  onClick={() => {
+                    setSelectedCategoryFilter("");
+                    setCategoryDropdownOpen(false);
+                    setFilterModalOpen(false);
+                  }}
+                  sx={{
+                    flex: 1,
+                    height: 56,
+                    borderRadius: 30,
+                    color: "#005242",
+                    fontSize: 22,
+                    fontWeight: 700,
+                    border: "2px solid white",
+                    backgroundColor: "rgba(255,255,255,0.3)",
+                    textTransform: "none",
+                  }}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    setCategoryDropdownOpen(false);
+                    setFilterModalOpen(false);
+                  }}
+                  sx={{
+                    flex: 1,
+                    height: 56,
+                    borderRadius: 30,
+                    color: "#fff",
+                    fontSize: 22,
+                    fontWeight: 700,
+                    backgroundColor: "#005242",
+                    textTransform: "none",
+                    "&:hover": { backgroundColor: "#005242" },
+                  }}
+                >
+                  Apply
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        {/* Delete Modal */}
+        {deleteModalOpen && selectedExpenseToDelete && (
+          <Box
+            sx={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.35)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 100,
+            }}
+          >
+            <Box
+              sx={{
+                width: 340,
+                minHeight: 250,
+                borderRadius: "35px",
+                background:
+                  "linear-gradient(180deg, #289173 0%, #A6C178 100%)",
+                color: "#fff",
+                textAlign: "center",
+                px: 3,
+                py: 4,
+              }}
+            >
+              <Box
+                sx={{
+                  width: 54,
+                  height: 54,
+                  borderRadius: "50%",
+                  backgroundColor: "#FAFCF7",
+                  color: "#289173",
+                  mx: "auto",
+                  mb: 2,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 38,
+                  fontWeight: 800,
+                }}
+              >
+                !
+              </Box>
+
+              <Typography sx={{ fontSize: 30, fontWeight: 700 }}>
+                Delete Expense
+              </Typography>
+
+              <Typography sx={{ fontSize: 28, mb: 4 }}>
+                “{selectedExpenseToDelete.title}”?
+              </Typography>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: 2,
+                }}
+              >
+                <Button
+                  onClick={() => {
+                    setDeleteModalOpen(false);
+                    setSelectedExpenseToDelete(null);
+                  }}
+                  sx={{
+                    flex: 1,
+                    height: 55,
+                    borderRadius: 30,
+                    color: "#005242",
+                    fontSize: 22,
+                    fontWeight: 700,
+                    border: "2px solid white",
+                    backgroundColor: "rgba(255,255,255,0.3)",
+                    textTransform: "none",
+                  }}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    handleDeleteExpense(selectedExpenseToDelete.id);
+                    setDeleteModalOpen(false);
+                    setSelectedExpenseToDelete(null);
+                  }}
+                  sx={{
+                    flex: 1,
+                    height: 55,
+                    borderRadius: 30,
+                    color: "#fff",
+                    fontSize: 22,
+                    fontWeight: 700,
+                    backgroundColor: "#005242",
+                    textTransform: "none",
+                    "&:hover": { backgroundColor: "#005242" },
+                  }}
+                >
+                  Apply
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        )}
 
         {/* Footer */}
         <Box
