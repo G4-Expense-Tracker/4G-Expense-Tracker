@@ -31,5 +31,16 @@ export async function getGoalTrees(goalId) {
 }
 
 export async function createNewTree(goalId) {
+    const res = await fetch(`${API}/trees/${goalId}/new`, {
+        method: "POST",
+        credentials: "include",
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to create tree");
+    }
+
+    return data.newTree;
 }
