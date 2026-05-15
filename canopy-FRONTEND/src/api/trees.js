@@ -16,7 +16,18 @@ export async function getAllTrees() {
 }
 
 export async function getGoalTrees(goalId) {
+    const res = await fetch(`${API}/trees/${goalId}/view`, {
+        method: "GET",
+        credentials: "include",
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch goal trees");
+    }
+
+    return data.goalTrees;
 }
 
 export async function createNewTree(goalId) {
