@@ -16,6 +16,9 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
+// Running the npm react file (NPM install)
+// Run the npm install -g @mobiscroll/cli
+// Run npm install @mobiscroll/react --registry=https://npm.mobiscroll.com   
 import {
   Eventcalendar,
   CalendarPrev,
@@ -48,7 +51,7 @@ export default function ExpensePage() {
 
   const [calendarMode, setCalendarMode] = useState("week");
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date(2026, 3, 7));
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [savedExpenses, setSavedExpenses] = useState([]);
   const [deletedSampleIds, setDeletedSampleIds] = useState([]);
 
