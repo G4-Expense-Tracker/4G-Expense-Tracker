@@ -86,8 +86,8 @@ router.post('/new', requireLogin, async (req, res) => {
         const user_id = req.user.user_id;
 
         const newExpense = await addExpense({
-        ...req.body,
-        user_id
+            ...req.body,
+            user_id
         });
 
         if (!newExpense.success) {
@@ -95,8 +95,8 @@ router.post('/new', requireLogin, async (req, res) => {
         }
 
         res.json({
-        success: true,
-        insertedID: newExpense.insertedID
+            success: true,
+            insertedID: newExpense.insertedID
         });
     } catch(err) {
         console.error(err);
@@ -110,12 +110,12 @@ router.post('/:expenseId/edit', requireLogin , async(req, res) => {
         const { expenseId } = req.params;
 
         const result = await editExpense(expenseId, {
-        ...req.body,
-        user_id
+            ...req.body,
+            user_id
         });
 
         if (!result.success) {
-        return res.status(400).json({ error: "Update failed" });
+            return res.status(400).json({ error: "Update failed" });
         }
 
         res.json({ success: true });
@@ -133,7 +133,7 @@ router.post('/:expenseId/delete', requireLogin, async (req, res) => {
         const success = await deleteExpense(expenseId, user_id);
 
         if (!success) {
-        return res.status(400).json({ error: "Delete failed" });
+            return res.status(400).json({ error: "Delete failed" });
         }
 
         res.json({ success: true });
