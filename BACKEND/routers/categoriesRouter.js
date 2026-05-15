@@ -10,7 +10,17 @@ import {
 
 router.post('/new', requireLogin , async (req, res) => {
     try {
+        // body needs name and icon_id
+        const newCategory = await addCategory(req.body)
 
+        if (!newCategory.success) {
+            return res.status(500).json({ error: "Failed to add category" });
+        }
+
+        res.json({
+            success: true,
+            categoryId: newCategory.category_id
+        })
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" });
