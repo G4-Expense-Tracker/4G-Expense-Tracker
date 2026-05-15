@@ -48,7 +48,7 @@ router.post('/:categoryId/edit', requireLogin , async (req, res) => {
     try {
         const category_id = req.params.categoryId
 
-        const editedCategory = await editCategory(category_id)
+        const editedCategory = await editCategory(category_id, req.body)
 
         if (!editedCategory.success) {
             return res.status(400).json({ error: "Failed to edit category" });
@@ -56,7 +56,7 @@ router.post('/:categoryId/edit', requireLogin , async (req, res) => {
 
         res.json({
             success: true,
-            categoryId: editCategory.category_id
+            categoryId: editedCategory.category_id
         })
     } catch (err) {
         console.error(err);
@@ -66,7 +66,15 @@ router.post('/:categoryId/edit', requireLogin , async (req, res) => {
 
 router.post('/:categoryId/delete', requireLogin , async (req, res) => {
     try {
+        const category_id = req.params.categoryId
 
+        const success = await deleteCategory(category_id)
+
+        if (!success) {
+            return res.status(400).json({ error: "Failed to delete category" });
+        }
+
+        res.json({ success: true })
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" });
