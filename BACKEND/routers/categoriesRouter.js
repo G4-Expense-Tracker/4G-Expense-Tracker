@@ -48,6 +48,7 @@ router.post('/:categoryId/edit', requireLogin , async (req, res) => {
     try {
         const category_id = req.params.categoryId
 
+        // req body needs name and icon id
         const editedCategory = await editCategory(category_id, req.body)
 
         if (!editedCategory.success) {
