@@ -46,7 +46,18 @@ router.get('/:categoryId/view', requireLogin , async (req, res) => {
 
 router.post('/:categoryId/edit', requireLogin , async (req, res) => {
     try {
+        const category_id = req.params.categoryId
 
+        const editedCategory = await editCategory(category_id)
+
+        if (!editedCategory.success) {
+            return res.status(400).json({ error: "Failed to edit category" });
+        }
+
+        res.json({
+            success: true,
+            categoryId: editCategory.category_id
+        })
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" });
