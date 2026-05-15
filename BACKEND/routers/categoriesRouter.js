@@ -29,7 +29,15 @@ router.post('/new', requireLogin , async (req, res) => {
 
 router.get('/:categoryId/view', requireLogin , async (req, res) => {
     try {
+        const category_id = req.params.categoryId
 
+        const category = await getCategoryById(category_id)
+
+        if (!category) {
+            return res.status(404).json({ error: 'Category not found' })
+        }
+
+        res.json({ category })
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: "Server failure" });
