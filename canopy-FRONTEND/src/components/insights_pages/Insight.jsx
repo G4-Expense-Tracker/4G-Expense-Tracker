@@ -11,11 +11,11 @@ function Insights(){
 
             {/* WeeklyInsight or MonthlyInsight component */}
 
-            <PieChart/>
+            {/* <PieChart/>
 
             <Top3/>
 
-            <FooterNav/>
+            <FooterNav/> */}
 
         </Box>
     )

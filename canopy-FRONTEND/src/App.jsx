@@ -24,6 +24,7 @@ import Notification from "./components/pages/profile_pages/notifications/Notific
 import ExpensePage from "./components/pages/expenses/ExpensePage";
 import EditExpensePage from "./components/pages/expenses/EditExpensePage";
 import AddExpensePage from "./components/pages/expenses/AddExpensePage";
+import Insights from "./components/insights_pages/Insight";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
         <Route path="/expenses" element={<ExpensePage />} />
         <Route path="/edit-expense/:id" element={<EditExpensePage />} />
         <Route path="/add-expense" element={<AddExpensePage />} />
+        <Route path="/insights" element={<Insights />} />
       </Routes>
       
     </BrowserRouter>
