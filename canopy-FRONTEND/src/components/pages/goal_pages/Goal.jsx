@@ -1,17 +1,16 @@
 import Header from "./Header"
-import { useEffect, useState } from "react";
-import TaskCard from "./TaskCard/TaskCard";
-import { Box, Typography } from "@mui/material";
-import InfoIcon from '@mui/icons-material/Info';
-import Savings from "./TaskCard/Savings";
-import FooterNav from "../../Footer/FooterNav";
-import VarTaskCard from "./TaskCard/VarTaskCard";
-import Congrats from "./TaskCard/Congrats";
-import { getAllGoals } from "../../../api/goals";
+import { useEffect, useState } from "react"
+import TaskCard from "./TaskCard/TaskCard"
+import { Box, Typography } from "@mui/material"
+import InfoIcon from "@mui/icons-material/Info"
+import Savings from "./TaskCard/Savings"
+import FooterNav from "../../Footer/FooterNav"
+import VarTaskCard from "./TaskCard/VarTaskCard"
+import Congrats from "./TaskCard/Congrats"
+import { getAllGoals } from "../../../api/goals"
 
-
-//DATABASE CALLS
-//these objects are just for ui and to show the shape of the object we want from the db
+// DATABASE CALLS
+// these objects are just for ui and to show the shape of the object we want from the db
 
 const goals = [
     {
@@ -37,8 +36,9 @@ const goals = [
         progress: 360,
         level: 3
     },
+
     {
-        id: 3,
+        id: 4,
         name: "Nikes",
         targetAmount: 90,
         progress: 50,
@@ -84,44 +84,28 @@ function Goal() {
 
     /* states */
     const [goalData, setGoalData] = useState(goals)
-    const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
+    const [currentGoalIndex, setCurrentGoalIndex] = useState(0)
     const [showCongrats, setShowCongrats] = useState(false)
     const [hasShownCongratsPopUp, setHasShownCongratsPopUp] = useState(false)
 
+    /* fetch goals */
     useEffect(() => {
         const fetchGoals = async () => {
             try {
-                const goals = await getAllGoals();
-                setGoalData(goals);
+                const goals = await getAllGoals()
+                setGoalData(goals)
             } catch (err) {
-                console.error("Failed to fetch goals:", err);
+                console.error("Failed to fetch goals:", err)
             }
-        };
+        }
 
-        fetchGoals();
-    }, []);
+        fetchGoals()
+    }, [])
 
     /* helper variables */
     const currentGoal = goalData[currentGoalIndex]
 
-    const currentSavings = currentGoal?.progress
-    const targetSavings = currentGoal?.targetAmount
-
-    const goalCompleted =
-        currentSavings >= targetSavings
-
-    const levelFiveIncomplete =
-        currentGoal?.level === 5 &&
-        currentSavings < targetSavings
-
-    /* use effect for completion pop up */
-    useEffect(() => {
-        if (goalCompleted && !hasShownCongratsPopUp) {
-            setShowCongrats(true)
-            setHasShownCongratsPopUp(true)
-        }
-    }, [goalCompleted, hasShownCongratsPopUp])
-
+    /* loading state */
     if (!currentGoal) {
         return (
             <Box>
@@ -132,10 +116,27 @@ function Goal() {
         )
     }
 
-    const currentGoalProgress = currentGoal.progress
+    const currentGoalProgress = taskProgress[currentGoal.id]
 
-    /* NO GOALS TO SHOW PAGE: */
+    const currentSavings = currentGoal.progress
+    const targetSavings = currentGoal.targetAmount
 
+    const goalCompleted =
+        currentSavings >= targetSavings
+
+    const levelFiveIncomplete =
+        currentGoal.level === 5 &&
+        currentSavings < targetSavings
+
+    /* completion popup */
+    useEffect(() => {
+        if (goalCompleted && !hasShownCongratsPopUp) {
+            setShowCongrats(true)
+            setHasShownCongratsPopUp(true)
+        }
+    }, [goalCompleted, hasShownCongratsPopUp])
+
+    /* no goals page */
     if (goalData.length === 0) {
         return (
             <Box>
@@ -154,28 +155,22 @@ function Goal() {
         )
     }
 
-    const currentGoal = goalData[currentGoalIndex]
-
-    const currentGoalProgress =
-        taskProgress[currentGoal.id]
-
+    /* next goal */
     const nextGoal = () => {
-        console.log("NEXT CLICKED")
         setCurrentGoalIndex((prevIndex) =>
-            prevIndex === goals.length - 1 ? 0 : prevIndex + 1
+            prevIndex === goalData.length - 1 ? 0 : prevIndex + 1
         )
     }
 
+    /* previous goal */
     const previousGoal = () => {
-        console.log("PREV CLICKED")
-
         setCurrentGoalIndex((prevIndex) =>
-            prevIndex === 0 ? goals.length - 1 : prevIndex - 1
+            prevIndex === 0 ? goalData.length - 1 : prevIndex - 1
         )
     }
 
+    /* add savings */
     const addSavings = (amount) => {
-
         setGoalData((prevGoals) =>
             prevGoals.map((goal, index) =>
                 index === currentGoalIndex
@@ -188,8 +183,8 @@ function Goal() {
         )
     }
 
+    /* subtract savings */
     const subtractSavings = (amount) => {
-
         setGoalData((prevGoals) =>
             prevGoals.map((goal, index) =>
                 index === currentGoalIndex
@@ -202,27 +197,9 @@ function Goal() {
         )
     }
 
-    /* helper variables */
-    const currentSavings = currentGoal.progress
-    const targetSavings = currentGoal.targetAmount
-
-    const goalCompleted =
-        currentSavings >= targetSavings
-
-    const levelFiveIncomplete =
-        currentGoal.level === 5 &&
-        currentSavings < targetSavings
-
-    /* use effect for completion pop up */
-    useEffect(() => {
-        if (goalCompleted && !hasShownCongratsPopUp) {
-            setShowCongrats(true)
-            setHasShownCongratsPopUp(true)
-        }
-    }, [goalCompleted, hasShownCongratsPopUp])
-
     return (
         <Box>
+
             <Header
                 name={currentGoal.name}
                 previousGoal={previousGoal}
@@ -239,17 +216,21 @@ function Goal() {
 
             {/* goal name and level */}
             <Box sx={{ display: "flex", padding: "1rem" }}>
+
                 <Typography variant="body1" component="h2">
                     {currentGoal.name}
                 </Typography>
 
                 <Box sx={{ display: "flex", paddingLeft: "2rem" }}>
+
                     <Typography variant="body1" component="p">
                         Lv {currentGoal.level}
                     </Typography>
 
                     <InfoIcon />
+
                 </Box>
+
             </Box>
 
             {/* task cards */}
@@ -276,6 +257,7 @@ function Goal() {
             />
 
             <FooterNav />
+
         </Box>
     )
 }
