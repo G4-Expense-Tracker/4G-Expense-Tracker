@@ -1,5 +1,5 @@
 import { Box } from "@mui/material"
-import FooterNav from "../Footer/FooterNav"
+import FooterNav from "../../Footer/FooterNav"
 
 function Insights(){
     return(

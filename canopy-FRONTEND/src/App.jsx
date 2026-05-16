@@ -24,7 +24,8 @@ import Notification from "./components/pages/profile_pages/notifications/Notific
 import ExpensePage from "./components/pages/expenses/ExpensePage";
 import EditExpensePage from "./components/pages/expenses/EditExpensePage";
 import AddExpensePage from "./components/pages/expenses/AddExpensePage";
-import Insights from "./components/insights_pages/Insight";
+import Insights from "./components/pages/insights_pages/Insight";
+
 
 function App() {
   return (
