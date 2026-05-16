@@ -20,9 +20,9 @@ function Insights(){
 
             {/* <PieChart/>
 
-            <Top3/>
+            <Top3/> */}
 
-            <FooterNav/> */}
+            <FooterNav/> 
 
         </Box>
     )
