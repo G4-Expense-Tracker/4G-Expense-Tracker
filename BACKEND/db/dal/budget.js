@@ -1,4 +1,5 @@
 import database from "../databaseConnection.js";
+import { getTotalByDate } from "./expense.js";
 
 export async function getBudget(user_id, timeframe) {
   const query = `
@@ -44,6 +45,62 @@ export async function setBudget(postData) {
     console.log(err);
     return { success: false };
   }
+}
+
+// this might need to go in the api folder but I'm keeping it here for now and I'll let Ria decide
+
+function getBudgetRating(spending, budget) {
+  if (spending > budget) {
+    return "Over Budget";
+  }
+
+  if (spending >= budget * 0.9) {
+    return "Near Budget";
+  }
+
+  return "Under Budget";
+}
+
+function jsDateToSQLDate(date) {
+  return (
+    date.getFullYear() +
+    "-" +
+    String(date.getMonth() + 1).padStart(2, "0") +
+    "-" +
+    String(date.getDate()).padStart(2, "0")
+  );
+}
+
+function formatDisplayDate(date) {
+  return date.toLocaleDateString("en-CA", {
+    month: "short",
+    day: "numeric",
+  });
+}
+
+export async function getPastDayRatings(numOfDays, user_id) {
+  const ratings = [];
+  const dailyBudget = await getBudget(user_id, "daily");
+
+  if (!dailyBudget) {
+    return [];
+  }
+
+  for (let i = 0; i < numOfDays; i++) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+
+    const sqlDate = jsDateToSQLDate(date);
+
+    const total = await getTotalByDate(user_id, sqlDate);
+
+    ratings.push({
+      date: formatDisplayDate(date),
+      rating: getBudgetRating(total, Number(dailyBudget.amount)),
+    });
+  }
+
+  return ratings;
 }
 
 // export async function editBudget(budget_id, postData) {

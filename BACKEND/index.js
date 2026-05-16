@@ -20,6 +20,7 @@ import goalsRouter from './routers/goalsRouter.js';
 import budgetsRouter from './routers/budgetsRouter.js';
 import expensesRouter from './routers/expensesRouter.js';
 import treesRouter from './routers/treesRouter.js'
+import categoriesRouter from './routers/categoriesRouter.js'
 
 app.use(
   cookieSession({
@@ -34,6 +35,7 @@ app.use('/api/goals', goalsRouter)
 app.use('/api/budgets', budgetsRouter)
 app.use('/api/expenses', expensesRouter)
 app.use('/api/trees', treesRouter)
+app.use('/api/categories', categoriesRouter)
 
 app.listen(8000, () => {
   console.log("Backend Web Server has started 🚀");
