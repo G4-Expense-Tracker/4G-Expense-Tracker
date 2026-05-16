@@ -2,6 +2,7 @@ import { Box, Button, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { createNewGoal } from '../../../api/goals';
 
 function GoalForm() {
     const navigate = useNavigate();
@@ -10,31 +11,9 @@ function GoalForm() {
 
     const plantHandler = async () => {
         try {
-            const res = await fetch(import.meta.env.VITE_APP_NEWGOAL_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    name,
-                    target_amount: Number(targetAmount),
-                }),
-            });
-
-            const data = await res.json();
-
-            if (!res.ok) {
-                console.error(data.error);
-                return;
-            }
-
-            console.log('Success:', data.message);
-
-            setName('');
-            setTargetAmount('');
-
-            navigate("/dashboard");
+            const data = await createNewGoal(name, targetAmount)
+            console.log(data.message)
+            navigate('/dashboard')
         } catch(err) {
             console.error('Error creating goal: ', err)
         }

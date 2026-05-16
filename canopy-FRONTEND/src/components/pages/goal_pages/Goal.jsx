@@ -4,9 +4,10 @@ import TaskCard from "./TaskCard/TaskCard";
 import { Box, Typography } from "@mui/material";
 import InfoIcon from '@mui/icons-material/Info';
 import Savings from "./TaskCard/Savings";
-import FooterNav from "../Footer/FooterNav";
+import FooterNav from "../../Footer/FooterNav";
 import VarTaskCard from "./TaskCard/VarTaskCard";
 import Congrats from "./TaskCard/Congrats";
+import { getAllGoals } from "../../../api/goals";
 
 
 //DATABASE CALLS
@@ -86,6 +87,52 @@ function Goal() {
     const [currentGoalIndex, setCurrentGoalIndex] = useState(0);
     const [showCongrats, setShowCongrats] = useState(false)
     const [hasShownCongratsPopUp, setHasShownCongratsPopUp] = useState(false)
+
+    useEffect(() => {
+        const fetchGoals = async () => {
+            try {
+                const goals = await getAllGoals();
+                setGoalData(goals);
+            } catch (err) {
+                console.error("Failed to fetch goals:", err);
+            }
+        };
+
+        fetchGoals();
+    }, []);
+
+    /* helper variables */
+    const currentGoal = goalData[currentGoalIndex]
+
+    const currentSavings = currentGoal?.progress
+    const targetSavings = currentGoal?.targetAmount
+
+    const goalCompleted =
+        currentSavings >= targetSavings
+
+    const levelFiveIncomplete =
+        currentGoal?.level === 5 &&
+        currentSavings < targetSavings
+
+    /* use effect for completion pop up */
+    useEffect(() => {
+        if (goalCompleted && !hasShownCongratsPopUp) {
+            setShowCongrats(true)
+            setHasShownCongratsPopUp(true)
+        }
+    }, [goalCompleted, hasShownCongratsPopUp])
+
+    if (!currentGoal) {
+        return (
+            <Box>
+                <Typography variant="body1" component="p">
+                    Loading Goals
+                </Typography>
+            </Box>
+        )
+    }
+
+    const currentGoalProgress = currentGoal.progress
 
     /* NO GOALS TO SHOW PAGE: */
 

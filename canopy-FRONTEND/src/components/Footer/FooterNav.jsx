@@ -30,7 +30,7 @@ export default function FooterNav() {
     >
       {/* Floating Add Button */}
       <Box
-        onClick={() => navigate("/expense")}
+        onClick={() => navigate("/add-expense")}
         sx={{
           position: "absolute",
           top: "-28px",
@@ -107,7 +107,7 @@ export default function FooterNav() {
             label="Goal"
             value="/goal"
             icon={<EmojiEventsIcon />}
-            onClick={() => navigate("/newgoals")}
+            onClick={() => navigate("/newgoal")}
             sx={{
               color: "#00503f",
             }}

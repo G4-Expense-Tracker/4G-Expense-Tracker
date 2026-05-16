@@ -6,20 +6,24 @@ import OB_End from "./components/pages/onboarding/OB_End";
 import LoginPage from "./components/pages/start/LoginPage";
 import SignupPage from "./components/pages/start/SignupPage";
 import LoadingPage from "./components/pages/start/LoadingPage";
-import Goal from "./components/goal_pages/Goal";
+import Goal from "./components/pages/goal_pages/Goal";
 
 
 import DashboardPage from "./components/pages/dashboard/DashboardPage";
 import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
 import CategoryPage from "./components/pages/profile_pages/category/CategoryPage";
 import AddCategoryPage from "./components/pages/profile_pages/category/AddCategoryPage";
-import NewGoal from "./components/goal_pages/NewGoal/NewGoal";
+import NewGoal from "./components/pages/goal_pages/NewGoal/NewGoal";
 import Accessibility from "./components/pages/profile_pages/accessibility/Accessibility";
 import AccountPage from "./components/pages/profile_pages/account/AccountPage";
 import ProfilePage from "./components/pages/profile_pages/profileandlogout/ProfilePage";
 import LogoutPage from "./components/pages/profile_pages/profileandlogout/LogoutPage";
 import Language from "./components/pages/profile_pages/Language";
 import Notification from "./components/pages/profile_pages/notifications/Notification";
+
+import ExpensePage from "./components/pages/expenses/ExpensePage";
+import EditExpensePage from "./components/pages/expenses/EditExpensePage";
+import AddExpensePage from "./components/pages/expenses/AddExpensePage";
 
 function App() {
   return (
@@ -43,6 +47,9 @@ function App() {
         <Route path="/logout" element={<LogoutPage />} />
         <Route path="/language" element={<Language />} />
         <Route path="/notifications" element={<Notification />} />
+        <Route path="/expenses" element={<ExpensePage />} />
+        <Route path="/edit-expense/:id" element={<EditExpensePage />} />
+        <Route path="/add-expense" element={<AddExpensePage />} />
       </Routes>
       
     </BrowserRouter>

@@ -3,7 +3,7 @@ import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import { useNavigate } from "react-router-dom";
-import pictLogo from "../../../assets/pictlogo.png";
+import mainLogo from "./images/mainLogo.png";
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ export default function MainPage() {
           zIndex: 2,
         }}
       >
-        <Box component="img" src={pictLogo} alt="Logo" sx={{ width: 120 }} />
+        <Box component="img" src={mainLogo} alt="Logo" sx={{ width: 120 }} />
       </Box>
 
       <Box
