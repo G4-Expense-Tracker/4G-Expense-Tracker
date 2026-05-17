@@ -18,9 +18,9 @@ export default function AddExpensePage() {
   const navigate = useNavigate();
 
   const defaultQuickExpenses = [
-    { id: 1, name: "Starbucks" },
-    { id: 2, name: "Bus" },
-    { id: 3, name: "F45" },
+    { id: 1, name: "Starbucks", category: "Foods and Drinks" },
+    { id: 2, name: "Bus", category: "Transport" },
+    { id: 3, name: "F45", category: "Health" },
   ];
 
   const [activeTab, setActiveTab] = useState("expense");
@@ -34,7 +34,6 @@ export default function AddExpensePage() {
 
   const [budgetAmount, setBudgetAmount] = useState("");
   const [budgetDate, setBudgetDate] = useState("2026-04-13");
-  const [budgetCategory, setBudgetCategory] = useState("");
   const [budgetType, setBudgetType] = useState("Monthly");
 
   useEffect(() => {
@@ -48,6 +47,7 @@ export default function AddExpensePage() {
     const updatedQuickExpenses = quickExpenses.filter((item) => item.id !== id);
 
     setQuickExpenses(updatedQuickExpenses);
+
     localStorage.setItem(
       "quickExpenses",
       JSON.stringify(updatedQuickExpenses)
@@ -56,7 +56,7 @@ export default function AddExpensePage() {
 
   const handleSaveExpense = () => {
     if (!expenseName || !amount || !category) {
-      alert("Please fill Expense Name, Amount, and Category.");
+      alert("Please fill Expense Name, Amount and Category.");
       return;
     }
 
@@ -82,15 +82,13 @@ export default function AddExpensePage() {
       const newQuickExpense = {
         id: Date.now() + 1,
         name: expenseName,
+        category: category === "Food" ? "Foods and Drinks" : category,
       };
 
       const savedQuickExpenses =
         JSON.parse(localStorage.getItem("quickExpenses")) || [];
 
-      const updatedQuickExpenses = [
-        ...savedQuickExpenses,
-        newQuickExpense,
-      ];
+      const updatedQuickExpenses = [...savedQuickExpenses, newQuickExpense];
 
       localStorage.setItem(
         "quickExpenses",
@@ -104,8 +102,8 @@ export default function AddExpensePage() {
   };
 
   const handleSaveBudget = () => {
-    if (!budgetAmount || !budgetCategory) {
-      alert("Please fill Amount and Category.");
+    if (!budgetAmount) {
+      alert("Please fill Amount.");
       return;
     }
 
@@ -114,7 +112,6 @@ export default function AddExpensePage() {
       type: budgetType,
       amount: `$${Number(budgetAmount).toFixed(2)}`,
       date: budgetDate,
-      category: budgetCategory,
     };
 
     const savedBudgets = JSON.parse(localStorage.getItem("budgets")) || [];
@@ -144,59 +141,79 @@ export default function AddExpensePage() {
           minHeight: "100vh",
           background: "linear-gradient(180deg, #289173 0%, #A6C178 100%)",
           px: 3,
-          pt: 8,
+          pt: 5,
+          pb: 5,
           color: "#fff",
         }}
       >
-        {/* Quick Expenses */}
-        <Box sx={{ mb: 4 }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
-            <Typography sx={{ fontSize: 16, fontWeight: 600 }}>
+        {/* QUICK EXPENSES */}
+        <Box sx={{ mb: 5 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
+            <Typography sx={{ fontSize: 18, fontWeight: 500 }}>
               Quick Expenses
             </Typography>
 
-            <EditIcon sx={{ fontSize: 18 }} />
+            <EditIcon sx={{ fontSize: 20, color: "#FFFFFF" }} />
           </Box>
 
           {quickExpenses.map((item) => (
             <Box
               key={item.id}
               sx={{
-                minHeight: 42,
-                border: "1px solid #D9F0B4",
-                borderRadius: "8px",
+                minHeight: 64,
+                borderRadius: "16px",
+                backgroundColor: "#DCE5C8",
+                border: "1px solid #D7EEA7",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                px: 2,
-                mb: 1,
+                px: 3,
+                mb: 1.8,
               }}
             >
-              <Typography sx={{ fontSize: 15, fontWeight: 700 }}>
+              <Typography
+                sx={{
+                  fontSize: 17,
+                  fontWeight: 700,
+                  color: "#000000",
+                }}
+              >
                 {item.name}
               </Typography>
 
-              <IconButton
-                onClick={() => deleteQuickExpense(item.id)}
-                sx={{ color: "#fff", p: 0 }}
-              >
-                <DeleteOutlineOutlinedIcon sx={{ fontSize: 20 }} />
-              </IconButton>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <Typography
+                  sx={{
+                    fontSize: 16,
+                    fontWeight: 500,
+                    color: "#111111",
+                  }}
+                >
+                  {item.category}
+                </Typography>
+
+                <IconButton
+                  onClick={() => deleteQuickExpense(item.id)}
+                  sx={{ color: "#005242", p: 0 }}
+                >
+                  <DeleteOutlineOutlinedIcon sx={{ fontSize: 22 }} />
+                </IconButton>
+              </Box>
             </Box>
           ))}
         </Box>
 
-        {/* Tabs */}
-        <Box sx={{ display: "flex", justifyContent: "space-around", mb: 4 }}>
+        {/* EXPENSE / BUDGET TABS */}
+        <Box sx={{ display: "flex", justifyContent: "space-around", mb: 5 }}>
           <Box
             onClick={() => setActiveTab("expense")}
             sx={{ textAlign: "center", cursor: "pointer" }}
           >
             <Typography
               sx={{
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: 700,
-                color: activeTab === "expense" ? "#fff" : "#003F33",
+                color: activeTab === "expense" ? "#FFFFFF" : "#003F33",
               }}
             >
               Expense
@@ -205,7 +222,7 @@ export default function AddExpensePage() {
             {activeTab === "expense" && (
               <Box
                 sx={{
-                  width: 140,
+                  width: 150,
                   height: 5,
                   borderRadius: 10,
                   backgroundColor: "#E7F7A5",
@@ -221,9 +238,9 @@ export default function AddExpensePage() {
           >
             <Typography
               sx={{
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: 700,
-                color: activeTab === "budget" ? "#fff" : "#003F33",
+                color: activeTab === "budget" ? "#FFFFFF" : "#003F33",
               }}
             >
               Budget
@@ -232,7 +249,7 @@ export default function AddExpensePage() {
             {activeTab === "budget" && (
               <Box
                 sx={{
-                  width: 140,
+                  width: 150,
                   height: 5,
                   borderRadius: 10,
                   backgroundColor: "#E7F7A5",
@@ -245,25 +262,25 @@ export default function AddExpensePage() {
 
         {activeTab === "expense" ? (
           <>
-            <Typography sx={{ fontSize: 15, mb: 1 }}>Expense Name</Typography>
+            <Typography sx={{ fontSize: 16, mb: 1 }}>Expense Name</Typography>
 
             <TextField
               fullWidth
               value={expenseName}
               onChange={(e) => setExpenseName(e.target.value)}
               sx={{
-                mb: 2.5,
+                mb: 3,
                 "& .MuiOutlinedInput-root": {
-                  height: 46,
+                  height: 54,
                   borderRadius: 30,
-                  backgroundColor: "#fff",
+                  backgroundColor: "#FFFFFF",
                 },
               }}
             />
 
-            <Box sx={{ display: "flex", gap: 2, mb: 2.5 }}>
+            <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
               <Box sx={{ flex: 1 }}>
-                <Typography sx={{ fontSize: 15, mb: 1 }}>Amount</Typography>
+                <Typography sx={{ fontSize: 16, mb: 1 }}>Amount</Typography>
 
                 <TextField
                   fullWidth
@@ -272,17 +289,17 @@ export default function AddExpensePage() {
                   placeholder="$"
                   sx={{
                     "& .MuiOutlinedInput-root": {
-                      height: 46,
+                      height: 54,
                       borderRadius: 30,
-                      backgroundColor: "#fff",
+                      backgroundColor: "#FFFFFF",
                       fontSize: 22,
                     },
                   }}
                 />
               </Box>
 
-              <Box sx={{ flex: 1.1 }}>
-                <Typography sx={{ fontSize: 15, mb: 1 }}>Date</Typography>
+              <Box sx={{ flex: 1 }}>
+                <Typography sx={{ fontSize: 16, mb: 1 }}>Date</Typography>
 
                 <TextField
                   fullWidth
@@ -291,26 +308,26 @@ export default function AddExpensePage() {
                   onChange={(e) => setDate(e.target.value)}
                   sx={{
                     "& .MuiOutlinedInput-root": {
-                      height: 46,
+                      height: 54,
                       borderRadius: 30,
-                      backgroundColor: "#fff",
+                      backgroundColor: "#FFFFFF",
                     },
                   }}
                 />
               </Box>
             </Box>
 
-            <Typography sx={{ fontSize: 15, mb: 1 }}>Categories</Typography>
+            <Typography sx={{ fontSize: 16, mb: 1 }}>Categories</Typography>
 
             <Box
               sx={{
-                height: 46,
+                height: 54,
                 borderRadius: 30,
-                backgroundColor: "#fff",
+                backgroundColor: "#FFFFFF",
                 display: "flex",
                 alignItems: "center",
                 px: 2,
-                mb: 3,
+                mb: 4,
               }}
             >
               <TextField
@@ -321,7 +338,7 @@ export default function AddExpensePage() {
                 sx={{ flex: 1 }}
               />
 
-              <ChevronRightIcon sx={{ fontSize: 34, color: "#005242" }} />
+              <ChevronRightIcon sx={{ fontSize: 36, color: "#005242" }} />
             </Box>
 
             <Box
@@ -330,20 +347,19 @@ export default function AddExpensePage() {
                 justifyContent: "center",
                 alignItems: "center",
                 gap: 0.5,
-                mb: 4,
+                mb: 5,
               }}
             >
               <Checkbox
                 checked={quickExpense}
                 onChange={(e) => setQuickExpense(e.target.checked)}
                 sx={{
-                  color: "#fff",
-                  p: 0,
-                  "&.Mui-checked": { color: "#fff" },
+                  color: "#FFFFFF",
+                  "&.Mui-checked": { color: "#FFFFFF" },
                 }}
               />
 
-              <Typography sx={{ fontSize: 14 }}>
+              <Typography sx={{ fontSize: 15 }}>
                 Save this as a quick expense
               </Typography>
             </Box>
@@ -352,12 +368,12 @@ export default function AddExpensePage() {
               <Button
                 onClick={handleSaveExpense}
                 sx={{
-                  width: 200,
-                  height: 52,
+                  width: 230,
+                  height: 60,
                   borderRadius: 40,
                   backgroundColor: "#005242",
-                  color: "#fff",
-                  fontSize: 18,
+                  color: "#FFFFFF",
+                  fontSize: 20,
                   fontWeight: 700,
                   textTransform: "none",
                   "&:hover": { backgroundColor: "#005242" },
@@ -369,16 +385,17 @@ export default function AddExpensePage() {
           </>
         ) : (
           <>
+            {/* DAILY / MONTHLY BUTTON */}
             <Box
               sx={{
-                width: 220,
-                height: 46,
+                width: 250,
+                height: 58,
                 mx: "auto",
-                mb: 4,
-                borderRadius: 30,
+                mb: 5,
+                borderRadius: 40,
                 backgroundColor: "#005242",
                 display: "flex",
-                overflow: "hidden",
+                p: 0.5,
               }}
             >
               {["Daily", "Monthly"].map((type) => (
@@ -390,13 +407,24 @@ export default function AddExpensePage() {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    color: "#fff",
-                    fontWeight: 700,
+                    borderRadius: 40,
                     cursor: "pointer",
+                    fontSize: 18,
+                    fontWeight: 700,
+                    color: "#FFFFFF",
+                    transition: "0.3s",
                     background:
                       budgetType === type
                         ? "linear-gradient(180deg, #2C7D6C 0%, #005242 100%)"
                         : "transparent",
+                    boxShadow:
+                      budgetType === type
+                        ? "0px 0px 15px rgba(255,255,255,0.45)"
+                        : "none",
+                    border:
+                      budgetType === type
+                        ? "1px solid rgba(255,255,255,0.5)"
+                        : "none",
                   }}
                 >
                   {type}
@@ -404,9 +432,10 @@ export default function AddExpensePage() {
               ))}
             </Box>
 
-            <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
+            {/* AMOUNT + DATE */}
+            <Box sx={{ display: "flex", gap: 2, mb: 8 }}>
               <Box sx={{ flex: 1 }}>
-                <Typography sx={{ fontSize: 15, mb: 1 }}>Amount</Typography>
+                <Typography sx={{ fontSize: 16, mb: 1 }}>Amount</Typography>
 
                 <TextField
                   fullWidth
@@ -415,16 +444,16 @@ export default function AddExpensePage() {
                   placeholder="$"
                   sx={{
                     "& .MuiOutlinedInput-root": {
-                      height: 46,
+                      height: 54,
                       borderRadius: 30,
-                      backgroundColor: "#fff",
+                      backgroundColor: "#FFFFFF",
                     },
                   }}
                 />
               </Box>
 
-              <Box sx={{ flex: 1.1 }}>
-                <Typography sx={{ fontSize: 15, mb: 1 }}>Date</Typography>
+              <Box sx={{ flex: 1 }}>
+                <Typography sx={{ fontSize: 16, mb: 1 }}>Date</Typography>
 
                 <TextField
                   fullWidth
@@ -433,49 +462,26 @@ export default function AddExpensePage() {
                   onChange={(e) => setBudgetDate(e.target.value)}
                   sx={{
                     "& .MuiOutlinedInput-root": {
-                      height: 46,
+                      height: 54,
                       borderRadius: 30,
-                      backgroundColor: "#fff",
+                      backgroundColor: "#FFFFFF",
                     },
                   }}
                 />
               </Box>
             </Box>
 
-            <Typography sx={{ fontSize: 15, mb: 1 }}>Categories</Typography>
-
-            <Box
-              sx={{
-                height: 46,
-                borderRadius: 30,
-                backgroundColor: "#fff",
-                display: "flex",
-                alignItems: "center",
-                px: 2,
-                mb: 5,
-              }}
-            >
-              <TextField
-                variant="standard"
-                value={budgetCategory}
-                onChange={(e) => setBudgetCategory(e.target.value)}
-                InputProps={{ disableUnderline: true }}
-                sx={{ flex: 1 }}
-              />
-
-              <ChevronRightIcon sx={{ fontSize: 34, color: "#005242" }} />
-            </Box>
-
+            {/* SAVE BUTTON */}
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Button
                 onClick={handleSaveBudget}
                 sx={{
-                  width: 200,
-                  height: 52,
+                  width: 230,
+                  height: 60,
                   borderRadius: 40,
                   backgroundColor: "#005242",
-                  color: "#fff",
-                  fontSize: 18,
+                  color: "#FFFFFF",
+                  fontSize: 20,
                   fontWeight: 700,
                   textTransform: "none",
                   "&:hover": { backgroundColor: "#005242" },
