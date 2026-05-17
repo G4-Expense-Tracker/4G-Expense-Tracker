@@ -1,46 +1,61 @@
-const API = import.meta.env.VITE_APP_BASE_URL
+const API = import.meta.env.VITE_APP_BASE_URL;
 
 export async function getAllTrees() {
-    const res = await fetch(`${API}/trees/list`, {
-        method: "GET",
-        credentials: "include",
-    });
+  const res = await fetch(`${API}/trees/list`, {
+    method: "GET",
+    credentials: "include",
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch trees");
-    }
+  if (!res.ok) {
+    throw new Error(data.error || "Failed to fetch trees");
+  }
 
-    return data.userTrees;
+  return data.userTrees;
 }
 
 export async function getGoalTrees(goalId) {
-    const res = await fetch(`${API}/trees/${goalId}/view`, {
-        method: "GET",
-        credentials: "include",
-    });
+  const res = await fetch(`${API}/trees/${goalId}/view`, {
+    method: "GET",
+    credentials: "include",
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch goal trees");
-    }
+  if (!res.ok) {
+    throw new Error(data.error || "Failed to fetch goal trees");
+  }
 
-    return data.goalTrees;
+  return data.goalTrees;
 }
 
 export async function createNewTree(goalId) {
-    const res = await fetch(`${API}/trees/${goalId}/new`, {
-        method: "POST",
-        credentials: "include",
-    });
+  const res = await fetch(`${API}/trees/${goalId}/new`, {
+    method: "POST",
+    credentials: "include",
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    if (!res.ok) {
-        throw new Error(data.error || "Failed to create tree");
-    }
+  if (!res.ok) {
+    throw new Error(data.error || "Failed to create tree");
+  }
 
-    return data.newTree;
+  return data.newTree;
+}
+
+export async function getValidTreeYears() {
+  const res = await fetch(`${API}/years`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || "Failed to fetch years");
+  }
+
+  return data.years;
 }
