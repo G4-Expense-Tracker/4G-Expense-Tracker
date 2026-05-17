@@ -16,9 +16,8 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-// Running the npm react file (NPM install)
-// Run the npm install -g @mobiscroll/cli
-// Run npm install @mobiscroll/react --registry=https://npm.mobiscroll.com   
+import { getAllExpenses, deleteExpense } from "../../../api/expenses.js";
+
 import {
   Eventcalendar,
   CalendarPrev,
@@ -51,7 +50,7 @@ export default function ExpensePage() {
 
   const [calendarMode, setCalendarMode] = useState("week");
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date(2026, 3, 7));
   const [savedExpenses, setSavedExpenses] = useState([]);
   const [deletedSampleIds, setDeletedSampleIds] = useState([]);
 
@@ -63,12 +62,18 @@ export default function ExpensePage() {
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("");
 
   useEffect(() => {
-    const storedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
-    const storedDeletedIds =
-      JSON.parse(localStorage.getItem("deletedSampleIds")) || [];
+    async function loadExpenses() {
+      try {
+        const expenses = await getAllExpenses();
+        console.log("expenses from backend:", expenses);
 
-    setSavedExpenses(storedExpenses);
-    setDeletedSampleIds(storedDeletedIds);
+        setSavedExpenses(Array.isArray(expenses) ? expenses : []);
+      } catch (error) {
+        console.log("Error loading expenses:", error);
+      }
+    }
+
+    loadExpenses();
   }, []);
 
   const sampleExpenses = [
@@ -126,89 +131,86 @@ export default function ExpensePage() {
   const allExpenses = [...visibleSampleExpenses, ...savedExpenses];
 
   const formatDate = (date) => date.toISOString().split("T")[0];
+
   const selectedDateString = formatDate(selectedDate);
+  const selectedMonth = selectedDate.getMonth();
+  const selectedYear = selectedDate.getFullYear();
 
   const filteredExpenses = allExpenses.filter((expense) => {
-    const matchesDate = expense.date === selectedDateString;
+    if (!expense.date) return false;
+
+    const expenseDateString = String(expense.date).split("T")[0];
+    const expenseDate = new Date(expenseDateString + "T00:00:00");
+
+    const matchesDate =
+      calendarMode === "week"
+        ? expenseDateString === selectedDateString
+        : expenseDate.getMonth() === selectedMonth &&
+          expenseDate.getFullYear() === selectedYear;
+
+    const categoryName = expense.category || expense.category_name || "";
 
     const matchesCategory =
       !selectedCategoryFilter ||
-      expense.category?.toLowerCase() === selectedCategoryFilter.toLowerCase();
+      categoryName.toLowerCase() === selectedCategoryFilter.toLowerCase();
 
     return matchesDate && matchesCategory;
   });
 
   const totalAmount = filteredExpenses.reduce((total, expense) => {
-    return total + Number(String(expense.amount).replace("$", ""));
+    return total + Number(String(expense.amount || 0).replace("$", ""));
   }, 0);
 
   const getExpenseIcon = (expense) => {
-    const iconType = expense.iconType || expense.category?.toLowerCase();
+    const iconType = (
+      expense.iconType ||
+      expense.category ||
+      expense.category_name ||
+      ""
+    ).toLowerCase();
 
-    if (iconType?.includes("bus") || iconType?.includes("transport"))
+    if (iconType.includes("bus") || iconType.includes("transport"))
       return <DirectionsBusIcon />;
 
-    if (iconType?.includes("drink") || iconType?.includes("food"))
+    if (iconType.includes("drink") || iconType.includes("food"))
       return <LocalCafeIcon />;
 
-    if (iconType?.includes("grocery") || iconType?.includes("shopping"))
+    if (iconType.includes("grocery") || iconType.includes("shopping"))
       return <ShoppingCartIcon />;
 
-    if (iconType?.includes("health")) return <FitnessCenterIcon />;
+    if (iconType.includes("health")) return <FitnessCenterIcon />;
 
     return <ShoppingCartIcon />;
   };
 
+  const getExpenseId = (expense) => expense.expense_id || expense.id;
+
   const handleEditExpense = (expense) => {
-    const isSampleExpense = String(expense.id).startsWith("sample");
-
-    if (isSampleExpense) {
-      const editableExpense = {
-        ...expense,
-        id: Date.now(),
-        originalSampleId: expense.id,
-      };
-
-      const updatedSavedExpenses = [...savedExpenses, editableExpense];
-      const updatedDeletedIds = [...deletedSampleIds, expense.id];
-
-      localStorage.setItem("expenses", JSON.stringify(updatedSavedExpenses));
-      localStorage.setItem(
-        "deletedSampleIds",
-        JSON.stringify(updatedDeletedIds)
-      );
-
-      setSavedExpenses(updatedSavedExpenses);
-      setDeletedSampleIds(updatedDeletedIds);
-
-      navigate(`/edit-expense/${editableExpense.id}`);
-    } else {
-      navigate(`/edit-expense/${expense.id}`);
-    }
+    const expenseId = getExpenseId(expense);
+    navigate(`/edit-expense/${expenseId}`);
   };
 
-  const handleDeleteExpense = (expenseId) => {
-    const isSampleExpense = String(expenseId).startsWith("sample");
+  const handleDeleteExpense = async (expenseId) => {
+    try {
+      await deleteExpense(expenseId);
 
-    if (isSampleExpense) {
-      const updatedDeletedIds = [...deletedSampleIds, expenseId];
-
-      localStorage.setItem(
-        "deletedSampleIds",
-        JSON.stringify(updatedDeletedIds)
+      setSavedExpenses((prev) =>
+        prev.filter(
+          (expense) => String(getExpenseId(expense)) !== String(expenseId)
+        )
       );
 
-      setDeletedSampleIds(updatedDeletedIds);
-    } else {
-      const updatedExpenses = savedExpenses.filter(
-        (expense) => String(expense.id) !== String(expenseId)
-      );
+      setDeletedSampleIds((prev) => {
+        if (String(expenseId).startsWith("sample")) {
+          return [...prev, expenseId];
+        }
+        return prev;
+      });
 
-      localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
-      setSavedExpenses(updatedExpenses);
+      setOpenMenuIndex(null);
+    } catch (error) {
+      console.log("Error deleting expense:", error);
     }
-
-    setOpenMenuIndex(null);
   };
 
   return (
@@ -234,7 +236,6 @@ export default function ExpensePage() {
           pb: "120px",
         }}
       >
-        {/* Status Bar */}
         <Box
           sx={{
             display: "flex",
@@ -255,7 +256,6 @@ export default function ExpensePage() {
           </Box>
         </Box>
 
-        {/* Tabs */}
         <Box
           sx={{
             display: "flex",
@@ -297,7 +297,6 @@ export default function ExpensePage() {
           </Typography>
         </Box>
 
-        {/* Weekly / Monthly Toggle */}
         <Box
           onClick={() =>
             setCalendarMode((prev) => (prev === "week" ? "month" : "week"))
@@ -324,7 +323,6 @@ export default function ExpensePage() {
           <KeyboardArrowRightIcon sx={{ fontSize: 24, color: "#163D2B" }} />
         </Box>
 
-        {/* Calendar */}
         <Box
           sx={{
             border: "1px solid #1C9A72",
@@ -418,7 +416,6 @@ export default function ExpensePage() {
           />
         </Box>
 
-        {/* Total */}
         <Box
           sx={{
             display: "flex",
@@ -439,7 +436,9 @@ export default function ExpensePage() {
               alignItems: "center",
             }}
           >
-            <Typography sx={{ fontSize: "18px" }}>Total</Typography>
+            <Typography sx={{ fontSize: "18px" }}>
+              {calendarMode === "week" ? "Total" : "Monthly"}
+            </Typography>
 
             <Typography
               sx={{
@@ -458,12 +457,11 @@ export default function ExpensePage() {
           />
         </Box>
 
-        {/* Expense Cards */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {filteredExpenses.length > 0 ? (
             filteredExpenses.map((expense, index) => (
               <Box
-                key={expense.id}
+                key={getExpenseId(expense)}
                 sx={{
                   minHeight: 86,
                   border: "1px solid #1C9A72",
@@ -491,7 +489,7 @@ export default function ExpensePage() {
 
                   <Box sx={{ minWidth: 0 }}>
                     <Typography sx={{ fontSize: "13px", color: "#005242" }}>
-                      {expense.time}
+                      {expense.time || "7:05am"}
                     </Typography>
 
                     <Typography
@@ -506,11 +504,13 @@ export default function ExpensePage() {
                         maxWidth: { xs: 130, sm: 160 },
                       }}
                     >
-                      {expense.title}
+                      {expense.title || expense.name}
                     </Typography>
 
                     <Typography sx={{ fontSize: "14px", color: "#005242" }}>
-                      {expense.category}
+                      {expense.category_name ||
+                        expense.category ||
+                        `Category ${expense.category_id || ""}`}
                     </Typography>
                   </Box>
                 </Box>
@@ -575,7 +575,7 @@ export default function ExpensePage() {
                         color: "#005242",
                       }}
                     >
-                      {expense.amount}
+                      ${Number(String(expense.amount || 0).replace("$", "")).toFixed(2)}
                     </Typography>
 
                     <IconButton
@@ -604,7 +604,6 @@ export default function ExpensePage() {
           )}
         </Box>
 
-        {/* Filter Modal */}
         {filterModalOpen && (
           <Box
             sx={{
@@ -657,7 +656,6 @@ export default function ExpensePage() {
                 </Typography>
               </Box>
 
-              {/* Category Dropdown */}
               <Box sx={{ mb: 5 }}>
                 <Box
                   onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
@@ -710,12 +708,6 @@ export default function ExpensePage() {
                             selectedCategoryFilter === cat ? "#fff" : "#000",
                           textTransform: "none",
                           fontSize: 15,
-                          "&:hover": {
-                            backgroundColor:
-                              selectedCategoryFilter === cat
-                                ? "#005242"
-                                : "#EAF4D4",
-                          },
                         }}
                       >
                         {cat}
@@ -761,7 +753,6 @@ export default function ExpensePage() {
                     fontWeight: 700,
                     backgroundColor: "#005242",
                     textTransform: "none",
-                    "&:hover": { backgroundColor: "#005242" },
                   }}
                 >
                   Apply
@@ -771,7 +762,6 @@ export default function ExpensePage() {
           </Box>
         )}
 
-        {/* Delete Modal */}
         {deleteModalOpen && selectedExpenseToDelete && (
           <Box
             sx={{
@@ -797,40 +787,15 @@ export default function ExpensePage() {
                 py: 4,
               }}
             >
-              <Box
-                sx={{
-                  width: 54,
-                  height: 54,
-                  borderRadius: "50%",
-                  backgroundColor: "#FAFCF7",
-                  color: "#289173",
-                  mx: "auto",
-                  mb: 2,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 38,
-                  fontWeight: 800,
-                }}
-              >
-                !
-              </Box>
-
               <Typography sx={{ fontSize: 30, fontWeight: 700 }}>
                 Delete Expense
               </Typography>
 
               <Typography sx={{ fontSize: 28, mb: 4 }}>
-                “{selectedExpenseToDelete.title}”?
+                “{selectedExpenseToDelete.title || selectedExpenseToDelete.name}”?
               </Typography>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: 2,
-                }}
-              >
+              <Box sx={{ display: "flex", gap: 2 }}>
                 <Button
                   onClick={() => {
                     setDeleteModalOpen(false);
@@ -853,7 +818,7 @@ export default function ExpensePage() {
 
                 <Button
                   onClick={() => {
-                    handleDeleteExpense(selectedExpenseToDelete.id);
+                    handleDeleteExpense(getExpenseId(selectedExpenseToDelete));
                     setDeleteModalOpen(false);
                     setSelectedExpenseToDelete(null);
                   }}
@@ -866,7 +831,6 @@ export default function ExpensePage() {
                     fontWeight: 700,
                     backgroundColor: "#005242",
                     textTransform: "none",
-                    "&:hover": { backgroundColor: "#005242" },
                   }}
                 >
                   Apply
@@ -876,7 +840,6 @@ export default function ExpensePage() {
           </Box>
         )}
 
-        {/* Footer */}
         <Box
           sx={{
             position: "fixed",
