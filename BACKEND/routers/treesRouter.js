@@ -3,71 +3,89 @@ const router = express.Router();
 
 import { requireLogin } from "../middleware/authMiddleware.js";
 import {
-    getTreesByUser,
-    getTreeByGoal,
-    addTree
-} from '../db/dal/tree.js'
+  getTreesByUser,
+  getTreeByGoal,
+  addTree,
+  getValidTreeYears,
+} from "../db/dal/tree.js";
 
 router.get("/list", requireLogin, async (req, res) => {
-    try {
-        const user_id = req.user.user_id;
+  try {
+    const user_id = req.user.user_id;
 
-        const userTrees = await getTreesByUser(user_id)
+    const userTrees = await getTreesByUser(user_id);
 
-        if (!userTrees || userTrees.length === 0) {
-            return res.status(404).json({ error:'Tree not found' })
-        }
-        
-        return res.json({
-            success: true,
-            userTrees
-        })
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server failure" });
+    if (!userTrees || userTrees.length === 0) {
+      return res.status(404).json({ error: "Tree not found" });
     }
+
+    return res.json({
+      success: true,
+      userTrees,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server failure" });
+  }
 });
 
-router.get('/:goalId/view', requireLogin, async (req, res) => {
-    try {
-        const goal_id = req.params.goalId;
+router.get("/:goalId/view", requireLogin, async (req, res) => {
+  try {
+    const goal_id = req.params.goalId;
 
-        const goalTrees = await getTreeByGoal(goal_id)
+    const goalTrees = await getTreeByGoal(goal_id);
 
-        if (!goalTrees) {
-            return res.status(404).json({ error: 'Tree not found' });
-        }
-        
-        return res.json({
-            success: true,
-            goalTrees
-        })
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server failure" });
+    if (!goalTrees) {
+      return res.status(404).json({ error: "Tree not found" });
     }
-})
 
-router.post('/:goalId/new', requireLogin, async (req, res) => {
-    try {
-        const user_id = req.user.user_id;
-        const goal_id = req.params.goalId;
-        const tree_type = Math.floor(Math.random() * 5) + 1;
+    return res.json({
+      success: true,
+      goalTrees,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server failure" });
+  }
+});
 
-        const newTree = await addTree({user_id, goal_id, tree_type})
+router.post("/:goalId/new", requireLogin, async (req, res) => {
+  try {
+    const user_id = req.user.user_id;
+    const goal_id = req.params.goalId;
+    const tree_type = Math.floor(Math.random() * 5) + 1;
 
-        if (!newTree || newTree.length === 0) {
-            return res.status(500).json({ error:'Failed to create tree' })
-        }
+    const newTree = await addTree({ user_id, goal_id, tree_type });
 
-        res.json({
-            success: true,
-            newTree,
-        })
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Server failure" });
+    if (!newTree || newTree.length === 0) {
+      return res.status(500).json({ error: "Failed to create tree" });
     }
-})
+
+    res.json({
+      success: true,
+      newTree,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server failure" });
+  }
+});
+
+router.get("/years", async (req, res) => {
+  const user_id = req.user.user_id;
+  try {
+    const years = getValidTreeYears(user_id);
+    res.json({
+      success: true,
+      years,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching years",
+    });
+  }
+});
 
 export default router;
