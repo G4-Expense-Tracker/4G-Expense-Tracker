@@ -85,3 +85,21 @@ export async function addTree(postData) {
     return null;
   }
 }
+
+export async function getValidTreeYears(user_id) {
+  const query = `
+  SELECT DISTINCT YEAR(date_earned) AS year
+  FROM tree
+  WHERE user_id = :user_id
+  ORDER BY year DESC;
+  `;
+
+  try {
+    const results = await database.query(query, { user_id });
+
+    return results[0];
+  } catch (err) {
+    console.log(err);
+    return [];
+  }
+}
