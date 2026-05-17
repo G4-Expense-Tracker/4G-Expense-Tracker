@@ -31,19 +31,29 @@ export default function DashboardPage() {
   const [cardIndex, setCardIndex] = useState(0);
 
   useEffect(() => {
-    const savedGoals = JSON.parse(localStorage.getItem("goals")) || [];
-    const savedBudgets = JSON.parse(localStorage.getItem("budgets")) || {};
-    const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    const loadDashboardData = () => {
+      const savedGoals = JSON.parse(localStorage.getItem("goals")) || [];
+      const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+      const savedBudgetsArray =
+        JSON.parse(localStorage.getItem("budgets")) || [];
 
-    setGoals(savedGoals);
-    setDashboardCards(
-      createDashboardCards(savedBudgets, savedExpenses, savedGoals)
-    );
+      setGoals(savedGoals);
+      setDashboardCards(
+        createDashboardCards(savedBudgetsArray, savedExpenses, savedGoals)
+      );
+    };
+
+    loadDashboardData();
+
+    window.addEventListener("focus", loadDashboardData);
+
+    return () => {
+      window.removeEventListener("focus", loadDashboardData);
+    };
   }, []);
 
   const currentGoal = goals[currentIndex];
 
-  // Automatically calculates circular progress
   const progress = currentGoal
     ? Math.min(
         Math.round(
@@ -69,7 +79,7 @@ export default function DashboardPage() {
     if (currentGoal) {
       navigate(`/goal/${currentGoal.id}`);
     } else {
-      navigate("/goal");
+      navigate("/goals");
     }
   }
 
@@ -89,8 +99,9 @@ export default function DashboardPage() {
   return (
     <Box
       sx={{
-        width: 390,
-        minHeight: "100svh",
+        width: "100%",
+        maxWidth: 430,
+        minHeight: "100vh",
         mx: "auto",
         bgcolor: "#F7F9F2",
         position: "relative",
@@ -98,7 +109,6 @@ export default function DashboardPage() {
         pb: 13,
       }}
     >
-      {/* Status bar */}
       <Box
         sx={{
           display: "flex",
@@ -117,7 +127,6 @@ export default function DashboardPage() {
         </Box>
       </Box>
 
-      {/* Greeting */}
       <Typography
         sx={{
           textAlign: "center",
@@ -131,7 +140,6 @@ export default function DashboardPage() {
         Good Morning, Hye
       </Typography>
 
-      {/* Goal preview circle */}
       <Box
         sx={{
           mt: 7,
@@ -141,14 +149,7 @@ export default function DashboardPage() {
           alignItems: "center",
         }}
       >
-        <IconButton
-          onClick={previousGoal}
-          sx={{
-            position: "absolute",
-            left: 12,
-            color: "#168C6C",
-          }}
-        >
+        <IconButton onClick={previousGoal} sx={{ position: "absolute", left: 12, color: "#168C6C" }}>
           <ChevronLeftIcon />
         </IconButton>
 
@@ -164,19 +165,14 @@ export default function DashboardPage() {
             cursor: "pointer",
           }}
         >
-          {/* Yellow full circle */}
           <CircularProgress
             variant="determinate"
             value={100}
             size={235}
             thickness={4.5}
-            sx={{
-              color: "#FFD84D",
-              position: "absolute",
-            }}
+            sx={{ color: "#FFD84D", position: "absolute" }}
           />
 
-          {/* Green automatic progress circle */}
           {currentGoal && (
             <CircularProgress
               variant="determinate"
@@ -187,36 +183,10 @@ export default function DashboardPage() {
                 color: "#004D40",
                 position: "absolute",
                 transform: "rotate(-90deg)",
-                transition: "all 0.5s ease",
               }}
             />
           )}
 
-          {/* Percent bubble */}
-          {currentGoal && (
-            <Box
-              sx={{
-                position: "absolute",
-                top: 10,
-                right: 50,
-                width: 42,
-                height: 42,
-                borderRadius: "50%",
-                bgcolor: "#004D40",
-                color: "white",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontWeight: 700,
-                fontSize: 12,
-                zIndex: 2,
-              }}
-            >
-              {progress}%
-            </Box>
-          )}
-
-          {/* Inner circle */}
           <Box
             sx={{
               width: 195,
@@ -235,53 +205,26 @@ export default function DashboardPage() {
               component="img"
               src={getPlantImage()}
               alt="goal plant"
-              sx={{
-                width: 95,
-                height: 95,
-                objectFit: "contain",
-              }}
+              sx={{ width: 95, height: 95, objectFit: "contain" }}
             />
 
-            <Typography
-              sx={{
-                mt: 1,
-                fontSize: 24,
-                fontWeight: 800,
-                color: "#004D40",
-              }}
-            >
+            <Typography sx={{ mt: 1, fontSize: 24, fontWeight: 800, color: "#004D40" }}>
               {currentGoal ? currentGoal.title : "Click here"}
             </Typography>
 
-            <Typography
-              sx={{
-                fontSize: 14,
-                fontWeight: 700,
-                color: "#004D40",
-              }}
-            >
+            <Typography sx={{ fontSize: 14, fontWeight: 700, color: "#004D40" }}>
               {currentGoal
-                ? `$${currentGoal.savedAmount || 0} / ${
-                    currentGoal.targetAmount || 0
-                  }`
+                ? `$${currentGoal.savedAmount || 0} / ${currentGoal.targetAmount || 0}`
                 : "to set your goal"}
             </Typography>
           </Box>
         </Box>
 
-        <IconButton
-          onClick={nextGoal}
-          sx={{
-            position: "absolute",
-            right: 12,
-            color: "#168C6C",
-          }}
-        >
+        <IconButton onClick={nextGoal} sx={{ position: "absolute", right: 12, color: "#168C6C" }}>
           <ChevronRightIcon />
         </IconButton>
       </Box>
 
-      {/* Bottom cards */}
       <Box
         onScroll={handleCardScroll}
         sx={{
@@ -292,15 +235,11 @@ export default function DashboardPage() {
           px: 2,
           pb: 2,
           scrollSnapType: "x mandatory",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
+          "&::-webkit-scrollbar": { display: "none" },
         }}
       >
         {dashboardCards.length > 0 ? (
-          dashboardCards.map((card) => (
-            <DashboardCard key={card.id} card={card} />
-          ))
+          dashboardCards.map((card) => <DashboardCard key={card.id} card={card} />)
         ) : (
           <Box
             sx={{
@@ -317,7 +256,6 @@ export default function DashboardPage() {
             <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 22 }}>
               No saved values yet
             </Typography>
-
             <Typography sx={{ mt: 2, color: "#004D40", fontSize: 15 }}>
               Add a goal, budget, or expense to see dashboard previews.
             </Typography>
@@ -325,15 +263,7 @@ export default function DashboardPage() {
         )}
       </Box>
 
-      {/* Dots */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          gap: 1,
-          mt: 1,
-        }}
-      >
+      <Box sx={{ display: "flex", justifyContent: "center", gap: 1, mt: 1 }}>
         {dashboardCards.map((card, index) => (
           <Box
             key={card.id}
@@ -346,7 +276,20 @@ export default function DashboardPage() {
           />
         ))}
       </Box>
-      <FooterNav />
+
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "100%",
+          maxWidth: 430,
+          zIndex: 20,
+        }}
+      >
+        <FooterNav />
+      </Box>
     </Box>
   );
 }
@@ -373,7 +316,7 @@ function DashboardCard({ card }) {
       </Typography>
 
       <Typography sx={{ fontWeight: 800, fontSize: 36, color: "#004D40" }}>
-        ${card.amount}
+        ${card.amount.toFixed(2)}
       </Typography>
 
       <LinearProgress
@@ -384,9 +327,7 @@ function DashboardCard({ card }) {
           height: 12,
           borderRadius: 10,
           bgcolor: "#FFF8CC",
-          "& .MuiLinearProgress-bar": {
-            bgcolor: "#004D40",
-          },
+          "& .MuiLinearProgress-bar": { bgcolor: "#004D40" },
         }}
       />
 
@@ -395,9 +336,8 @@ function DashboardCard({ card }) {
           <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
             {card.leftLabel || "Used"}
           </Typography>
-
           <Typography sx={{ fontSize: 18, fontWeight: 700, color: "#004D40" }}>
-            ${card.used}
+            ${card.used.toFixed(2)}
           </Typography>
         </Box>
 
@@ -405,9 +345,8 @@ function DashboardCard({ card }) {
           <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
             {card.rightLabel || "Remaining"}
           </Typography>
-
           <Typography sx={{ fontSize: 18, fontWeight: 700, color: "#004D40" }}>
-            ${card.remaining}
+            ${card.remaining.toFixed(2)}
           </Typography>
         </Box>
       </Box>
@@ -415,15 +354,27 @@ function DashboardCard({ card }) {
   );
 }
 
+function cleanAmount(amount) {
+  return Number(String(amount).replace("$", "")) || 0;
+}
+
 function createDashboardCards(budgets, expenses, goals) {
   const cards = [];
 
   const totalExpenses = expenses.reduce((total, expense) => {
-    return total + Number(expense.amount || 0);
+    return total + cleanAmount(expense.amount);
   }, 0);
 
-  if (budgets.dailyBudget) {
-    const dailyBudget = Number(budgets.dailyBudget);
+  const latestDailyBudget = [...budgets]
+    .reverse()
+    .find((budget) => budget.type === "Daily");
+
+  const latestMonthlyBudget = [...budgets]
+    .reverse()
+    .find((budget) => budget.type === "Monthly");
+
+  if (latestDailyBudget) {
+    const dailyBudget = cleanAmount(latestDailyBudget.amount);
 
     cards.push({
       id: "daily-budget",
@@ -434,8 +385,8 @@ function createDashboardCards(budgets, expenses, goals) {
     });
   }
 
-  if (budgets.monthlyBudget) {
-    const monthlyBudget = Number(budgets.monthlyBudget);
+  if (latestMonthlyBudget) {
+    const monthlyBudget = cleanAmount(latestMonthlyBudget.amount);
 
     cards.push({
       id: "monthly-budget",
@@ -448,12 +399,13 @@ function createDashboardCards(budgets, expenses, goals) {
 
   if (expenses.length > 0) {
     const recentExpense = expenses[expenses.length - 1];
+    const recentAmount = cleanAmount(recentExpense.amount);
 
     cards.push({
       id: "recent-expense",
       title: "Recent Expense",
-      amount: Number(recentExpense.amount || 0),
-      used: Number(recentExpense.amount || 0),
+      amount: recentAmount,
+      used: recentAmount,
       remaining: 0,
       leftLabel: "Amount",
       rightLabel: "Latest",
@@ -466,11 +418,10 @@ function createDashboardCards(budgets, expenses, goals) {
     cards.push({
       id: "goal-progress",
       title: "Goal Progress",
-      amount: Number(firstGoal.targetAmount || 0),
-      used: Number(firstGoal.savedAmount || 0),
+      amount: cleanAmount(firstGoal.targetAmount),
+      used: cleanAmount(firstGoal.savedAmount),
       remaining: Math.max(
-        Number(firstGoal.targetAmount || 0) -
-          Number(firstGoal.savedAmount || 0),
+        cleanAmount(firstGoal.targetAmount) - cleanAmount(firstGoal.savedAmount),
         0
       ),
     });
