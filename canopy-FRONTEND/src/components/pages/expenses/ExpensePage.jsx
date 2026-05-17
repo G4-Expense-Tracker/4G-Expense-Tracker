@@ -28,6 +28,7 @@ import {
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 
 import FooterNav from "../../Footer/FooterNav.jsx";
+import ExpenseHeader from "../../headers/ExpenseHeader.jsx";
 
 setOptions({
   theme: "ios",
@@ -256,6 +257,7 @@ export default function ExpensePage() {
           </Box>
         </Box>
 
+        {/* Tabs */}
         <Box
           sx={{
             display: "flex",
