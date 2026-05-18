@@ -77,35 +77,27 @@ export default function AddExpensePage() {
   // =========================
   // Save Budget
   // =========================
-  const handleSaveBudget = () => {
-    if (!budgetAmount || !budgetCategory) {
-      alert("Please fill Amount and Category.");
-      return;
+  const handleSaveBudget = async () => {
+    try {
+      if (!budgetAmount || !budgetType) {
+        alert("Please fill Amount and Budget Type.");
+        return;
+      }
+
+      const newBudget = {
+        timeframe: budgetType.toLowerCase(),
+        amount: Number(budgetAmount),
+      };
+
+      await setBudget(newBudget);
+
+      alert("Budget saved successfully!");
+
+      navigate("/expenses");
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
     }
-
-    const newBudget = {
-      id: Date.now(),
-      type: budgetType,
-      amount: `$${Number(budgetAmount).toFixed(2)}`,
-      date: budgetDate,
-      category: budgetCategory,
-    };
-
-    const savedBudgets =
-      JSON.parse(localStorage.getItem("budgets")) || [];
-
-    const updatedBudgets = [...savedBudgets, newBudget];
-
-    localStorage.setItem(
-      "budgets",
-      JSON.stringify(updatedBudgets)
-    );
-
-    console.log("Saved budgets:", updatedBudgets);
-
-    alert("Budget saved successfully!");
-
-    navigate("/expenses");
   };
 
   return (
@@ -283,6 +275,7 @@ export default function AddExpensePage() {
 
               <TextField
                 fullWidth
+                type="number"
                 value={expenseName}
                 onChange={(e) =>
                   setExpenseName(e.target.value)
@@ -543,6 +536,7 @@ export default function AddExpensePage() {
 
                   <TextField
                     fullWidth
+                    type="number"
                     value={budgetAmount}
                     onChange={(e) =>
                       setBudgetAmount(
