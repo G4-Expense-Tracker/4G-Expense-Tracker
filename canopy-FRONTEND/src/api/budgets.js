@@ -30,12 +30,14 @@ export async function editSingleCategory() {
     return data;
 }
 
-export async function deleteSingleCategory() {
+export async function viewBudget(timeframe) {}
 
+export async function deleteSingleCategory() {
 
     if (!res.ok) {
         throw new Error(data.error || "Failed to delete category");
-export async function viewBudget(timeframe) {
+    }
+
     const params = new URLSearchParams({ timeframe });
 
     const res = await fetch(`${API}/budgets/view?${params.toString()}`, {

@@ -14,6 +14,9 @@ import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
+import { createNewExpense } from "../../../api/expenses";
+import { setBudget } from "../../../api/budgets";
+
 export default function AddExpensePage() {
   const navigate = useNavigate();
 
@@ -42,38 +45,33 @@ export default function AddExpensePage() {
   // =========================
   // Save Expense
   // =========================
-  const handleSaveExpense = () => {
-    if (!expenseName || !amount || !category) {
-      alert("Please fill Expense Name, Amount and Category.");
-      return;
+  const handleSaveExpense = async () => {
+    try {
+      if (!expenseName || !amount || !category) {
+        alert("Please fill Expense Name, Amount and Category.");
+        return;
+      }
+
+      const newExpense = {
+        category_id: Number(category),
+        title: expenseName,
+        amount: Number(amount),
+        date,
+        note: "",
+        quick_expense: quickExpense,
+      };
+
+      console.log(newExpense);
+
+      await createNewExpense(newExpense);
+
+      alert("Expense saved successfully!");
+
+      navigate("/expenses");
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
     }
-
-    const newExpense = {
-      id: Date.now(),
-      date,
-      time: "7:05am",
-      title: expenseName,
-      category,
-      amount: `$${Number(amount).toFixed(2)}`,
-      quickExpense,
-      iconType: category.toLowerCase(),
-    };
-
-    const savedExpenses =
-      JSON.parse(localStorage.getItem("expenses")) || [];
-
-    const updatedExpenses = [...savedExpenses, newExpense];
-
-    localStorage.setItem(
-      "expenses",
-      JSON.stringify(updatedExpenses)
-    );
-
-    console.log("Saved expenses:", updatedExpenses);
-
-    alert("Expense saved successfully!");
-
-    navigate("/expenses");
   };
 
   // =========================
