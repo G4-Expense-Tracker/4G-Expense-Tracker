@@ -9,6 +9,27 @@ import {
   Checkbox,
   IconButton,
 } from "@mui/material";
+// Backend Importing:
+/* =========================================================
+   BACKEND API IMPORTS
+   =========================================================
+   These functions connect this page to the backend API.
+
+   getAllQuickExpenses()
+   -> fetches quick expenses from backend
+
+   createNewExpense()
+   -> creates new expense in backend database
+
+   deleteExpense()
+   -> deletes expense from backend database
+========================================================= */
+
+// import {
+//   getAllQuickExpenses,
+//   createNewExpense,
+//   deleteExpense,
+// } from "../../../api/expenses";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -16,6 +37,11 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 export default function AddExpensePage() {
   const navigate = useNavigate();
+    /* =========================================================
+     DEFAULT FALLBACK QUICK EXPENSES
+     =========================================================
+     Used only if backend request fails
+  ========================================================= */
 
   const defaultQuickExpenses = [
     { id: 1, name: "Starbucks", category: "Foods and Drinks" },
@@ -35,6 +61,164 @@ export default function AddExpensePage() {
   const [budgetAmount, setBudgetAmount] = useState("");
   const [budgetDate, setBudgetDate] = useState("2026-04-13");
   const [budgetType, setBudgetType] = useState("Monthly");
+
+  //Backend Code:
+  /* =========================================================
+     FETCH QUICK EXPENSES FROM BACKEND
+     =========================================================
+     Runs when page loads.
+
+     Backend route:
+     GET /expenses/list?quickExpense=true
+  ========================================================= */
+
+  // useEffect(() => {
+  //   fetchQuickExpenses();
+  // }, []);
+
+  // const fetchQuickExpenses = async () => {
+
+  //   try {
+
+  // backend API request
+  //     const data = await getAllQuickExpenses();
+
+  // update frontend state
+  //     if (data && data.length > 0) {
+  //       setQuickExpenses(data);
+  //     }
+
+  //   } catch (error) {
+
+  //     console.error("Quick expenses error:", error);
+
+      // fallback local data
+  //     setQuickExpenses(defaultQuickExpenses);
+  //   }
+  // };
+
+  // /* =========================================================
+  //    DELETE QUICK EXPENSE
+  //    =========================================================
+  //    Backend route:
+  //    POST /expenses/:id/delete
+  // ========================================================= */
+
+  // const deleteQuickExpense = async (id) => {
+
+  //   try {
+
+      // backend delete request
+  //     await deleteExpense(id);
+
+      // remove item from frontend state
+  //     setQuickExpenses((prev) =>
+  //       prev.filter((item) => item.id !== id)
+  //     );
+
+  //   } catch (error) {
+
+  //     console.error("Delete quick expense error:", error);
+
+  //     alert(error.message);
+  //   }
+  // };
+
+  // /* =========================================================
+    //  SAVE NEW EXPENSE
+    //  =========================================================
+    //  Backend route:
+    //  POST /expenses/new
+
+    //  Sends:
+    //  - title
+    //  - amount
+    //  - category
+    //  - date
+    //  - quickExpense
+  // ========================================================= */
+
+  // const handleSaveExpense = async () => {
+
+    // simple validation
+  //   if (!expenseName || !amount || !category) {
+
+  //     alert("Please fill Expense Name, Amount and Category.");
+  //     return;
+  //   }
+
+  //   /* -------------------------------------------------------
+      // expense object sent to backend
+  //   ------------------------------------------------------- */
+
+  //   const newExpense = {
+  //     title: expenseName,
+  //     amount: Number(amount),
+  //     date,
+  //     category,
+  //     quickExpense,
+  //   };
+
+  //   try {
+
+  //     console.log("Sending expense:", newExpense);
+
+      // backend API request
+  //     const result = await createNewExpense(newExpense);
+
+  //     console.log("Saved expense:", result);
+
+      // redirect to expenses page
+  //     navigate("/expenses");
+
+  //   } catch (error) {
+
+  //     console.error("Save expense error:", error);
+
+  //     alert(error.message);
+  //   }
+  // };
+
+  /* =========================================================
+     SAVE BUDGET
+     =========================================================
+     Uses same backend endpoint:
+     POST /expenses/new
+  ========================================================= */
+
+  // const handleSaveBudget = async () => {
+
+  //   if (!budgetAmount) {
+
+  //     alert("Please fill Amount.");
+  //     return;
+  //   }
+
+  //   const newBudget = {
+  //     title: `${budgetType} Budget`,
+  //     amount: Number(budgetAmount),
+  //     date: budgetDate,
+  //     category: "Budget",
+  //     quickExpense: false,
+  //     type: budgetType,
+  //   };
+
+  //   try {
+
+  //     console.log("Sending budget:", newBudget);
+
+   // backend request
+  //     await createNewExpense(newBudget);
+
+  //     navigate("/dashboard");
+
+  //   } catch (error) {
+
+  //     console.error("Save budget error:", error);
+
+  //     alert(error.message);
+  //   }
+  // };
 
   useEffect(() => {
     const savedQuickExpenses =
