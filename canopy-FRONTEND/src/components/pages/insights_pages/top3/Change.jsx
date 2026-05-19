@@ -2,12 +2,12 @@ import { Box, Typography } from "@mui/material";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
-function Change({ data }) {
+function Change({ category, percentChange }) {
     return (
         <Box>
 
             <Typography variant="h3" component="h3">
-                {catagoryName}
+                {category}
             </Typography>
 
             <Box>
