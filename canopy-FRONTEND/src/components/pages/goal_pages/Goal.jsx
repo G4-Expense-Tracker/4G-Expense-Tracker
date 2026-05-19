@@ -1,7 +1,7 @@
 import Header from "./Header"
 import { useEffect, useState } from "react"
 import TaskCard from "./TaskCard/TaskCard"
-import { Box, Typography, Button, TextField } from "@mui/material"
+import { Box, Typography, Button } from "@mui/material"
 import InfoIcon from "@mui/icons-material/Info"
 import EditIcon from "@mui/icons-material/Edit"
 import DeleteIcon from "@mui/icons-material/Delete"
@@ -11,14 +11,7 @@ import VarTaskCard from "./TaskCard/VarTaskCard"
 import Congrats from "./TaskCard/Congrats"
 import { getAllGoals } from "../../../api/goals"
 
-// mock fallback (temporary)
-const fallbackGoals = [
-    { id: 1, name: "Tuition", targetAmount: 200, progress: 40, level: 1 },
-    { id: 2, name: "Korea", targetAmount: 1500, progress: 500, level: 2 },
-    { id: 3, name: "Air Pods", targetAmount: 360, progress: 360, level: 3 },
-    { id: 4, name: "Nikes", targetAmount: 90, progress: 50, level: 5 }
-]
-
+// THIS NEEDS AN API CALL! <3
 const taskProgress = {
     1: { 1: 1, 2: 3, 3: 0, 4: 2, 5: 1 },
     2: { 1: 3, 2: 2, 3: 1, 4: 0, 5: 3 },
@@ -28,16 +21,17 @@ const taskProgress = {
 
 function Goal() {
     // ---------------- STATE ----------------
-    const [goalData, setGoalData] = useState(fallbackGoals)
+    const [goalData, setGoalData] = useState([])
     const [currentGoalIndex, setCurrentGoalIndex] = useState(0)
 
     const [showCongrats, setShowCongrats] = useState(false)
     const [hasShownCongrats, setHasShownCongrats] = useState(false)
 
     const [showActions, setShowActions] = useState(false)
+
+    // edit/delete UI state (assumed used elsewhere in your file)
     const [showEditModal, setShowEditModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
-
     const [editName, setEditName] = useState("")
     const [editAmount, setEditAmount] = useState("")
 
@@ -46,7 +40,7 @@ function Goal() {
         const fetchGoals = async () => {
             try {
                 const data = await getAllGoals()
-                if (data?.length) setGoalData(data)
+                setGoalData(data || [])
             } catch (err) {
                 console.error("Failed to fetch goals:", err)
             }
@@ -55,39 +49,8 @@ function Goal() {
         fetchGoals()
     }, [])
 
-    // ---------------- DERIVED STATE ----------------
+    // ---------------- GUARDS ----------------
     const currentGoal = goalData[currentGoalIndex]
-
-    const currentGoalProgress =
-        currentGoal ? taskProgress[currentGoal.id] : null
-
-    const currentSavings = currentGoal?.progress ?? 0
-    const targetSavings = currentGoal?.targetAmount ?? 0
-
-    const goalCompleted =
-        !!currentGoal && currentSavings >= targetSavings
-
-    const levelFiveIncomplete =
-        !!currentGoal &&
-        currentGoal.level === 5 &&
-        currentSavings < targetSavings
-
-    // ---------------- EFFECTS ----------------
-    useEffect(() => {
-        if (goalCompleted && !hasShownCongrats) {
-            setShowCongrats(true)
-            setHasShownCongrats(true)
-        }
-    }, [goalCompleted, hasShownCongrats])
-
-    // ---------------- EARLY RETURNS ----------------
-    if (!currentGoal) {
-        return (
-            <Box>
-                <Typography>Loading Goals</Typography>
-            </Box>
-        )
-    }
 
     if (goalData.length === 0) {
         return (
@@ -98,6 +61,33 @@ function Goal() {
             </Box>
         )
     }
+
+    if (!currentGoal) {
+        return (
+            <Box>
+                <Typography>Loading Goals...</Typography>
+            </Box>
+        )
+    }
+
+    // ---------------- DERIVED VALUES ----------------
+    const currentGoalProgress = taskProgress[currentGoal.id]
+
+    const currentSavings = currentGoal.progress ?? 0
+    const targetSavings = currentGoal.targetAmount ?? 0
+
+    const goalCompleted = currentSavings >= targetSavings
+
+    const levelFiveIncomplete =
+        currentGoal.level === 5 && currentSavings < targetSavings
+
+    // ---------------- EFFECTS ----------------
+    useEffect(() => {
+        if (goalCompleted && !hasShownCongrats) {
+            setShowCongrats(true)
+            setHasShownCongrats(true)
+        }
+    }, [goalCompleted, hasShownCongrats])
 
     // ---------------- NAVIGATION ----------------
     const nextGoal = () => {
@@ -156,10 +146,7 @@ function Goal() {
     }
 
     const deleteGoal = () => {
-        setGoalData(prev =>
-            prev.filter((_, i) => i !== currentGoalIndex)
-        )
-
+        setGoalData(prev => prev.filter((_, i) => i !== currentGoalIndex))
         setCurrentGoalIndex(0)
         setShowDeleteModal(false)
     }
@@ -174,7 +161,7 @@ function Goal() {
                 handleDots={() => setShowActions(v => !v)}
             />
 
-            {/* actions menu */}
+            {/* actions */}
             {showActions && (
                 <Box sx={{
                     position: "absolute",
@@ -238,7 +225,6 @@ function Goal() {
                 onClose={() => setShowCongrats(false)}
             />
 
-            {/* footer */}
             <FooterNav />
         </Box>
     )
