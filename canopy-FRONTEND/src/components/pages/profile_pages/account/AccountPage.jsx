@@ -14,6 +14,8 @@ import FooterNav from "../../../Footer/FooterNav.jsx";
 /* Profile image */
 import profilepic from "../../profile_pages/account/profilepic.png";
 
+import { getUserSession, editUser } from "../../../../api/users";
+
 export default function AccountPage() {
   const navigate = useNavigate();
 
