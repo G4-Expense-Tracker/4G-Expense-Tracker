@@ -28,7 +28,7 @@ export default function LoadingPage() {
 
   function handleClick() {
     if (isLoggedIn) {
-      navigate("/home");
+      navigate("/dashboard");
     } else {
       navigate("/main");
     }
