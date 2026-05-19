@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createNewExpense } from "../../../api/expenses.js";
 
 import {
   Box,
@@ -54,51 +55,55 @@ export default function AddExpensePage() {
     );
   };
 
-  const handleSaveExpense = () => {
+  const handleSaveExpense = async () => {
     if (!expenseName || !amount || !category) {
       alert("Please fill Expense Name, Amount and Category.");
       return;
     }
 
     const newExpense = {
-      id: Date.now(),
-      date,
-      time: "7:05am",
-      title: expenseName,
-      category,
-      amount: `$${Number(amount).toFixed(2)}`,
-      quickExpense,
-      iconType: category.toLowerCase(),
+      name:expenseName,
+      amount: Number(amount),
+      category: category,
+      date: date,
+      quickExpense: quickExpense,
     };
 
-    const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    // const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
-    localStorage.setItem(
-      "expenses",
-      JSON.stringify([...savedExpenses, newExpense])
-    );
+    // localStorage.setItem(
+    //   "expenses",
+    //   JSON.stringify([...savedExpenses, newExpense])
+    // );
 
-    if (quickExpense) {
-      const newQuickExpense = {
-        id: Date.now() + 1,
-        name: expenseName,
-        category: category === "Food" ? "Foods and Drinks" : category,
-      };
+    // if (quickExpense) {
+    //   const newQuickExpense = {
+    //     id: Date.now() + 1,
+    //     name: expenseName,
+    //     category: category === "Food" ? "Foods and Drinks" : category,
+    //   };
 
-      const savedQuickExpenses =
-        JSON.parse(localStorage.getItem("quickExpenses")) || [];
+    //   const savedQuickExpenses =
+    //     JSON.parse(localStorage.getItem("quickExpenses")) || [];
 
-      const updatedQuickExpenses = [...savedQuickExpenses, newQuickExpense];
+    //   const updatedQuickExpenses = [...savedQuickExpenses, newQuickExpense];
 
-      localStorage.setItem(
-        "quickExpenses",
-        JSON.stringify(updatedQuickExpenses)
-      );
+    //   localStorage.setItem(
+    //     "quickExpenses",
+    //     JSON.stringify(updatedQuickExpenses)
+    //   );
 
-      setQuickExpenses(updatedQuickExpenses);
-    }
+    //   setQuickExpenses(updatedQuickExpenses);
+    // }
 
-    navigate("/expenses");
+    // navigate("/expenses");
+    try {
+      await createNewExpense(newExpense);
+      navigate("/expenses");
+    } catch (error) {
+    console.error("Error creating expense:", error);
+    alert(error.message || "Failed to save expense.");
+  }
   };
 
   const handleSaveBudget = () => {
