@@ -185,6 +185,7 @@ export default function ProfilePage() {
         {/* Notifications */}
         <MenuItem
           icon={<NotificationsNoneIcon />}
+          onClick={()=> navigate("/notifications")}
           text="Notifications"
           textColor={text}
           green={green}
@@ -193,6 +194,7 @@ export default function ProfilePage() {
         {/* Accessibility */}
         <MenuItem
           icon={<SettingsOutlinedIcon />}
+          onClick={()=> navigate("/accessibility")}
           text="Accessibility"
           textColor={text}
           green={green}
