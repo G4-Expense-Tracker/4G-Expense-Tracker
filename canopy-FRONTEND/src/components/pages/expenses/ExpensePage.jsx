@@ -30,7 +30,6 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import FooterNav from "../../Footer/FooterNav.jsx";
 import ExpenseHeader from "../../headers/ExpenseHeader.jsx";
 
-import { getAllExpenses, deleteExpense } from "../../../api/expenses";
 
 setOptions({
   theme: "ios",
