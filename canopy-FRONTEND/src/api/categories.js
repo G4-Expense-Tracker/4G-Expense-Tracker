@@ -1,0 +1,67 @@
+const API = import.meta.env.VITE_APP_BASE_URL
+
+export async function createNewCategory() {
+    const res = await fetch(`${API}/categories/new`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(categoryData),
+    });
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to create new category");
+    }
+
+    return data;
+}
+
+export async function getSingleCategory(categoryId) {
+    const res = await fetch(`${API}/categories/${categoryId}/view`, {
+        method: "GET",
+        credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch category");
+    }
+
+    return data;
+}
+
+export async function editSingleCategory(categoryId, updatedInfo) {
+    const res = await fetch(`${API}/categories/${categoryId}/edit`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(updatedInfo),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to edit category");
+    }
+
+    return data;
+}
+
+export async function deleteSingleCategory(categoryId) {
+    const res = await fetch(`${API}/categories/${categoryId}/delete`, {
+        method: "POST",
+        credentials: "include",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+        throw new Error(data.error || "Failed to delete category");
+    }
+
+    return data;
+}
