@@ -1,9 +1,28 @@
 import { Box, Typography } from "@mui/material"
 import LinearProgress from '@mui/material/LinearProgress';
+import { viewBudget } from "../../../api/budgets";
+import { getAllExpenses, getDateRangeTotal } from "../../../api/expenses";
+import { getMonthDates } from "./dateHelper";
 
 function Monthly() {
 
-    const percentAvailable = 12
+    const budget = viewBudget("monthly") //budget left
+    const spent = getDateRangeTotal() //budget spent
+
+    /* Dates */
+    const now = new Date();
+    const prevMonth = new Date(now);
+    prevMonth.setUTCMonth(prevMonth.getUTCMonth() - 1);
+    const current = getMonthDates(now);
+    const prev = getMonthDates(prevMonth);
+
+
+    /* dates to pass to db function */
+    const currentMonthStart = current.firstOfMonth
+    const currentMonthEnd = current.lastOfMonth
+    const prevMonthStart = prev.firstOfMonth
+    const prevMonthEnd = prev.lastOfMonth
+
 
     return (
         <Box>
@@ -19,7 +38,7 @@ function Monthly() {
                     <Box sx={{ mb: 2 }}>
                         <LinearProgress
                             variant="determinate"
-                            value={ percentUsed }
+                            value={percentUsed}
                         />
                     </Box>
 

@@ -1,99 +1,75 @@
-import { Box, Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import Change from "./Change";
+import { getMonthDates } from "../dateHelper"
+import { getCategoryTopChanges } from "../../../../api/expenses";
 
 function Top3() {
-    const top3Changes = [
-        {
-            category_id: "Food",
-            current: "curr",
-            previous: "prev",
-            percentChange: -16
-        },
-        {
-            category_id: "Transportation",
-            current: "curr",
-            previous: "prev",
-            percentChange: -5
-        },
-        {
-            category_id: "Drinks",
-            current: "curr",
-            previous: "prev",
-            percentChange: 12
+
+    const [top3Changes, setTop3Changes] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+
+        async function fetchData() {
+
+            const now = new Date();
+            const prevMonth = new Date(now);
+            prevMonth.setUTCMonth(prevMonth.getUTCMonth() - 1);
+
+            const current = getMonthDates(now);
+            const prev = getMonthDates(prevMonth);
+
+            const data = await getCategoryTopChanges(
+                current.firstOfMonth,
+                current.lastOfMonth,
+                prev.firstOfMonth,
+                prev.lastOfMonth
+            );
+
+            setTop3Changes(data || []);
+            setLoading(false);
         }
 
-    ]
+        fetchData();
+    }, []);
 
-    /* DATE HELPER FUNCTION */
-
-    // Source - https://stackoverflow.com/a/76545208
-    // Posted by RobG
-    // Retrieved 2026-05-19, License - CC BY-SA 4.0
-
-    const getMonthDates = (date = new Date()) => {
-        let y = date.getUTCFullYear();
-        let m = date.getUTCMonth();
-
-        let firstOfMonth = new Date(Date.UTC(y, m, 1));
-        let lastOfMonth = new Date(Date.UTC(y, m + 1, 0));
-
-        return { firstOfMonth, lastOfMonth };
-    };
-
-    const now = new Date();
-    const prevMonth = new Date(now);
-    prevMonth.setUTCMonth(prevMonth.getUTCMonth() - 1);
-
-    const current = getMonthDates(now);
-    const prev = getMonthDates(prevMonth);
-
-    /* dates to pass to db function */
-    const currentMonthStart = current.firstOfMonth
-    const currentMonthEnd = current.lastOfMonth
-    const prevMonthStart = prev.firstOfMonth
-    const prevMonthEnd = prev.lastOfMonth
-
-    /* if no data in db for past month: */
-    if(!top3Changes){
-        return(
+    if (loading) {
+        return (
             <Box>
-                <Typography variant="body1" component="p">
+                <Typography>Loading...</Typography>
+            </Box>
+        );
+    }
+
+    if (top3Changes.length === 0) {
+        return (
+            <Box>
+                <Typography variant="body1">
                     No Data to Show.
                 </Typography>
             </Box>
-        )
+        );
     }
 
     return (
+        <Box sx={{ backgroundColor: "lightgreen" }}>
 
-        <Box sx={{
-            /* change these eventually */
-            backgroundColor:"lightgreen"
-        }}>
             {/* HEADER */}
-            <Box
-            sx={{
-                display:"flex"
-            }}>
-                <Typography variant="h2" component="h2">
+            <Box sx={{ display: "flex" }}>
+                <Typography variant="h2">
                     Top 3 Changes
                 </Typography>
 
-                <Typography variant="body1" component="p">
+                <Typography variant="body1">
                     vs Last Month
                 </Typography>
             </Box>
 
             {/* BODY */}
-            <Box 
-            sx={{
-                display:"flex"
-            }}>
+            <Box sx={{ display: "flex" }}>
                 {top3Changes.map((change) => (
                     <Change
-
-                        /* change to name eventually  */
-
                         key={change.category_id}
                         category={change.category_id}
                         percentChange={change.percentChange}
@@ -102,8 +78,7 @@ function Top3() {
             </Box>
 
         </Box>
-
-    )
+    );
 }
 
-export default Top3
+export default Top3;
