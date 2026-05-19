@@ -16,7 +16,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-import { getAllExpenses, deleteExpense } from "../../../api/expenses.js";
 
 import {
   Eventcalendar,
