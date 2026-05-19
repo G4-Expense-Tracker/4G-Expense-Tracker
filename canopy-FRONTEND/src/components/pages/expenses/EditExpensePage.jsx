@@ -14,15 +14,19 @@ export default function EditExpensePage() {
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
 
+  const [expense, setExpense] = useState(null);
+
   useEffect(() => {
     async function loadExpense() {
       try {
-        const expense = await getExpense(id);
+        const currentExpense = await getExpense(id);
 
-        setName(expense.title || "");
-        setCategory(expense.category_id || "");
-        setAmount(expense.amount || "");
-        setDate(expense.date?.split("T")[0] || "");
+        setExpense(currentExpense)
+
+        setName(currentExpense.title || "");
+        setCategory(currentExpense.category_id || "");
+        setAmount(currentExpense.amount || "");
+        setDate(currentExpense.date?.split("T")[0] || "");
       } catch (err) {
         console.error(err);
       }
@@ -31,26 +35,21 @@ export default function EditExpensePage() {
     loadExpense();
   }, [id]);
 
-  const handleApply = () => {
-    const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+  const handleApply = async () => {
+    try {
+      await editExpense(id, {
+        title: name,
+        category_id: category,
+        amount: Number(amount),
+        date,
+        note: "",
+        quick_expense: expense?.quick_expense ?? false,
+      });
 
-    const updatedExpenses = savedExpenses.map((expense) => {
-      if (String(expense.id) === String(id)) {
-        return {
-          ...expense,
-          title: name,
-          category,
-          amount: `$${Number(amount).toFixed(2)}`,
-          date,
-          iconType: category.toLowerCase(),
-        };
-      }
-
-      return expense;
-    });
-
-    localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
-    navigate("/expenses");
+      navigate("/expenses");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
