@@ -142,6 +142,20 @@ export default function ExpensePage() {
     setOpenMenuIndex(null);
   };
 
+  // const handleDeleteExpense = async (expenseId) => {
+  //   try {
+  //     await deleteExpense(expenseId);
+
+  //     setSavedExpenses((prev) =>
+  //       prev.filter((e) => e.expense_id !== expenseId)
+  //     );
+
+  //     setOpenMenuIndex(null);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
   return (
     <Box
       sx={{
