@@ -5,12 +5,38 @@ import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import { useNavigate } from "react-router-dom";
 import mainLogo from "./images/mainLogo.png";
 
+import { useEffect, useState } from "react";
+import { getUserSession } from "../../../api/users";
+
 export default function LoadingPage() {
   const navigate = useNavigate();
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    async function loadSession() {
+      try {
+        const data = await getUserSession();
+        setIsLoggedIn(data.isLoggedIn);
+      } catch (err) {
+        setIsLoggedIn(false);
+      }
+    }
+
+    loadSession();
+  }, []);
+
+  function handleClick() {
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    } else {
+      navigate("/main");
+    }
+  }
+
   return (
     <Box
-      onClick={() => navigate("/main")}
+      onClick={handleClick}
       sx={{
         width: "100%",
         maxWidth: 390,
