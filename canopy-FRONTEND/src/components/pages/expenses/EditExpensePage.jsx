@@ -3,6 +3,8 @@ import { Box, Typography, TextField, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { getExpense, editExpense } from "../../../api/expenses";
+
 export default function EditExpensePage() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -12,41 +14,42 @@ export default function EditExpensePage() {
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
 
+  const [expense, setExpense] = useState(null);
+
   useEffect(() => {
-    const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    async function loadExpense() {
+      try {
+        const currentExpense = await getExpense(id);
 
-    const expenseToEdit = savedExpenses.find(
-      (expense) => String(expense.id) === String(id)
-    );
+        setExpense(currentExpense)
 
-    if (expenseToEdit) {
-      setName(expenseToEdit.title || "");
-      setCategory(expenseToEdit.category || "");
-      setAmount(expenseToEdit.amount?.replace("$", "") || "");
-      setDate(expenseToEdit.date || "");
+        setName(currentExpense.title || "");
+        setCategory(currentExpense.category_id || "");
+        setAmount(currentExpense.amount || "");
+        setDate(currentExpense.date?.split("T")[0] || "");
+      } catch (err) {
+        console.error(err);
+      }
     }
+
+    loadExpense();
   }, [id]);
 
-  const handleApply = () => {
-    const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+  const handleApply = async () => {
+    try {
+      await editExpense(id, {
+        title: name,
+        category_id: category,
+        amount: Number(amount),
+        date,
+        note: "",
+        quick_expense: expense?.quick_expense ?? false,
+      });
 
-    const updatedExpenses = savedExpenses.map((expense) => {
-      if (String(expense.id) === String(id)) {
-        return {
-          ...expense,
-          title: name,
-          category,
-          amount: `$${Number(amount).toFixed(2)}`,
-          date,
-          iconType: category.toLowerCase(),
-        };
-      }
-
-      return expense;
-    });
-
-    localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
-    navigate("/expenses");
+      navigate("/expenses");
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

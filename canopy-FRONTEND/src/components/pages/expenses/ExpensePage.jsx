@@ -28,6 +28,8 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import FooterNav from "../../Footer/FooterNav.jsx";
 import ExpenseHeader from "../../headers/ExpenseHeader.jsx";
 
+import { getAllExpenses, deleteExpense } from "../../../api/expenses";
+
 setOptions({
   theme: "ios",
   themeVariant: "light",
@@ -43,8 +45,17 @@ export default function ExpensePage() {
   const [savedExpenses, setSavedExpenses] = useState([]);
 
   useEffect(() => {
-    const storedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
-    setSavedExpenses(storedExpenses);
+    async function loadExpenses() {
+      try {
+        const data = await getAllExpenses();
+        setSavedExpenses(data || []);
+      } catch (err) {
+        console.error(err);
+        setSavedExpenses([]);
+      }
+    }
+
+    loadExpenses();
   }, []);
 
   const sampleExpenses = [
@@ -95,7 +106,7 @@ export default function ExpensePage() {
     },
   ];
 
-  const allExpenses = [...sampleExpenses, ...savedExpenses];
+  const allExpenses = [...sampleExpenses];
 
   const formatDate = (date) => date.toISOString().split("T")[0];
 
@@ -130,6 +141,20 @@ export default function ExpensePage() {
     setSavedExpenses(updatedExpenses);
     setOpenMenuIndex(null);
   };
+
+  // const handleDeleteExpense = async (expenseId) => {
+  //   try {
+  //     await deleteExpense(expenseId);
+
+  //     setSavedExpenses((prev) =>
+  //       prev.filter((e) => e.expense_id !== expenseId)
+  //     );
+
+  //     setOpenMenuIndex(null);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   return (
     <Box
