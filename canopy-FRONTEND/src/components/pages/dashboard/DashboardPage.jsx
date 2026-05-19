@@ -146,7 +146,7 @@ export default function DashboardPage() {
           color: "#004D40",
         }}
       >
-        Good Morning, Hye
+        {loadingUser ? "Good Morning..." : `Good Morning, ${user.first_name}`}
       </Typography>
 
       {/* Goal preview circle */}
