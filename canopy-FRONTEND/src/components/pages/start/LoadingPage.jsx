@@ -11,6 +11,21 @@ import { getUserSession } from "../../../api/users";
 export default function LoadingPage() {
   const navigate = useNavigate();
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    async function loadSession() {
+      try {
+        const data = await getUserSession();
+        setIsLoggedIn(data.isLoggedIn);
+      } catch (err) {
+        setIsLoggedIn(false);
+      }
+    }
+
+    loadSession();
+  }, []);
+
   return (
     <Box
       onClick={() => navigate("/main")}
