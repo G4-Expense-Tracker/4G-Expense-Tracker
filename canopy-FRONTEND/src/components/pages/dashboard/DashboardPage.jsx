@@ -87,7 +87,7 @@ export default function DashboardPage() {
     if (currentGoal) {
       navigate(`/goal/${currentGoal.id}`);
     } else {
-      navigate("/goal");
+      navigate("/newgoal");
     }
   }
 
