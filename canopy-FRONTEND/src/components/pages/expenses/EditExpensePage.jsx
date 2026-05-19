@@ -3,6 +3,8 @@ import { Box, Typography, TextField, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, useParams } from "react-router-dom";
 
+import { getExpense, editExpense } from "../../../api/expenses";
+
 export default function EditExpensePage() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -13,18 +15,20 @@ export default function EditExpensePage() {
   const [date, setDate] = useState("");
 
   useEffect(() => {
-    const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    async function loadExpense() {
+      try {
+        const expense = await getExpense(id);
 
-    const expenseToEdit = savedExpenses.find(
-      (expense) => String(expense.id) === String(id)
-    );
-
-    if (expenseToEdit) {
-      setName(expenseToEdit.title || "");
-      setCategory(expenseToEdit.category || "");
-      setAmount(expenseToEdit.amount?.replace("$", "") || "");
-      setDate(expenseToEdit.date || "");
+        setName(expense.title || "");
+        setCategory(expense.category_id || "");
+        setAmount(expense.amount || "");
+        setDate(expense.date?.split("T")[0] || "");
+      } catch (err) {
+        console.error(err);
+      }
     }
+
+    loadExpense();
   }, [id]);
 
   const handleApply = () => {
