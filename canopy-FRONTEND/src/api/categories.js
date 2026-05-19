@@ -11,7 +11,12 @@ export async function createNewCategory() {
 }
 
 export async function getSingleCategory() {
+    const res = await fetch(`${API}/categories/${categoryId}/view`, {
+        method: "GET",
+        credentials: "include",
+    });
 
+    const data = await res.json();
 
     if (!res.ok) {
         throw new Error(data.error || "Failed to fetch category");
