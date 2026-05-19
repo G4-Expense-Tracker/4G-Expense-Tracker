@@ -17,7 +17,7 @@ export async function createNewCategory() {
     return data;
 }
 
-export async function getSingleCategory() {
+export async function getSingleCategory(categoryId) {
     const res = await fetch(`${API}/categories/${categoryId}/view`, {
         method: "GET",
         credentials: "include",
@@ -32,7 +32,7 @@ export async function getSingleCategory() {
     return data;
 }
 
-export async function editSingleCategory() {
+export async function editSingleCategory(categoryId, updatedInfo) {
     const res = await fetch(`${API}/categories/${categoryId}/edit`, {
         method: "POST",
         headers: {
@@ -51,8 +51,13 @@ export async function editSingleCategory() {
     return data;
 }
 
-export async function deleteSingleCategory() {
+export async function deleteSingleCategory(categoryId) {
+    const res = await fetch(`${API}/categories/${categoryId}/delete`, {
+        method: "POST",
+        credentials: "include",
+    });
 
+    const data = await res.json();
 
     if (!res.ok) {
         throw new Error(data.error || "Failed to delete category");
