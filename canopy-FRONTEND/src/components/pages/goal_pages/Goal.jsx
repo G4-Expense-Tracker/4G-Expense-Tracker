@@ -9,7 +9,7 @@ import Savings from "./TaskCard/Savings"
 import FooterNav from "../../Footer/FooterNav"
 import VarTaskCard from "./TaskCard/VarTaskCard"
 import Congrats from "./TaskCard/Congrats"
-import { getAllGoals } from "../../../api/goals"
+import { getAllGoals, addGoalProgress } from "../../../api/goals"
 
 // DATABASE CALLS
 // these objects are just for ui and to show the shape of the object we want from the db
@@ -175,32 +175,48 @@ function Goal() {
     }
 
     /* add savings */
-    const addSavings = (amount) => {
-        setGoalData((prevGoals) =>
-            prevGoals.map((goal, index) =>
-                index === currentGoalIndex
-                    ? {
-                          ...goal,
-                          progress: goal.progress + amount
-                      }
-                    : goal
-            )
-        )
-    }
+    const addSavings = async (amount) => {
+        const goal = currentGoal;
+
+        try {
+            const updated = await addGoalProgress(goal.id, amount);
+
+            setGoalData((prev) =>
+                prev.map((g, index) =>
+                    index === currentGoalIndex
+                        ? {
+                            ...g,
+                            progress: updated.goal.progress
+                        }
+                        : g
+                )
+            );
+        } catch (err) {
+            console.error("Add savings failed:", err);
+        }
+    };
 
     /* subtract savings */
-    const subtractSavings = (amount) => {
-        setGoalData((prevGoals) =>
-            prevGoals.map((goal, index) =>
-                index === currentGoalIndex
-                    ? {
-                          ...goal,
-                          progress: Math.max(0, goal.progress - amount)
-                      }
-                    : goal
-            )
-        )
-    }
+    const subtractSavings = async (amount) => {
+        const goal = currentGoal;
+
+        try {
+            const updated = await addGoalProgress(goal.id, amount);
+
+            setGoalData((prev) =>
+                prev.map((g, index) =>
+                    index === currentGoalIndex
+                        ? {
+                            ...g,
+                            progress: updated.goal.progress
+                        }
+                        : g
+                )
+            );
+        } catch (err) {
+            console.error("Subtract savings failed:", err);
+        }
+    };
 
     /* open edit modal */
     const openEditModal = () => {

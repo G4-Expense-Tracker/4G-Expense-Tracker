@@ -18,10 +18,12 @@ import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
 import FooterNav from "../../../Footer/FooterNav.jsx";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import profilePic from "../account/profilepic.png";
+
+import { getUserSession } from "../../../../api/users.js";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -33,6 +35,24 @@ export default function ProfilePage() {
   const cardBg = darkMode ? "#27463C" : "#EAF7D7";
   const text = darkMode ? "#FFFFFF" : "#000000";
   const green = darkMode ? "#D7F5E8" : "#005844";
+
+  const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {  
+    async function getUser() {
+      try {
+        const sessionData = await getUserSession();
+        setUser(sessionData.user);
+      } catch (err) {
+        console.error("Failed to fetch user session:", err);
+      } finally {
+        setLoadingUser(false);
+      }
+    }
+
+    getUser();
+  }, []);
 
   return (
     <Box
@@ -132,7 +152,7 @@ export default function ProfilePage() {
             mb: "32px",
           }}
         >
-          HYE
+          {loadingUser ? "..." : `${user.first_name}`}
         </Typography>
 
         {/* ================= MY GARDEN ================= */}

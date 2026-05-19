@@ -82,8 +82,8 @@ export default function FooterNav() {
         >
           {/* HOME */}
           <BottomNavigationAction
-            label="Main"
-            value="/main"
+            label="Home"
+            value="/dashboard"
             icon={<HomeIcon />}
             onClick={() => navigate("/dashboard")}
             sx={{
@@ -93,10 +93,10 @@ export default function FooterNav() {
 
           {/* EXPENSE */}
           <BottomNavigationAction
-            label="Expenses"
-            value="/expenses"
+            label="Expense"
+            value="/expense"
             icon={<BarChartRoundedIcon />}
-            onClick={() => navigate("/expenses")}
+            onClick={() => navigate("/expense")}
             sx={{
               color: "#00503f",
             }}
@@ -105,9 +105,9 @@ export default function FooterNav() {
           {/* GOAL */}
           <BottomNavigationAction
             label="Goal"
-            value="/goal"
+            value="/goals"
             icon={<EmojiEventsIcon />}
-            onClick={() => navigate("/newgoal")}
+            onClick={() => navigate("/goals")}
             sx={{
               color: "#00503f",
             }}

@@ -14,8 +14,73 @@ import FooterNav from "../../../Footer/FooterNav.jsx";
 /* Profile image */
 import profilepic from "../../profile_pages/account/profilepic.png";
 
+import { getUserSession, editUser } from "../../../../api/users";
+import { useState, useEffect } from "react";
+
 export default function AccountPage() {
   const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  function handleChange(event) {
+    const { name, value } = event.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  async function handleSave() {
+    try {
+      if (!formData.password.trim()) {
+        alert("Please enter your password before saving.");
+        return;
+      }
+
+      await editUser(
+        formData.first_name,
+        formData.last_name,
+        formData.email,
+        formData.password,
+        formData.phone_number
+      );
+
+      navigate("/profile");
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  useEffect(() => {
+    async function getUser() {
+      try {
+        const sessionData = await getUserSession();
+
+        setFormData({
+          first_name: sessionData.user.first_name || "",
+          last_name: sessionData.user.last_name || "",
+          email: sessionData.user.email || "",
+          phone_number: sessionData.user.phone_number || "",
+          password: "",
+        });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getUser();
+  }, []);
 
   return (
     <Box
@@ -142,12 +207,24 @@ export default function AccountPage() {
         <Box sx={{ display: "flex", gap: "18px", mb: "20px" }}>
           <Box sx={{ flex: 1 }}>
             <Typography sx={labelStyle}>First Name</Typography>
-            <TextField fullWidth defaultValue="Hye" sx={smallInputStyle} />
+            <TextField
+              fullWidth
+              name="first_name"
+              value={formData.first_name}
+              onChange={handleChange}
+              sx={smallInputStyle}
+            />
           </Box>
 
           <Box sx={{ flex: 1 }}>
             <Typography sx={labelStyle}>Last Name</Typography>
-            <TextField fullWidth defaultValue="Shim" sx={smallInputStyle} />
+            <TextField
+              fullWidth
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
+              sx={smallInputStyle}
+            />
           </Box>
         </Box>
 
@@ -157,7 +234,9 @@ export default function AccountPage() {
             <Typography sx={labelStyle}>Email</Typography>
             <TextField
               fullWidth
-              defaultValue="Shim_Hye_Soo@gmail.com"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               sx={inputStyle}
             />
           </Box>
@@ -165,21 +244,30 @@ export default function AccountPage() {
 
         {/* Phone */}
         <Typography sx={labelStyle}>Phone</Typography>
-        <TextField fullWidth sx={{ ...inputStyle, mb: "16px" }} />
+        <TextField
+          fullWidth
+          name="phone_number"
+          value={formData.phone_number}
+          onChange={handleChange}
+          sx={{ ...inputStyle, mb: "16px" }}
+        />
 
         {/* Password */}
         <Typography sx={labelStyle}>Password</Typography>
         <TextField
           fullWidth
           type="password"
-          defaultValue="password123"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Enter new password"
           sx={{ ...inputStyle, mb: "36px" }}
         />
 
         {/* Save Button */}
         <Box sx={{ display: "flex", justifyContent: "center", mb: "36px" }}>
           <Button
-            onClick={() => navigate("/profile")}
+            onClick={handleSave}
             sx={{
               width: 210,
               height: 64,
