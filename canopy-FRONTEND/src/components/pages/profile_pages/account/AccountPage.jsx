@@ -19,6 +19,16 @@ import { getUserSession, editUser } from "../../../../api/users";
 export default function AccountPage() {
   const navigate = useNavigate();
 
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    password: "",
+  });
+
+  const [loading, setLoading] = useState(true);
+
   return (
     <Box
       sx={{

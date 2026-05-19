@@ -14,9 +14,11 @@ router.get('/session', requireLogin , (req, res) => {
     res.json({
         isLoggedIn: true,
         user: {
-        id: req.user.user_id,
-        email: req.user.email,
-        first_name: req.user.first_name,
+            id: req.user.user_id,
+            email: req.user.email,
+            first_name: req.user.first_name,
+            last_name: req.user.last_name,
+            phone_number: req.user.phone_number
         },
     });
 })
