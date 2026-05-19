@@ -303,8 +303,8 @@ export default function DashboardPage() {
         const formattedData = data.map((goal) => ({
           id: goal.id,
           title: goal.name,
-          saved: Number(goal.saved_amount ?? 0),
-          target: Number(goal.target_amount ?? 1),
+          saved: Number(goal.progress ?? 0),
+          target: Number(goal.targetAmount ?? 1),
           level: Number(goal.level ?? 1),
         }));
 
