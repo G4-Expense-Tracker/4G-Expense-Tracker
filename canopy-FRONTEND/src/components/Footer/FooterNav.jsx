@@ -5,7 +5,7 @@ import {
 } from "@mui/material";
 
 import HomeIcon from "@mui/icons-material/Home";
-import BarChartIcon from "@mui/icons-material/BarChart";
+import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
@@ -82,10 +82,10 @@ export default function FooterNav() {
         >
           {/* HOME */}
           <BottomNavigationAction
-            label="main"
+            label="Main"
             value="/main"
             icon={<HomeIcon />}
-            onClick={() => navigate("/main")}
+            onClick={() => navigate("/dashboard")}
             sx={{
               color: "#00503f",
             }}
@@ -93,10 +93,10 @@ export default function FooterNav() {
 
           {/* EXPENSE */}
           <BottomNavigationAction
-            label="dashboard"
-            value="/dashboard"
-            icon={<BarChartIcon />}
-            onClick={() => navigate("/dashboard")}
+            label="Expenses"
+            value="/expenses"
+            icon={<BarChartRoundedIcon />}
+            onClick={() => navigate("/expenses")}
             sx={{
               color: "#00503f",
             }}

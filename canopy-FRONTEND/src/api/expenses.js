@@ -70,6 +70,9 @@ export async function createNewExpense(newExpenseData) {
         body: JSON.stringify(newExpenseData),
     });
 
+    // For test purpose: 
+    // const text = await res.text();
+    //   const data = text ? JSON.parse(text) : {};
     const data = await res.json();
 
     if (!res.ok) {
@@ -89,6 +92,9 @@ export async function editExpense(expenseId, updatedInfo) {
         body: JSON.stringify(updatedInfo),
     });
 
+    // For test purpose: 
+    // const text = await res.text();
+    //   const data = text ? JSON.parse(text) : {};
     const data = await res.json();
 
     if (!res.ok) {

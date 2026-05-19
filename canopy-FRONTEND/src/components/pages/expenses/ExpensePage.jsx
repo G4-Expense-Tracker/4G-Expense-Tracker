@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { Box, Typography, IconButton } from "@mui/material";
+import { Box, Typography, IconButton, Button } from "@mui/material";
 
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
@@ -16,6 +16,8 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
+import { getAllExpenses, deleteExpense } from "../../../api/expenses.js";
+
 import {
   Eventcalendar,
   CalendarPrev,
@@ -28,7 +30,6 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import FooterNav from "../../Footer/FooterNav.jsx";
 import ExpenseHeader from "../../headers/ExpenseHeader.jsx";
 
-import { getAllExpenses, deleteExpense } from "../../../api/expenses";
 
 setOptions({
   theme: "ios",
@@ -39,10 +40,28 @@ setOptions({
 export default function ExpensePage() {
   const navigate = useNavigate();
 
+  const categories = [
+    "Food",
+    "Drink",
+    "Transport",
+    "Groceries",
+    "Health",
+    "Shopping",
+    "Housing",
+  ];
+
   const [calendarMode, setCalendarMode] = useState("week");
   const [openMenuIndex, setOpenMenuIndex] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date(2026, 3, 7));
   const [savedExpenses, setSavedExpenses] = useState([]);
+  const [deletedSampleIds, setDeletedSampleIds] = useState([]);
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedExpenseToDelete, setSelectedExpenseToDelete] = useState(null);
+
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState("");
 
   useEffect(() => {
     async function loadExpenses() {
@@ -64,7 +83,7 @@ export default function ExpensePage() {
       date: "2026-04-07",
       time: "6:00am",
       title: "Bus Fare",
-      category: "Food",
+      category: "Transport",
       amount: "$6.00",
       iconType: "bus",
     },
@@ -111,35 +130,84 @@ export default function ExpensePage() {
   const formatDate = (date) => date.toISOString().split("T")[0];
 
   const selectedDateString = formatDate(selectedDate);
+  const selectedMonth = selectedDate.getMonth();
+  const selectedYear = selectedDate.getFullYear();
 
-  const filteredExpenses = allExpenses.filter(
-    (expense) => expense.date === selectedDateString
-  );
+  const filteredExpenses = allExpenses.filter((expense) => {
+    if (!expense.date) return false;
+
+    const expenseDateString = String(expense.date).split("T")[0];
+    const expenseDate = new Date(expenseDateString + "T00:00:00");
+
+    const matchesDate =
+      calendarMode === "week"
+        ? expenseDateString === selectedDateString
+        : expenseDate.getMonth() === selectedMonth &&
+          expenseDate.getFullYear() === selectedYear;
+
+    const categoryName = expense.category || expense.category_name || "";
+
+    const matchesCategory =
+      !selectedCategoryFilter ||
+      categoryName.toLowerCase() === selectedCategoryFilter.toLowerCase();
+
+    return matchesDate && matchesCategory;
+  });
 
   const totalAmount = filteredExpenses.reduce((total, expense) => {
-    return total + Number(String(expense.amount).replace("$", ""));
+    return total + Number(String(expense.amount || 0).replace("$", ""));
   }, 0);
 
   const getExpenseIcon = (expense) => {
-    const iconType = expense.iconType || expense.category?.toLowerCase();
+    const iconType = (
+      expense.iconType ||
+      expense.category ||
+      expense.category_name ||
+      ""
+    ).toLowerCase();
 
-    if (iconType?.includes("bus")) return <DirectionsBusIcon />;
-    if (iconType?.includes("drink")) return <LocalCafeIcon />;
-    if (iconType?.includes("food")) return <LocalCafeIcon />;
-    if (iconType?.includes("grocery")) return <ShoppingCartIcon />;
-    if (iconType?.includes("health")) return <FitnessCenterIcon />;
+    if (iconType.includes("bus") || iconType.includes("transport"))
+      return <DirectionsBusIcon />;
+
+    if (iconType.includes("drink") || iconType.includes("food"))
+      return <LocalCafeIcon />;
+
+    if (iconType.includes("grocery") || iconType.includes("shopping"))
+      return <ShoppingCartIcon />;
+
+    if (iconType.includes("health")) return <FitnessCenterIcon />;
 
     return <ShoppingCartIcon />;
   };
 
-  const handleDeleteExpense = (expenseId) => {
-    const updatedExpenses = savedExpenses.filter(
-      (expense) => String(expense.id) !== String(expenseId)
-    );
+  const getExpenseId = (expense) => expense.expense_id || expense.id;
 
-    localStorage.setItem("expenses", JSON.stringify(updatedExpenses));
-    setSavedExpenses(updatedExpenses);
-    setOpenMenuIndex(null);
+  const handleEditExpense = (expense) => {
+    const expenseId = getExpenseId(expense);
+    navigate(`/edit-expense/${expenseId}`);
+  };
+
+  const handleDeleteExpense = async (expenseId) => {
+    try {
+      await deleteExpense(expenseId);
+
+      setSavedExpenses((prev) =>
+        prev.filter(
+          (expense) => String(getExpenseId(expense)) !== String(expenseId)
+        )
+      );
+
+      setDeletedSampleIds((prev) => {
+        if (String(expenseId).startsWith("sample")) {
+          return [...prev, expenseId];
+        }
+        return prev;
+      });
+
+      setOpenMenuIndex(null);
+    } catch (error) {
+      console.log("Error deleting expense:", error);
+    }
   };
 
   // const handleDeleteExpense = async (expenseId) => {
@@ -179,7 +247,6 @@ export default function ExpensePage() {
           pb: "120px",
         }}
       >
-        {/* Status Bar */}
         <Box
           sx={{
             display: "flex",
@@ -189,13 +256,7 @@ export default function ExpensePage() {
             px: "4px",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: "22px",
-              fontWeight: 600,
-              color: "#3D3D3D",
-            }}
-          >
+          <Typography sx={{ fontSize: "22px", fontWeight: 600 }}>
             9:41
           </Typography>
 
@@ -206,9 +267,48 @@ export default function ExpensePage() {
           </Box>
         </Box>
 
-      <ExpenseHeader/>
+        {/* Tabs */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            px: { xs: "28px", sm: "35px" },
+            mb: "28px",
+          }}
+        >
+          <Box sx={{ textAlign: "center" }}>
+            <Typography
+              sx={{
+                fontSize: { xs: "24px", sm: "26px" },
+                fontWeight: 700,
+                color: "#004B3B",
+              }}
+            >
+              Expense
+            </Typography>
 
-        {/* Weekly / Monthly Toggle */}
+            <Box
+              sx={{
+                width: { xs: 130, sm: 145 },
+                height: 5,
+                borderRadius: "10px",
+                backgroundColor: "#A7C26E",
+                mt: "12px",
+              }}
+            />
+          </Box>
+
+          <Typography
+            sx={{
+              fontSize: { xs: "24px", sm: "26px" },
+              fontWeight: 700,
+              color: "#91AE5F",
+            }}
+          >
+            Insight
+          </Typography>
+        </Box>
+
         <Box
           onClick={() =>
             setCalendarMode((prev) => (prev === "week" ? "month" : "week"))
@@ -235,7 +335,6 @@ export default function ExpensePage() {
           <KeyboardArrowRightIcon sx={{ fontSize: 24, color: "#163D2B" }} />
         </Box>
 
-        {/* Calendar */}
         <Box
           sx={{
             border: "1px solid #1C9A72",
@@ -244,22 +343,17 @@ export default function ExpensePage() {
             mb: "14px",
             backgroundColor: "#FAFCF7",
 
-            // React Calender Mobiscroll Referenced from
-            // https://demo.mobiscroll.com/react/eventcalendar/event-data-structure
             "& .mbsc-calendar": {
               backgroundColor: "#FAFCF7",
             },
-
             "& .mbsc-calendar-wrapper": {
               backgroundColor: "#FAFCF7",
             },
-
             "& .mbsc-calendar-week-day": {
               color: "#005242",
               fontSize: "15px",
               fontWeight: 500,
             },
-
             "& .mbsc-calendar-cell-text": {
               color: "#005242",
               fontSize: "18px",
@@ -267,18 +361,15 @@ export default function ExpensePage() {
               height: "30px",
               lineHeight: "30px",
             },
-
             "& .mbsc-selected .mbsc-calendar-cell-text": {
               backgroundColor: "#005242",
               color: "#FFFFFF",
               borderRadius: "50%",
               fontWeight: 700,
             },
-
             "& .mbsc-button": {
               color: "#1C9A72",
             },
-
             "& .mbsc-calendar-cell": {
               border: "none",
             },
@@ -337,7 +428,6 @@ export default function ExpensePage() {
           />
         </Box>
 
-        {/* Total */}
         <Box
           sx={{
             display: "flex",
@@ -358,7 +448,9 @@ export default function ExpensePage() {
               alignItems: "center",
             }}
           >
-            <Typography sx={{ fontSize: "18px" }}>Total</Typography>
+            <Typography sx={{ fontSize: "18px" }}>
+              {calendarMode === "week" ? "Total" : "Monthly"}
+            </Typography>
 
             <Typography
               sx={{
@@ -371,15 +463,17 @@ export default function ExpensePage() {
             </Typography>
           </Box>
 
-          <FilterAltOutlinedIcon sx={{ color: "#005242", fontSize: 32 }} />
+          <FilterAltOutlinedIcon
+            onClick={() => setFilterModalOpen(true)}
+            sx={{ color: "#005242", fontSize: 32, cursor: "pointer" }}
+          />
         </Box>
 
-        {/* Expense Cards */}
         <Box sx={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           {filteredExpenses.length > 0 ? (
             filteredExpenses.map((expense, index) => (
               <Box
-                key={expense.id}
+                key={getExpenseId(expense)}
                 sx={{
                   minHeight: 86,
                   border: "1px solid #1C9A72",
@@ -407,7 +501,7 @@ export default function ExpensePage() {
 
                   <Box sx={{ minWidth: 0 }}>
                     <Typography sx={{ fontSize: "13px", color: "#005242" }}>
-                      {expense.time}
+                      {expense.time || "7:05am"}
                     </Typography>
 
                     <Typography
@@ -422,11 +516,13 @@ export default function ExpensePage() {
                         maxWidth: { xs: 130, sm: 160 },
                       }}
                     >
-                      {expense.title}
+                      {expense.title || expense.name}
                     </Typography>
 
                     <Typography sx={{ fontSize: "14px", color: "#005242" }}>
-                      {expense.category}
+                      {expense.category_name ||
+                        expense.category ||
+                        `Category ${expense.category_id || ""}`}
                     </Typography>
                   </Box>
                 </Box>
@@ -441,7 +537,7 @@ export default function ExpensePage() {
                     }}
                   >
                     <Box
-                      onClick={() => navigate(`/edit-expense/${expense.id}`)}
+                      onClick={() => handleEditExpense(expense)}
                       sx={{
                         textAlign: "center",
                         color: "#005242",
@@ -461,7 +557,10 @@ export default function ExpensePage() {
                     />
 
                     <Box
-                      onClick={() => handleDeleteExpense(expense.id)}
+                      onClick={() => {
+                        setSelectedExpenseToDelete(expense);
+                        setDeleteModalOpen(true);
+                      }}
                       sx={{
                         textAlign: "center",
                         color: "#005242",
@@ -488,7 +587,7 @@ export default function ExpensePage() {
                         color: "#005242",
                       }}
                     >
-                      {expense.amount}
+                      ${Number(String(expense.amount || 0).replace("$", "")).toFixed(2)}
                     </Typography>
 
                     <IconButton
@@ -517,7 +616,242 @@ export default function ExpensePage() {
           )}
         </Box>
 
-        {/* Footer */}
+        {filterModalOpen && (
+          <Box
+            sx={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.35)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 100,
+            }}
+          >
+            <Box
+              sx={{
+                width: 340,
+                minHeight: categoryDropdownOpen ? 390 : 260,
+                borderRadius: "35px",
+                background:
+                  "linear-gradient(180deg, #289173 0%, #A6C178 100%)",
+                color: "#fff",
+                px: 4,
+                py: 4,
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mb: 4,
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <FilterAltOutlinedIcon sx={{ fontSize: 34, color: "#fff" }} />
+
+                  <Typography sx={{ fontSize: 28, fontWeight: 700 }}>
+                    Filter
+                  </Typography>
+                </Box>
+
+                <Typography
+                  onClick={() => setFilterModalOpen(false)}
+                  sx={{
+                    fontSize: 34,
+                    color: "#005242",
+                    cursor: "pointer",
+                    lineHeight: 1,
+                  }}
+                >
+                  ×
+                </Typography>
+              </Box>
+
+              <Box sx={{ mb: 5 }}>
+                <Box
+                  onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+                  sx={{
+                    height: 48,
+                    borderRadius: 30,
+                    backgroundColor: "#fff",
+                    color: "#005242",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    px: 2,
+                    cursor: "pointer",
+                  }}
+                >
+                  <Typography sx={{ fontSize: 18 }}>
+                    {selectedCategoryFilter || "Category"}
+                  </Typography>
+
+                  <Typography sx={{ fontSize: 28 }}>
+                    {categoryDropdownOpen ? "▾" : "▸"}
+                  </Typography>
+                </Box>
+
+                {categoryDropdownOpen && (
+                  <Box
+                    sx={{
+                      mt: 2,
+                      borderRadius: "22px",
+                      backgroundColor: "#fff",
+                      p: 2,
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 1,
+                    }}
+                  >
+                    {categories.map((cat) => (
+                      <Button
+                        key={cat}
+                        onClick={() => setSelectedCategoryFilter(cat)}
+                        sx={{
+                          minWidth: 95,
+                          borderRadius: 2,
+                          border: "1px solid #93AF58",
+                          backgroundColor:
+                            selectedCategoryFilter === cat
+                              ? "#005242"
+                              : "#EAF4D4",
+                          color:
+                            selectedCategoryFilter === cat ? "#fff" : "#000",
+                          textTransform: "none",
+                          fontSize: 15,
+                        }}
+                      >
+                        {cat}
+                      </Button>
+                    ))}
+                  </Box>
+                )}
+              </Box>
+
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Button
+                  onClick={() => {
+                    setSelectedCategoryFilter("");
+                    setCategoryDropdownOpen(false);
+                    setFilterModalOpen(false);
+                  }}
+                  sx={{
+                    flex: 1,
+                    height: 56,
+                    borderRadius: 30,
+                    color: "#005242",
+                    fontSize: 22,
+                    fontWeight: 700,
+                    border: "2px solid white",
+                    backgroundColor: "rgba(255,255,255,0.3)",
+                    textTransform: "none",
+                  }}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    setCategoryDropdownOpen(false);
+                    setFilterModalOpen(false);
+                  }}
+                  sx={{
+                    flex: 1,
+                    height: 56,
+                    borderRadius: 30,
+                    color: "#fff",
+                    fontSize: 22,
+                    fontWeight: 700,
+                    backgroundColor: "#005242",
+                    textTransform: "none",
+                  }}
+                >
+                  Apply
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        )}
+
+        {deleteModalOpen && selectedExpenseToDelete && (
+          <Box
+            sx={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.35)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 100,
+            }}
+          >
+            <Box
+              sx={{
+                width: 340,
+                minHeight: 250,
+                borderRadius: "35px",
+                background:
+                  "linear-gradient(180deg, #289173 0%, #A6C178 100%)",
+                color: "#fff",
+                textAlign: "center",
+                px: 3,
+                py: 4,
+              }}
+            >
+              <Typography sx={{ fontSize: 30, fontWeight: 700 }}>
+                Delete Expense
+              </Typography>
+
+              <Typography sx={{ fontSize: 28, mb: 4 }}>
+                “{selectedExpenseToDelete.title || selectedExpenseToDelete.name}”?
+              </Typography>
+
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Button
+                  onClick={() => {
+                    setDeleteModalOpen(false);
+                    setSelectedExpenseToDelete(null);
+                  }}
+                  sx={{
+                    flex: 1,
+                    height: 55,
+                    borderRadius: 30,
+                    color: "#005242",
+                    fontSize: 22,
+                    fontWeight: 700,
+                    border: "2px solid white",
+                    backgroundColor: "rgba(255,255,255,0.3)",
+                    textTransform: "none",
+                  }}
+                >
+                  Cancel
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    handleDeleteExpense(getExpenseId(selectedExpenseToDelete));
+                    setDeleteModalOpen(false);
+                    setSelectedExpenseToDelete(null);
+                  }}
+                  sx={{
+                    flex: 1,
+                    height: 55,
+                    borderRadius: 30,
+                    color: "#fff",
+                    fontSize: 22,
+                    fontWeight: 700,
+                    backgroundColor: "#005242",
+                    textTransform: "none",
+                  }}
+                >
+                  Apply
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        )}
+
         <Box
           sx={{
             position: "fixed",

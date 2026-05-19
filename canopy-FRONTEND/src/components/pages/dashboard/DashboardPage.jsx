@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Typography,
-  CircularProgress,
-  IconButton,
-  LinearProgress,
-} from "@mui/material";
+import { Box, Typography, IconButton, LinearProgress } from "@mui/material";
 
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import CloseIcon from "@mui/icons-material/Close";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+
 import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
 import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 
-import FooterNav from "../../Footer/FooterNav";
+import FooterNav from "../../Footer/FooterNav.jsx";
 
 import seed1 from "../dashboard/plants/seed1.png";
 import phase1 from "../dashboard/plants/phase1.png";
@@ -22,460 +22,777 @@ import phase2 from "../dashboard/plants/phase2.png";
 import phase3 from "../dashboard/plants/phase3.png";
 import phase4 from "../dashboard/plants/phase4.png";
 
-export default function DashboardPage() {
-  const navigate = useNavigate();
+const API_URL = "http://localhost:8000";
 
-  const [goals, setGoals] = useState([]);
-  const [dashboardCards, setDashboardCards] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [cardIndex, setCardIndex] = useState(0);
+function getPlantImage(level) {
+  if (level <= 0) return seed1;
+  if (level === 1) return phase1;
+  if (level === 2) return phase2;
+  if (level === 3) return phase3;
+  return phase4;
+}
 
-  useEffect(() => {
-    const savedGoals = JSON.parse(localStorage.getItem("goals")) || [];
-    const savedBudgets = JSON.parse(localStorage.getItem("budgets")) || {};
-    const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+function CircularGoalProgress({ percent }) {
+  const size = 240;
+  const center = size / 2;
+  const radius = 100;
+  const stroke = 14;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (percent / 100) * circumference;
 
-    setGoals(savedGoals);
-    setDashboardCards(
-      createDashboardCards(savedBudgets, savedExpenses, savedGoals)
-    );
-  }, []);
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <circle
+        cx={center}
+        cy={center}
+        r={radius}
+        stroke="#FFD84D"
+        strokeWidth={stroke}
+        fill="#FFFBD8"
+      />
 
-  const currentGoal = goals[currentIndex];
+      <circle
+        cx={center}
+        cy={center}
+        r={radius}
+        stroke="#005242"
+        strokeWidth={stroke}
+        fill="transparent"
+        strokeLinecap="round"
+        strokeDasharray={circumference}
+        strokeDashoffset={strokeDashoffset}
+        transform={`rotate(-90 ${center} ${center})`}
+      />
+    </svg>
+  );
+}
 
-  // Automatically calculates circular progress
-  const progress = currentGoal
-    ? Math.min(
-        Math.round(
-          (Number(currentGoal.savedAmount || 0) /
-            Number(currentGoal.targetAmount || 1)) *
-            100
-        ),
-        100
-      )
-    : 0;
-
-  function nextGoal() {
-    if (goals.length === 0) return;
-    setCurrentIndex((prev) => (prev + 1) % goals.length);
-  }
-
-  function previousGoal() {
-    if (goals.length === 0) return;
-    setCurrentIndex((prev) => (prev === 0 ? goals.length - 1 : prev - 1));
-  }
-
-  function handleGoalClick() {
-    if (currentGoal) {
-      navigate(`/goal/${currentGoal.id}`);
-    } else {
-      navigate("/goal");
-    }
-  }
-
-  function handleCardScroll(event) {
-    const cardWidth = 286;
-    setCardIndex(Math.round(event.target.scrollLeft / cardWidth));
-  }
-
-  function getPlantImage() {
-    if (!currentGoal || progress === 0) return seed1;
-    if (progress < 40) return phase1;
-    if (progress < 60) return phase2;
-    if (progress < 85) return phase3;
-    return phase4;
-  }
+function InsightCard({ title }) {
+  const changes = [
+    { name: "Food", value: "+12%", type: "up" },
+    { name: "Transport", value: "-8%", type: "down" },
+    { name: "Shopping", value: "+5%", type: "up" },
+  ];
 
   return (
     <Box
       sx={{
-        width: 390,
-        minHeight: "100svh",
-        mx: "auto",
-        bgcolor: "#F7F9F2",
-        position: "relative",
-        overflowX: "hidden",
-        pb: 13,
+        backgroundColor: "#DDF2C4",
+        borderRadius: "14px",
+        p: "22px",
+        mb: "24px",
+        boxShadow: "0 6px 12px rgba(0,0,0,0.18)",
       }}
     >
-      {/* Status bar */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          px: 3,
-          pt: 2,
-          mb: 2,
-        }}
-      >
-        <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
-
-        <Box sx={{ display: "flex", gap: 0.3 }}>
-          <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
-          <WifiIcon sx={{ fontSize: 14 }} />
-          <BatteryFullIcon sx={{ fontSize: 17 }} />
-        </Box>
-      </Box>
-
-      {/* Greeting */}
-      <Typography
-        sx={{
-          textAlign: "center",
-          mt: 4,
-          fontSize: 28,
-          fontWeight: 700,
-          fontFamily: "Georgia, serif",
-          color: "#004D40",
-        }}
-      >
-        Good Morning, Hye
+      <Typography sx={{ fontSize: "28px", fontWeight: 800, color: "#005242" }}>
+        {title}
       </Typography>
 
-      {/* Goal preview circle */}
+      <Typography sx={{ fontSize: "20px", fontWeight: 800, color: "#005242", mb: 2 }}>
+        Top 3 changes
+      </Typography>
+
+      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+        {changes.map((item) => (
+          <Box key={item.name} sx={{ textAlign: "center" }}>
+            <Typography sx={{ fontSize: "16px", fontWeight: 700, color: "#005242" }}>
+              {item.name}
+            </Typography>
+
+            <Box
+              sx={{
+                width: 44,
+                height: 44,
+                borderRadius: "50%",
+                backgroundColor: item.type === "up" ? "#FFCF24" : "#289173",
+                color: "#fff",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                mx: "auto",
+                my: 1,
+              }}
+            >
+              {item.type === "up" ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />}
+            </Box>
+
+            <Typography sx={{ fontSize: "18px", fontWeight: 800, color: "#005242" }}>
+              {item.value}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  );
+}
+
+function BudgetOverviewModal({ subtitle, period, spent, description, items, onClose }) {
+  return (
+    <Box
+      sx={{
+        position: "fixed",
+        inset: 0,
+        backgroundColor: "rgba(0,0,0,0.35)",
+        zIndex: 120,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        p: 2,
+      }}
+    >
       <Box
         sx={{
-          mt: 7,
+          width: "100%",
+          maxWidth: 390,
+          maxHeight: "90vh",
+          overflowY: "auto",
+          backgroundColor: "#FFFDF8",
+          borderRadius: "34px",
+          p: "24px",
           position: "relative",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          "&::-webkit-scrollbar": { display: "none" },
         }}
       >
         <IconButton
-          onClick={previousGoal}
+          onClick={onClose}
           sx={{
             position: "absolute",
-            left: 12,
-            color: "#168C6C",
+            top: 16,
+            right: 16,
+            backgroundColor: "#F4F4F4",
+            width: 54,
+            height: 54,
           }}
         >
-          <ChevronLeftIcon />
+          <CloseIcon sx={{ fontSize: 36, color: "#111" }} />
         </IconButton>
 
+        <Typography
+          sx={{
+            fontSize: "32px",
+            fontWeight: 900,
+            lineHeight: 1.05,
+            color: "#252642",
+            mt: "58px",
+            mb: "12px",
+            textAlign: "center",
+          }}
+        >
+          CANOPY
+          <br />
+          BUDGETING
+        </Typography>
+
+        <Typography
+          sx={{
+            fontSize: "16px",
+            fontWeight: 800,
+            color: "#252642",
+            textAlign: "center",
+            mb: "24px",
+          }}
+        >
+          {subtitle}
+        </Typography>
+
         <Box
-          onClick={handleGoalClick}
+          sx={{
+            backgroundColor: "#FFFFFF",
+            borderRadius: "28px",
+            p: "20px",
+            boxShadow: "0 8px 22px rgba(0,0,0,0.12)",
+          }}
+        >
+          <Typography sx={{ fontSize: "24px", fontWeight: 900, color: "#005242", mb: 3 }}>
+            {period}
+          </Typography>
+
+          <Typography sx={{ fontSize: "34px", fontWeight: 900, color: "#005242" }}>
+            {spent}
+          </Typography>
+
+          <Typography sx={{ color: "#888", fontSize: "16px", mb: 3 }}>
+            {description}
+          </Typography>
+
+          {items.map((item) => (
+            <Box
+              key={item.name}
+              sx={{
+                backgroundColor: "#fff",
+                borderRadius: "16px",
+                p: 2,
+                mb: 2,
+                boxShadow: "0 4px 12px rgba(0,0,0,0.10)",
+              }}
+            >
+              <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
+                <Box
+                  sx={{
+                    width: 52,
+                    height: 52,
+                    borderRadius: "50%",
+                    backgroundColor: item.color,
+                    flexShrink: 0,
+                  }}
+                />
+
+                <Box>
+                  <Typography sx={{ fontSize: "18px", fontWeight: 900, color: "#005242" }}>
+                    {item.name}
+                  </Typography>
+
+                  <Typography sx={{ color: "#888", fontSize: "14px" }}>
+                    {item.budgetLabel}
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Typography sx={{ mt: 2, fontSize: "16px", fontWeight: 800, color: "#005242" }}>
+                Spent: {item.spent}
+              </Typography>
+
+              <LinearProgress
+                variant="determinate"
+                value={item.progress}
+                sx={{
+                  height: 8,
+                  borderRadius: 10,
+                  mt: 1,
+                  backgroundColor: "#E6F5EE",
+                  "& .MuiLinearProgress-bar": { backgroundColor: "#45D495" },
+                }}
+              />
+            </Box>
+          ))}
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+export default function DashboardPage() {
+  const sampleGoals = [
+    { id: 1, title: "Tuition", saved: 0, target: 1000, level: 1 },
+    { id: 2, title: "Nike Shoe", saved: 50, target: 130, level: 2 },
+    { id: 3, title: "Airpods", saved: 150, target: 250, level: 3 },
+    { id: 4, title: "Korea", saved: 1500, target: 1800, level: 4 },
+  ];
+
+  const [goals, setGoals] = useState(sampleGoals);
+  const [goalIndex, setGoalIndex] = useState(0);
+  const [openCardMenu, setOpenCardMenu] = useState(null);
+  const [dailyBudgetOpen, setDailyBudgetOpen] = useState(false);
+  const [monthlyBudgetOpen, setMonthlyBudgetOpen] = useState(false);
+  const [addCardOpen, setAddCardOpen] = useState(false);
+
+  useEffect(() => {
+    async function loadGoalsFromBackend() {
+      try {
+        const response = await fetch(`${API_URL}/api/goals`, {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error("Could not load goals from backend");
+        }
+
+        const data = await response.json();
+
+        const formattedGoals = data.map((goal) => ({
+          id: goal.id || goal.goalId,
+          title: goal.name || goal.title || goal.goalName || "Goal",
+          saved: Number(goal.savedAmount || goal.saved || goal.currentAmount || 0),
+          target: Number(goal.targetAmount || goal.target || goal.goalAmount || 1),
+          level: Number(goal.level || goal.goalLevel || 1),
+        }));
+
+        if (formattedGoals.length > 0) {
+          setGoals(formattedGoals);
+          setGoalIndex(0);
+        }
+      } catch (error) {
+        console.log("Dashboard backend goals error:", error);
+        setGoals(sampleGoals);
+      }
+    }
+
+    loadGoalsFromBackend();
+  }, []);
+
+  const activeGoal = goals[goalIndex] || sampleGoals[0];
+
+  const progressPercent = Math.min(
+    100,
+    Math.round((activeGoal.saved / activeGoal.target) * 100)
+  );
+
+  const dashboardCards = [
+    {
+      id: "daily",
+      title: "Daily Budget",
+      amount: "$50",
+      used: "$45",
+      remaining: "$5",
+      progress: 85,
+    },
+    {
+      id: "monthly",
+      title: "Monthly Budget",
+      amount: "$500",
+      used: "$320",
+      remaining: "$180",
+      progress: 64,
+    },
+    {
+      id: "recent",
+      title: "Recent Expense",
+      amount: "$9.50",
+      used: "Starbucks",
+      remaining: "Drink",
+      progress: 40,
+    },
+  ];
+
+  const dailyOverviewItems = [
+    { name: "Food & Drink", budgetLabel: "Daily: $20", spent: "$15", progress: 75, color: "#FFD057" },
+    { name: "Transportation", budgetLabel: "Daily: $10", spent: "$5", progress: 50, color: "#5AA9FF" },
+    { name: "Shopping", budgetLabel: "Daily: $20", spent: "$25", progress: 100, color: "#FF9A57" },
+  ];
+
+  const monthlyOverviewItems = [
+    { name: "Food & Drink", budgetLabel: "Monthly: $1000", spent: "$500", progress: 50, color: "#FFD057" },
+    { name: "Transportation", budgetLabel: "Monthly: $600", spent: "$300", progress: 50, color: "#5AA9FF" },
+    { name: "Housing", budgetLabel: "Monthly: $800", spent: "$650", progress: 80, color: "#FF9A57" },
+  ];
+
+  const handlePrevGoal = () => {
+    setGoalIndex((prev) => (prev === 0 ? goals.length - 1 : prev - 1));
+  };
+
+  const handleNextGoal = () => {
+    setGoalIndex((prev) => (prev === goals.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleCardClick = (card) => {
+    if (card.id === "daily") setDailyBudgetOpen(true);
+    if (card.id === "monthly") setMonthlyBudgetOpen(true);
+  };
+
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: "#FAFCF7",
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: 430,
+          minHeight: "100vh",
+          position: "relative",
+          overflowX: "hidden",
+          px: "20px",
+          pt: "22px",
+          pb: "120px",
+        }}
+      >
+        <Box sx={{ display: "flex", justifyContent: "space-between", mb: "24px" }}>
+          <Typography sx={{ fontSize: "20px", fontWeight: 700 }}>9:41</Typography>
+
+          <Box sx={{ display: "flex", gap: 0.5, color: "#253527" }}>
+            <SignalCellular4BarIcon />
+            <WifiIcon />
+            <BatteryFullIcon />
+          </Box>
+        </Box>
+
+        <Typography
+          sx={{
+            fontSize: "30px",
+            fontWeight: 700,
+            textAlign: "center",
+            fontFamily: "serif",
+            mb: "18px",
+          }}
+        >
+          Good Morning, Hye
+        </Typography>
+
+        <Box
           sx={{
             position: "relative",
-            width: 260,
             height: 260,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            cursor: "pointer",
+            mb: "18px",
           }}
         >
-          {/* Yellow full circle */}
-          <CircularProgress
-            variant="determinate"
-            value={100}
-            size={235}
-            thickness={4.5}
+          <IconButton
+            onClick={handlePrevGoal}
+            sx={{ position: "absolute", left: 0, color: "#289173", zIndex: 5 }}
+          >
+            <KeyboardArrowLeftIcon sx={{ fontSize: 40 }} />
+          </IconButton>
+
+          <Box
             sx={{
-              color: "#FFD84D",
-              position: "absolute",
+              position: "relative",
+              width: 240,
+              height: 240,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-          />
+          >
+            <CircularGoalProgress percent={progressPercent} />
 
-          {/* Green automatic progress circle */}
-          {currentGoal && (
-            <CircularProgress
-              variant="determinate"
-              value={progress}
-              size={235}
-              thickness={4.5}
-              sx={{
-                color: "#004D40",
-                position: "absolute",
-                transform: "rotate(-90deg)",
-                transition: "all 0.5s ease",
-              }}
-            />
-          )}
-
-          {/* Percent bubble */}
-          {currentGoal && (
             <Box
               sx={{
                 position: "absolute",
-                top: 10,
-                right: 50,
-                width: 42,
-                height: 42,
+                top: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: 50,
+                height: 50,
                 borderRadius: "50%",
-                bgcolor: "#004D40",
-                color: "white",
+                backgroundColor: "#005242",
+                color: "#fff",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                fontWeight: 700,
-                fontSize: 12,
-                zIndex: 2,
+                fontSize: "17px",
+                fontWeight: 800,
+                zIndex: 3,
               }}
             >
-              {progress}%
+              {progressPercent}%
             </Box>
-          )}
 
-          {/* Inner circle */}
+            <Box
+              sx={{
+                position: "absolute",
+                textAlign: "center",
+                top: 42,
+                left: 0,
+                right: 0,
+              }}
+            >
+              <Box
+                component="img"
+                key={activeGoal.id}
+                src={getPlantImage(activeGoal.level)}
+                alt={activeGoal.title}
+                sx={{
+                  width: 88,
+                  height: 88,
+                  objectFit: "contain",
+                  mb: 0.5,
+                  transformOrigin: "bottom center",
+                  animation: "plantSwing 1.8s ease-in-out infinite",
+                  "@keyframes plantSwing": {
+                    "0%": { transform: "rotate(-4deg) translateX(-2px)" },
+                    "50%": { transform: "rotate(4deg) translateX(2px)" },
+                    "100%": { transform: "rotate(-4deg) translateX(-2px)" },
+                  },
+                }}
+              />
+
+              <Typography
+                sx={{
+                  fontSize: "30px",
+                  fontWeight: 900,
+                  color: "#005242",
+                  lineHeight: 1,
+                  mt: 1,
+                }}
+              >
+                {activeGoal.title}
+              </Typography>
+
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  fontWeight: 700,
+                  color: "#005242",
+                  mt: 0.3,
+                }}
+              >
+                ${activeGoal.saved} / {activeGoal.target}
+              </Typography>
+            </Box>
+          </Box>
+
+          <IconButton
+            onClick={handleNextGoal}
+            sx={{ position: "absolute", right: 0, color: "#289173", zIndex: 5 }}
+          >
+            <KeyboardArrowRightIcon sx={{ fontSize: 40 }} />
+          </IconButton>
+        </Box>
+
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 1, mb: "26px" }}>
+          {goals.map((goal, index) => (
+            <Box
+              key={goal.id}
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                backgroundColor: index === goalIndex ? "#289173" : "#A7BF75",
+              }}
+            />
+          ))}
+        </Box>
+
+        <Box sx={{ display: "flex", justifyContent: "flex-start", mb: "16px" }}>
+          <Typography sx={{ fontSize: "30px", fontWeight: 800, color: "#005242" }}>
+            Dashboard
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            overflowX: "auto",
+            gap: 2,
+            mb: "28px",
+            pb: 1,
+            mx: "-20px",
+            px: "20px",
+            "&::-webkit-scrollbar": { display: "none" },
+          }}
+        >
+          {dashboardCards.map((card) => (
+            <Box
+              key={card.id}
+              onClick={() => handleCardClick(card)}
+              sx={{
+                minWidth: 310,
+                backgroundColor: "#DDF2C4",
+                borderRadius: "14px",
+                p: "18px",
+                boxShadow: "0 6px 12px rgba(0,0,0,0.15)",
+                cursor: card.id === "daily" || card.id === "monthly" ? "pointer" : "default",
+                position: "relative",
+                flexShrink: 0,
+              }}
+            >
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Typography sx={{ fontSize: "24px", fontWeight: 800, color: "#005242" }}>
+                  {card.title}
+                </Typography>
+
+                <IconButton
+                  size="small"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setOpenCardMenu(openCardMenu === card.id ? null : card.id);
+                  }}
+                >
+                  <MoreHorizIcon sx={{ color: "#289173" }} />
+                </IconButton>
+              </Box>
+
+              {openCardMenu === card.id && (
+                <Box
+                  onClick={(event) => event.stopPropagation()}
+                  sx={{
+                    position: "absolute",
+                    top: 52,
+                    right: 16,
+                    backgroundColor: "#FAFCF7",
+                    border: "1px solid #1C9A72",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    zIndex: 10,
+                    boxShadow: "0 5px 12px rgba(0,0,0,0.15)",
+                  }}
+                >
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 2, py: 1.2, color: "#005242" }}>
+                    <EditIcon sx={{ fontSize: 18 }} />
+                    <Typography sx={{ fontWeight: 700 }}>Edit</Typography>
+                  </Box>
+
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 2, py: 1.2, color: "#005242" }}>
+                    <DeleteOutlineOutlinedIcon sx={{ fontSize: 18 }} />
+                    <Typography sx={{ fontWeight: 700 }}>Delete</Typography>
+                  </Box>
+                </Box>
+              )}
+
+              <Typography sx={{ fontSize: "38px", fontWeight: 800, color: "#000", mb: 1 }}>
+                {card.amount}
+              </Typography>
+
+              <LinearProgress
+                variant="determinate"
+                value={card.progress}
+                sx={{
+                  height: 13,
+                  borderRadius: 10,
+                  backgroundColor: "#FFF7D7",
+                  "& .MuiLinearProgress-bar": { backgroundColor: "#005242" },
+                }}
+              />
+
+              <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+                <Box>
+                  <Typography sx={{ fontSize: 12, fontWeight: 700 }}>Used</Typography>
+                  <Typography sx={{ fontSize: "24px", fontWeight: 800, color: "#005242" }}>
+                    {card.used}
+                  </Typography>
+                </Box>
+
+                <Box sx={{ textAlign: "right" }}>
+                  <Typography sx={{ fontSize: 12, fontWeight: 700 }}>Remaining</Typography>
+                  <Typography sx={{ fontSize: "24px", fontWeight: 800, color: "#005242" }}>
+                    {card.remaining}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+          ))}
+
           <Box
+            onClick={() => setAddCardOpen(true)}
             sx={{
-              width: 195,
-              height: 195,
-              borderRadius: "50%",
-              bgcolor: "#FFF8CC",
+              minWidth: 310,
+              height: 190,
+              backgroundColor: "#DDF2C4",
+              borderRadius: "14px",
+              p: "18px",
+              boxShadow: "0 6px 12px rgba(0,0,0,0.15)",
+              cursor: "pointer",
               display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
               alignItems: "center",
-              textAlign: "center",
-              zIndex: 1,
+              justifyContent: "center",
+              gap: 2,
+              flexShrink: 0,
             }}
           >
             <Box
-              component="img"
-              src={getPlantImage()}
-              alt="goal plant"
               sx={{
-                width: 95,
-                height: 95,
-                objectFit: "contain",
-              }}
-            />
-
-            <Typography
-              sx={{
-                mt: 1,
-                fontSize: 24,
+                width: 64,
+                height: 64,
+                borderRadius: "50%",
+                backgroundColor: "#FFFBD8",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "44px",
+                color: "#005242",
                 fontWeight: 800,
-                color: "#004D40",
               }}
             >
-              {currentGoal ? currentGoal.title : "Click here"}
-            </Typography>
+              +
+            </Box>
 
-            <Typography
-              sx={{
-                fontSize: 14,
-                fontWeight: 700,
-                color: "#004D40",
-              }}
-            >
-              {currentGoal
-                ? `$${currentGoal.savedAmount || 0} / ${
-                    currentGoal.targetAmount || 0
-                  }`
-                : "to set your goal"}
+            <Typography sx={{ fontSize: "28px", fontWeight: 800, color: "#005242" }}>
+              Add New Card
             </Typography>
           </Box>
         </Box>
 
-        <IconButton
-          onClick={nextGoal}
-          sx={{
-            position: "absolute",
-            right: 12,
-            color: "#168C6C",
-          }}
-        >
-          <ChevronRightIcon />
-        </IconButton>
-      </Box>
+        {dailyBudgetOpen && (
+          <BudgetOverviewModal
+            subtitle="DAILY SPENDING OVERVIEW"
+            period="Today"
+            spent="$45"
+            description="Spent from $50 daily budget"
+            items={dailyOverviewItems}
+            onClose={() => setDailyBudgetOpen(false)}
+          />
+        )}
 
-      {/* Bottom cards */}
-      <Box
-        onScroll={handleCardScroll}
-        sx={{
-          mt: 5,
-          display: "flex",
-          gap: 2,
-          overflowX: "auto",
-          px: 2,
-          pb: 2,
-          scrollSnapType: "x mandatory",
-          "&::-webkit-scrollbar": {
-            display: "none",
-          },
-        }}
-      >
-        {dashboardCards.length > 0 ? (
-          dashboardCards.map((card) => (
-            <DashboardCard key={card.id} card={card} />
-          ))
-        ) : (
+        {monthlyBudgetOpen && (
+          <BudgetOverviewModal
+            subtitle="MONTHLY SPENDING OVERVIEW"
+            period="This Month"
+            spent="$320"
+            description="Spent from $500 monthly budget"
+            items={monthlyOverviewItems}
+            onClose={() => setMonthlyBudgetOpen(false)}
+          />
+        )}
+
+        {addCardOpen && (
           <Box
             sx={{
-              minWidth: 270,
-              height: 160,
-              borderRadius: 3,
-              bgcolor: "#DFF0BF",
-              boxShadow: "0px 6px 10px rgba(0,0,0,0.25)",
-              p: 3,
-              boxSizing: "border-box",
-              scrollSnapAlign: "center",
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.35)",
+              zIndex: 130,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              p: 2,
             }}
           >
-            <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 22 }}>
-              No saved values yet
-            </Typography>
+            <Box
+              sx={{
+                width: "100%",
+                maxWidth: 390,
+                maxHeight: "88vh",
+                overflowY: "auto",
+                borderRadius: "34px",
+                background: "linear-gradient(180deg, #289173 0%, #A7BF75 100%)",
+                p: "24px",
+                position: "relative",
+                "&::-webkit-scrollbar": { display: "none" },
+              }}
+            >
+              <Box
+                sx={{
+                  width: 190,
+                  height: 7,
+                  borderRadius: 10,
+                  backgroundColor: "#fff",
+                  mx: "auto",
+                  mb: 4,
+                }}
+              />
 
-            <Typography sx={{ mt: 2, color: "#004D40", fontSize: 15 }}>
-              Add a goal, budget, or expense to see dashboard previews.
-            </Typography>
+              <IconButton
+                onClick={() => setAddCardOpen(false)}
+                sx={{
+                  position: "absolute",
+                  top: 16,
+                  right: 16,
+                  backgroundColor: "#F4F4F4",
+                  width: 50,
+                  height: 50,
+                }}
+              >
+                <CloseIcon sx={{ fontSize: 32 }} />
+              </IconButton>
+
+              <InsightCard title="Weekly Insight" />
+              <InsightCard title="Monthly Insight" />
+            </Box>
           </Box>
         )}
-      </Box>
 
-      {/* Dots */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          gap: 1,
-          mt: 1,
-        }}
-      >
-        {dashboardCards.map((card, index) => (
-          <Box
-            key={card.id}
-            sx={{
-              width: 10,
-              height: 10,
-              borderRadius: "50%",
-              bgcolor: cardIndex === index ? "#004D40" : "#9AB46B",
-            }}
-          />
-        ))}
-      </Box>
-
-      <FooterNav />
-    </Box>
-  );
-}
-
-function DashboardCard({ card }) {
-  const progress =
-    card.amount > 0 ? Math.min((card.used / card.amount) * 100, 100) : 0;
-
-  return (
-    <Box
-      sx={{
-        minWidth: 270,
-        height: 160,
-        borderRadius: 3,
-        bgcolor: "#DFF0BF",
-        boxShadow: "0px 6px 10px rgba(0,0,0,0.25)",
-        p: 3,
-        boxSizing: "border-box",
-        scrollSnapAlign: "center",
-      }}
-    >
-      <Typography sx={{ color: "#004D40", fontWeight: 700, fontSize: 24 }}>
-        {card.title}
-      </Typography>
-
-      <Typography sx={{ fontWeight: 800, fontSize: 36, color: "#004D40" }}>
-        ${card.amount}
-      </Typography>
-
-      <LinearProgress
-        variant="determinate"
-        value={progress}
-        sx={{
-          mt: 1.5,
-          height: 12,
-          borderRadius: 10,
-          bgcolor: "#FFF8CC",
-          "& .MuiLinearProgress-bar": {
-            bgcolor: "#004D40",
-          },
-        }}
-      />
-
-      <Box sx={{ display: "flex", justifyContent: "space-between", mt: 1.5 }}>
-        <Box>
-          <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
-            {card.leftLabel || "Used"}
-          </Typography>
-
-          <Typography sx={{ fontSize: 18, fontWeight: 700, color: "#004D40" }}>
-            ${card.used}
-          </Typography>
-        </Box>
-
-        <Box sx={{ textAlign: "right" }}>
-          <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
-            {card.rightLabel || "Remaining"}
-          </Typography>
-
-          <Typography sx={{ fontSize: 18, fontWeight: 700, color: "#004D40" }}>
-            ${card.remaining}
-          </Typography>
+        <Box
+          sx={{
+            position: "fixed",
+            bottom: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "100%",
+            maxWidth: 430,
+            zIndex: 20,
+          }}
+        >
+          <FooterNav />
         </Box>
       </Box>
     </Box>
   );
-}
-
-function createDashboardCards(budgets, expenses, goals) {
-  const cards = [];
-
-  const totalExpenses = expenses.reduce((total, expense) => {
-    return total + Number(expense.amount || 0);
-  }, 0);
-
-  if (budgets.dailyBudget) {
-    const dailyBudget = Number(budgets.dailyBudget);
-
-    cards.push({
-      id: "daily-budget",
-      title: "Daily Budget",
-      amount: dailyBudget,
-      used: totalExpenses,
-      remaining: Math.max(dailyBudget - totalExpenses, 0),
-    });
-  }
-
-  if (budgets.monthlyBudget) {
-    const monthlyBudget = Number(budgets.monthlyBudget);
-
-    cards.push({
-      id: "monthly-budget",
-      title: "Monthly Budget",
-      amount: monthlyBudget,
-      used: totalExpenses,
-      remaining: Math.max(monthlyBudget - totalExpenses, 0),
-    });
-  }
-
-  if (expenses.length > 0) {
-    const recentExpense = expenses[expenses.length - 1];
-
-    cards.push({
-      id: "recent-expense",
-      title: "Recent Expense",
-      amount: Number(recentExpense.amount || 0),
-      used: Number(recentExpense.amount || 0),
-      remaining: 0,
-      leftLabel: "Amount",
-      rightLabel: "Latest",
-    });
-  }
-
-  if (goals.length > 0) {
-    const firstGoal = goals[0];
-
-    cards.push({
-      id: "goal-progress",
-      title: "Goal Progress",
-      amount: Number(firstGoal.targetAmount || 0),
-      used: Number(firstGoal.savedAmount || 0),
-      remaining: Math.max(
-        Number(firstGoal.targetAmount || 0) -
-          Number(firstGoal.savedAmount || 0),
-        0
-      ),
-    });
-  }
-
-  return cards;
 }
