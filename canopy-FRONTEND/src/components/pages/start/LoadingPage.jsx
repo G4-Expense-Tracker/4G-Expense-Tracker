@@ -26,9 +26,17 @@ export default function LoadingPage() {
     loadSession();
   }, []);
 
+  function handleClick() {
+    if (isLoggedIn) {
+      navigate("/home");
+    } else {
+      navigate("/main");
+    }
+  }
+
   return (
     <Box
-      onClick={() => navigate("/main")}
+      onClick={handleClick}
       sx={{
         width: "100%",
         maxWidth: 390,
