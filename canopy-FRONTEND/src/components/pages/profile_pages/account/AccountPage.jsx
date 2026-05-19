@@ -29,6 +29,28 @@ export default function AccountPage() {
 
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    async function getUser() {
+      try {
+        const sessionData = await getUserSession();
+
+        setFormData({
+          first_name: sessionData.user.first_name || "",
+          last_name: sessionData.user.last_name || "",
+          email: sessionData.user.email || "",
+          phone_number: sessionData.user.phone_number || "",
+          password: "",
+        });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    getUser();
+  }, []);
+
   return (
     <Box
       sx={{
