@@ -22,6 +22,8 @@ import phase2 from "../dashboard/plants/phase2.png";
 import phase3 from "../dashboard/plants/phase3.png";
 import phase4 from "../dashboard/plants/phase4.png";
 
+import { getUserSession } from "../../../api/users";
+
 export default function DashboardPage() {
   const navigate = useNavigate();
 
@@ -29,6 +31,9 @@ export default function DashboardPage() {
   const [dashboardCards, setDashboardCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [cardIndex, setCardIndex] = useState(0);
+
+  const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
     const savedGoals = JSON.parse(localStorage.getItem("goals")) || [];
