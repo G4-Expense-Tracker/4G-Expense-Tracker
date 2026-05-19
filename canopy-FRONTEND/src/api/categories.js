@@ -33,7 +33,16 @@ export async function getSingleCategory() {
 }
 
 export async function editSingleCategory() {
+    const res = await fetch(`${API}/categories/${categoryId}/edit`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(updatedInfo),
+    });
 
+    const data = await res.json();
 
     if (!res.ok) {
         throw new Error(data.error || "Failed to edit category");
