@@ -3,6 +3,10 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 function Change({ category, percentChange }) {
+
+    const isIncrease = percentChange > 0
+    const isDecrease = percentChange < 0
+    
     return (
         <Box>
 

@@ -9,6 +9,7 @@ import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 import { useNavigate, useLocation } from "react-router-dom";
 
