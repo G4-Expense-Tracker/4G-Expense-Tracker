@@ -53,11 +53,28 @@ function Top3() {
     const prevMonthStart = prev.firstOfMonth
     const prevMonthEnd = prev.lastOfMonth
 
+    /* if no data in db for past month: */
+    if(!top3Changes){
+        return(
+            <Box>
+                <Typography variant="body1" component="p">
+                    No Data to Show.
+                </Typography>
+            </Box>
+        )
+    }
+
     return (
 
-        <Box>
+        <Box sx={{
+            /* change these eventually */
+            backgroundColor:"lightgreen"
+        }}>
             {/* HEADER */}
-            <Box>
+            <Box
+            sx={{
+                display:"flex"
+            }}>
                 <Typography variant="h2" component="h2">
                     Top 3 Changes
                 </Typography>
@@ -68,7 +85,10 @@ function Top3() {
             </Box>
 
             {/* BODY */}
-            <Box>
+            <Box 
+            sx={{
+                display:"flex"
+            }}>
                 {top3Changes.map((change) => (
                     <Change
 

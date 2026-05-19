@@ -6,9 +6,12 @@ function Change({ category, percentChange }) {
 
     const isIncrease = percentChange > 0
     const isDecrease = percentChange < 0
-    
+
     return (
-        <Box>
+        <Box
+        sx={{
+            textAlign:"center"
+        }}>
 
             <Typography variant="h3" component="h3">
                 {category}
@@ -18,7 +21,7 @@ function Change({ category, percentChange }) {
                 {/* arrow logic */}
                 {isIncrease && (
                     /* add a rounded border for circle */
-                    <ArrowUpwardIcon sx={{ color: "yellow", fontSize: 18 }} />
+                    <ArrowUpwardIcon sx={{ color: "red", fontSize: 18 }} />
                 )}
 
                 {isDecrease && (
@@ -30,7 +33,7 @@ function Change({ category, percentChange }) {
                 <Typography
                     sx={{
                         color: isIncrease
-                            ? "yellow"
+                            ? "red"
                             : isDecrease
                                 ? "green"
                                 : "text.primary",
