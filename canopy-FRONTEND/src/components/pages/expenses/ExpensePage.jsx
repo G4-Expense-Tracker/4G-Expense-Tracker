@@ -268,46 +268,7 @@ export default function ExpensePage() {
         </Box>
 
         {/* Tabs */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            px: { xs: "28px", sm: "35px" },
-            mb: "28px",
-          }}
-        >
-          <Box sx={{ textAlign: "center" }}>
-            <Typography
-              sx={{
-                fontSize: { xs: "24px", sm: "26px" },
-                fontWeight: 700,
-                color: "#004B3B",
-              }}
-            >
-              Expense
-            </Typography>
-
-            <Box
-              sx={{
-                width: { xs: 130, sm: 145 },
-                height: 5,
-                borderRadius: "10px",
-                backgroundColor: "#A7C26E",
-                mt: "12px",
-              }}
-            />
-          </Box>
-
-          <Typography
-            sx={{
-              fontSize: { xs: "24px", sm: "26px" },
-              fontWeight: 700,
-              color: "#91AE5F",
-            }}
-          >
-            Insight
-          </Typography>
-        </Box>
+        <ExpenseHeader/>
 
         <Box
           onClick={() =>
