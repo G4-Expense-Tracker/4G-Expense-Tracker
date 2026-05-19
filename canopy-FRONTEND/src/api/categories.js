@@ -1,7 +1,14 @@
 const API = import.meta.env.VITE_APP_BASE_URL
 
 export async function createNewCategory() {
-
+    const res = await fetch(`${API}/categories/new`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(categoryData),
+    });
 
     if (!res.ok) {
         throw new Error(data.error || "Failed to create new category");
