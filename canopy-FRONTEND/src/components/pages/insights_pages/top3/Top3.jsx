@@ -1,10 +1,13 @@
 import { Box, Typography } from "@mui/material"
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import Change from "./Change";
 
 function Top3() {
     const top3Changes = [
         {
-            category_id: 1
+            category_id: row.category_id,
+            current: curr,
+            previous: prev,
+            percentChange,
         }
 
     ]
@@ -27,10 +30,8 @@ function Top3() {
             </Box>
 
             {/* BODY */}
-            <Box>
-                {/* change one */}
+            <Change data={top3Changes} />
 
-            </Box>
         </Box>
 
     )
