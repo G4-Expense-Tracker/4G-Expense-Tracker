@@ -11,97 +11,42 @@ import VarTaskCard from "./TaskCard/VarTaskCard"
 import Congrats from "./TaskCard/Congrats"
 import { getAllGoals } from "../../../api/goals"
 
-// DATABASE CALLS
-// these objects are just for ui and to show the shape of the object we want from the db
-
-const goals = [
-    {
-        id: 1,
-        name: "Tuition",
-        targetAmount: 200,
-        progress: 40,
-        level: 1
-    },
-
-    {
-        id: 2,
-        name: "Korea",
-        targetAmount: 1500,
-        progress: 500,
-        level: 2
-    },
-
-    {
-        id: 3,
-        name: "Air Pods",
-        targetAmount: 360,
-        progress: 360,
-        level: 3
-    },
-
-    {
-        id: 4,
-        name: "Nikes",
-        targetAmount: 90,
-        progress: 50,
-        level: 5
-    }
+// mock fallback (temporary)
+const fallbackGoals = [
+    { id: 1, name: "Tuition", targetAmount: 200, progress: 40, level: 1 },
+    { id: 2, name: "Korea", targetAmount: 1500, progress: 500, level: 2 },
+    { id: 3, name: "Air Pods", targetAmount: 360, progress: 360, level: 3 },
+    { id: 4, name: "Nikes", targetAmount: 90, progress: 50, level: 5 }
 ]
 
 const taskProgress = {
-    1: {
-        1: 1,
-        2: 3,
-        3: 0,
-        4: 2,
-        5: 1
-    },
-
-    2: {
-        1: 3,
-        2: 2,
-        3: 1,
-        4: 0,
-        5: 3
-    },
-
-    3: {
-        1: 3,
-        2: 3,
-        3: 3,
-        4: 3,
-        5: 3
-    },
-
-    4: {
-        1: 1,
-        2: 1,
-        3: 3,
-        4: 3,
-        5: 3
-    }
+    1: { 1: 1, 2: 3, 3: 0, 4: 2, 5: 1 },
+    2: { 1: 3, 2: 2, 3: 1, 4: 0, 5: 3 },
+    3: { 1: 3, 2: 3, 3: 3, 4: 3, 5: 3 },
+    4: { 1: 1, 2: 1, 3: 3, 4: 3, 5: 3 }
 }
 
 function Goal() {
-    /* states */
-    const [goalData, setGoalData] = useState(goals)
+    // ---------------- STATE ----------------
+    const [goalData, setGoalData] = useState(fallbackGoals)
     const [currentGoalIndex, setCurrentGoalIndex] = useState(0)
-    const [showCongrats, setShowCongrats] = useState(false)
-    const [hasShownCongratsPopUp, setHasShownCongratsPopUp] = useState(false)
 
-    /* edit and delete states */
+    const [showCongrats, setShowCongrats] = useState(false)
+    const [hasShownCongrats, setHasShownCongrats] = useState(false)
+
     const [showActions, setShowActions] = useState(false)
     const [showEditModal, setShowEditModal] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+
     const [editName, setEditName] = useState("")
     const [editAmount, setEditAmount] = useState("")
 
-    /* fetch goals */
+    // ---------------- FETCH ----------------
     useEffect(() => {
         const fetchGoals = async () => {
             try {
-                const goals = await getAllGoals()
-                setGoalData(goals)
+                const data = await getAllGoals()
+                if (data?.length) setGoalData(data)
             } catch (err) {
                 console.error("Failed to fetch goals:", err)
             }
@@ -110,99 +55,84 @@ function Goal() {
         fetchGoals()
     }, [])
 
-    /* helper variables */
+    // ---------------- DERIVED STATE ----------------
     const currentGoal = goalData[currentGoalIndex]
 
-    /* loading state */
+    const currentGoalProgress =
+        currentGoal ? taskProgress[currentGoal.id] : null
+
+    const currentSavings = currentGoal?.progress ?? 0
+    const targetSavings = currentGoal?.targetAmount ?? 0
+
+    const goalCompleted =
+        !!currentGoal && currentSavings >= targetSavings
+
+    const levelFiveIncomplete =
+        !!currentGoal &&
+        currentGoal.level === 5 &&
+        currentSavings < targetSavings
+
+    // ---------------- EFFECTS ----------------
+    useEffect(() => {
+        if (goalCompleted && !hasShownCongrats) {
+            setShowCongrats(true)
+            setHasShownCongrats(true)
+        }
+    }, [goalCompleted, hasShownCongrats])
+
+    // ---------------- EARLY RETURNS ----------------
     if (!currentGoal) {
         return (
             <Box>
-                <Typography variant="body1" component="p">
-                    Loading Goals
-                </Typography>
+                <Typography>Loading Goals</Typography>
             </Box>
         )
     }
 
-    const currentGoalProgress = taskProgress[currentGoal.id]
-
-    const currentSavings = currentGoal.progress
-    const targetSavings = currentGoal.targetAmount
-
-    const goalCompleted = currentSavings >= targetSavings
-
-    const levelFiveIncomplete =
-        currentGoal.level === 5 &&
-        currentSavings < targetSavings
-
-    /* completion popup */
-    useEffect(() => {
-        if (goalCompleted && !hasShownCongratsPopUp) {
-            setShowCongrats(true)
-            setHasShownCongratsPopUp(true)
-        }
-    }, [goalCompleted, hasShownCongratsPopUp])
-
-    /* no goals page */
     if (goalData.length === 0) {
         return (
             <Box>
-                <Typography variant="h1" component="h1">
-                    No Goals!
-                </Typography>
-
-                <Typography variant="body1" component="p">
-                    Add a goal using the plus icon down below!
-                </Typography>
-
+                <Typography variant="h1">No Goals!</Typography>
+                <Typography>Add a goal using the plus icon below!</Typography>
                 <FooterNav />
             </Box>
         )
     }
 
-    /* next goal */
+    // ---------------- NAVIGATION ----------------
     const nextGoal = () => {
-        setCurrentGoalIndex((prevIndex) =>
-            prevIndex === goalData.length - 1 ? 0 : prevIndex + 1
+        setCurrentGoalIndex(prev =>
+            prev === goalData.length - 1 ? 0 : prev + 1
         )
     }
 
-    /* previous goal */
     const previousGoal = () => {
-        setCurrentGoalIndex((prevIndex) =>
-            prevIndex === 0 ? goalData.length - 1 : prevIndex - 1
+        setCurrentGoalIndex(prev =>
+            prev === 0 ? goalData.length - 1 : prev - 1
         )
     }
 
-    /* add savings */
+    // ---------------- ACTIONS ----------------
     const addSavings = (amount) => {
-        setGoalData((prevGoals) =>
-            prevGoals.map((goal, index) =>
-                index === currentGoalIndex
-                    ? {
-                          ...goal,
-                          progress: goal.progress + amount
-                      }
-                    : goal
+        setGoalData(prev =>
+            prev.map((g, i) =>
+                i === currentGoalIndex
+                    ? { ...g, progress: g.progress + amount }
+                    : g
             )
         )
     }
 
-    /* subtract savings */
     const subtractSavings = (amount) => {
-        setGoalData((prevGoals) =>
-            prevGoals.map((goal, index) =>
-                index === currentGoalIndex
-                    ? {
-                          ...goal,
-                          progress: Math.max(0, goal.progress - amount)
-                      }
-                    : goal
+        setGoalData(prev =>
+            prev.map((g, i) =>
+                i === currentGoalIndex
+                    ? { ...g, progress: Math.max(0, g.progress - amount) }
+                    : g
             )
         )
     }
 
-    /* open edit modal */
     const openEditModal = () => {
         setEditName(currentGoal.name)
         setEditAmount(currentGoal.targetAmount)
@@ -210,129 +140,97 @@ function Goal() {
         setShowActions(false)
     }
 
-    /* apply edit */
     const applyEditGoal = () => {
-        setGoalData((prevGoals) =>
-            prevGoals.map((goal, index) =>
-                index === currentGoalIndex
+        setGoalData(prev =>
+            prev.map((g, i) =>
+                i === currentGoalIndex
                     ? {
-                          ...goal,
-                          name: editName,
-                          targetAmount: Number(editAmount)
-                      }
-                    : goal
+                        ...g,
+                        name: editName,
+                        targetAmount: Number(editAmount)
+                    }
+                    : g
             )
         )
-
         setShowEditModal(false)
     }
 
-    /* delete goal */
     const deleteGoal = () => {
-        setGoalData((prevGoals) =>
-            prevGoals.filter((goal, index) => index !== currentGoalIndex)
+        setGoalData(prev =>
+            prev.filter((_, i) => i !== currentGoalIndex)
         )
 
         setCurrentGoalIndex(0)
         setShowDeleteModal(false)
     }
 
+    // ---------------- UI ----------------
     return (
         <Box sx={{ position: "relative", minHeight: "100vh" }}>
             <Header
                 name={currentGoal.name}
                 previousGoal={previousGoal}
                 nextGoal={nextGoal}
-                handleDots={() => setShowActions(!showActions)}
+                handleDots={() => setShowActions(v => !v)}
             />
 
-            {/* edit/delete menu that opens from the Header three dots */}
+            {/* actions menu */}
             {showActions && (
-                <Box
-                    sx={{
-                        position: "absolute",
-                        top: "6.5rem",
-                        left: "50%",
-                        transform: "translateX(140px)",
-                        display: "flex",
-                        bgcolor: "#00483b",
-                        color: "white",
-                        borderRadius: "6px",
-                        overflow: "hidden",
-                        zIndex: 50
-                    }}
-                >
-                    <Button
-                        onClick={openEditModal}
-                        sx={{
-                            color: "white",
-                            px: 2,
-                            textTransform: "none",
-                            display: "flex",
-                            flexDirection: "column"
-                        }}
-                    >
-                        <EditIcon />
-                        Edit
+                <Box sx={{
+                    position: "absolute",
+                    top: "6.5rem",
+                    left: "50%",
+                    transform: "translateX(140px)",
+                    display: "flex",
+                    bgcolor: "#00483b",
+                    color: "white",
+                    borderRadius: 2,
+                    zIndex: 50
+                }}>
+                    <Button onClick={openEditModal} sx={{ color: "white" }}>
+                        <EditIcon /> Edit
                     </Button>
-
-                    <Box
-                        sx={{
-                            width: "1px",
-                            bgcolor: "rgba(255,255,255,0.5)",
-                            my: 1
-                        }}
-                    />
 
                     <Button
                         onClick={() => {
                             setShowDeleteModal(true)
                             setShowActions(false)
                         }}
-                        sx={{
-                            color: "white",
-                            px: 2,
-                            textTransform: "none",
-                            display: "flex",
-                            flexDirection: "column"
-                        }}
+                        sx={{ color: "white" }}
                     >
-                        <DeleteIcon />
-                        Delete
+                        <DeleteIcon /> Delete
                     </Button>
                 </Box>
             )}
 
-            {/* Progress bar and savings */}
+            {/* savings */}
             <Savings
-                currentSavings={currentGoal.progress}
-                targetSavings={currentGoal.targetAmount}
+                currentSavings={currentSavings}
+                targetSavings={targetSavings}
                 addSavings={addSavings}
                 subtractSavings={subtractSavings}
             />
 
-            {/* goal name and level */}
-            <Box sx={{ display: "flex", padding: "1rem" }}>
-                <Typography variant="body1" component="h2">
-                    {currentGoal.name}
-                </Typography>
+            {/* goal info */}
+            <Box sx={{ display: "flex", p: 2 }}>
+                <Typography>{currentGoal.name}</Typography>
 
-                <Box sx={{ display: "flex", paddingLeft: "2rem" }}>
-                    <Typography variant="body1" component="p">
-                        Lv {currentGoal.level}
-                    </Typography>
-
+                <Box sx={{ display: "flex", pl: 2 }}>
+                    <Typography>Lv {currentGoal.level}</Typography>
                     <InfoIcon />
                 </Box>
             </Box>
 
-            {/* task cards */}
+            {/* task card */}
             {goalCompleted ? (
                 <VarTaskCard message="Congrats on reaching your goal!" />
             ) : levelFiveIncomplete ? (
                 <VarTaskCard message="Reach your goal to reveal your tree!" />
             ) : (
-                <TaskCard progress={currentGoalProgress} goal={currentGoal} />
+                <TaskCard
+                    progress={currentGoalProgress}
+                    goal={currentGoal}
+                />
             )}
 
             <Congrats
@@ -340,146 +238,10 @@ function Goal() {
                 onClose={() => setShowCongrats(false)}
             />
 
-            {/* edit modal */}
-            {showEditModal && (
-                <Box sx={modalOverlay}>
-                    <Box sx={modalBox}>
-                        <Typography variant="h4" fontWeight="bold">
-                            Edit Goal
-                        </Typography>
-
-                        <Typography sx={{ mb: 2 }}>{currentGoal.name}</Typography>
-
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 2, my: 2 }}>
-                            <Typography sx={{ width: "70px", textAlign: "left" }}>
-                                Name
-                            </Typography>
-
-                            <TextField
-                                value={editName}
-                                onChange={(e) => setEditName(e.target.value)}
-                                fullWidth
-                                size="small"
-                                sx={inputStyle}
-                            />
-                        </Box>
-
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 2, my: 2 }}>
-                            <Typography sx={{ width: "70px", textAlign: "left" }}>
-                                Amount
-                            </Typography>
-
-                            <TextField
-                                value={editAmount}
-                                onChange={(e) => setEditAmount(e.target.value)}
-                                fullWidth
-                                size="small"
-                                sx={inputStyle}
-                            />
-                        </Box>
-
-                        <Box sx={{ display: "flex", gap: 3, mt: 4 }}>
-                            <Button
-                                onClick={() => setShowEditModal(false)}
-                                sx={cancelButton}
-                            >
-                                Cancel
-                            </Button>
-
-                            <Button onClick={applyEditGoal} sx={applyButton}>
-                                Apply
-                            </Button>
-                        </Box>
-                    </Box>
-                </Box>
-            )}
-
-            {/* delete modal */}
-            {showDeleteModal && (
-                <Box sx={modalOverlay}>
-                    <Box sx={modalBox}>
-                        <Typography variant="h4" fontWeight="bold">
-                            Delete Goal
-                        </Typography>
-
-                        <Typography>{currentGoal.name}</Typography>
-
-                        <Typography sx={{ fontSize: "1.5rem", textAlign: "center", my: 3 }}>
-                            Are you sure you want to delete this goal?
-                        </Typography>
-
-                        <Box sx={{ display: "flex", gap: 3 }}>
-                            <Button
-                                onClick={() => setShowDeleteModal(false)}
-                                sx={cancelButton}
-                            >
-                                No
-                            </Button>
-
-                            <Button onClick={deleteGoal} sx={applyButton}>
-                                Yes
-                            </Button>
-                        </Box>
-                    </Box>
-                </Box>
-            )}
-
+            {/* footer */}
             <FooterNav />
         </Box>
     )
-}
-
-/* modal background */
-const modalOverlay = {
-    position: "fixed",
-    inset: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.35)",
-    zIndex: 100,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center"
-}
-
-/* modal box */
-const modalBox = {
-    width: "330px",
-    padding: "35px",
-    borderRadius: "28px",
-    background: "linear-gradient(#259c7c, #a6c98a)",
-    color: "white",
-    textAlign: "center"
-}
-
-/* input style */
-const inputStyle = {
-    bgcolor: "white",
-    borderRadius: "30px",
-    "& .MuiOutlinedInput-root": {
-        borderRadius: "30px"
-    }
-}
-
-/* cancel/no button */
-const cancelButton = {
-    flex: 1,
-    borderRadius: "30px",
-    bgcolor: "rgba(255,255,255,0.35)",
-    color: "#00483b",
-    border: "1px solid white",
-    fontWeight: "bold",
-    fontSize: "1.1rem",
-    textTransform: "none"
-}
-
-/* apply/yes button */
-const applyButton = {
-    flex: 1,
-    borderRadius: "30px",
-    bgcolor: "#00483b",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: "1.1rem",
-    textTransform: "none"
 }
 
 export default Goal
