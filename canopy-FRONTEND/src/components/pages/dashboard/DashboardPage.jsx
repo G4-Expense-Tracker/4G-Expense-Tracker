@@ -23,6 +23,9 @@ import phase3 from "../dashboard/plants/phase3.png";
 import phase4 from "../dashboard/plants/phase4.png";
 
 import { getUserSession } from "../../../api/users";
+import { getAllGoals } from "../../../api/goals";
+import { getAllExpenses } from "../../../api/expenses";
+import { viewBudget } from "../../../api/budgets";
 
 export default function DashboardPage() {
   const navigate = useNavigate();

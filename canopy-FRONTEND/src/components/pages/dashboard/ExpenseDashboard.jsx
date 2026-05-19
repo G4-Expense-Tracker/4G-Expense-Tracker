@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import BottomNav from "./Bottomnav.jsx";
 
+import { createNewExpense } from "../../../api/expenses.js";
+
 export default function ExpenseDashboard() {
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState("");
@@ -28,17 +30,7 @@ export default function ExpenseDashboard() {
         quick_expense: quickExpense,
       };
 
-      const response = await fetch( import.meta.env.VITE_APP_NEWEXPENSE_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify(expenseData),
-        }
-      );
-
-      const data = await response.json();
+      const data = await createNewExpense(expenseData);
 
       if (data.success) {
         console.log("Expense added!");
