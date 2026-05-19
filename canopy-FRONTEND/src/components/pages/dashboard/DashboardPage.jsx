@@ -22,7 +22,9 @@ import phase2 from "../dashboard/plants/phase2.png";
 import phase3 from "../dashboard/plants/phase3.png";
 import phase4 from "../dashboard/plants/phase4.png";
 
-const API_URL = "http://localhost:8000";
+import { getAllGoals } from "../../../api/goals.js";
+import { getAllExpenses } from "../../../api/expenses.js";
+import { viewBudget } from "../../../api/budgets.js";
 
 function getPlantImage(level) {
   if (level <= 0) return seed1;
@@ -279,49 +281,47 @@ export default function DashboardPage() {
     { id: 4, title: "Korea", saved: 1500, target: 1800, level: 4 },
   ];
 
-  const [goals, setGoals] = useState(sampleGoals);
+  const [goals, setGoals] = useState([]);
   const [goalIndex, setGoalIndex] = useState(0);
+  const [goalsLoading, setGoalsLoading] = useState(true);
+
+  const [dailyBudget, setDailyBudget] = useState(null);
+  const [monthlyBudget, setMonthlyBudget] = useState(null);
+
   const [openCardMenu, setOpenCardMenu] = useState(null);
   const [dailyBudgetOpen, setDailyBudgetOpen] = useState(false);
   const [monthlyBudgetOpen, setMonthlyBudgetOpen] = useState(false);
   const [addCardOpen, setAddCardOpen] = useState(false);
 
   useEffect(() => {
-    async function loadGoalsFromBackend() {
+    async function loadGoals() {
       try {
-        const response = await fetch(`${API_URL}/api/goals`, {
-          method: "GET",
-          credentials: "include",
-        });
+        setGoalsLoading(true);
 
-        if (!response.ok) {
-          throw new Error("Could not load goals from backend");
-        }
+        const data = await getAllGoals();
 
-        const data = await response.json();
-
-        const formattedGoals = data.map((goal) => ({
-          id: goal.id || goal.goalId,
-          title: goal.name || goal.title || goal.goalName || "Goal",
-          saved: Number(goal.savedAmount || goal.saved || goal.currentAmount || 0),
-          target: Number(goal.targetAmount || goal.target || goal.goalAmount || 1),
-          level: Number(goal.level || goal.goalLevel || 1),
+        const formattedData = data.map((goal) => ({
+          id: goal.id,
+          title: goal.name,
+          saved: Number(goal.saved_amount ?? 0),
+          target: Number(goal.target_amount ?? 1),
+          level: Number(goal.level ?? 1),
         }));
 
-        if (formattedGoals.length > 0) {
-          setGoals(formattedGoals);
-          setGoalIndex(0);
-        }
-      } catch (error) {
-        console.log("Dashboard backend goals error:", error);
-        setGoals(sampleGoals);
+        setGoals(formattedData);
+        setGoalIndex(0);
+      } catch (err) {
+        console.error("Failed to load goals:", err);
+        setGoals([]);
+      } finally {
+        setGoalsLoading(false);
       }
     }
 
-    loadGoalsFromBackend();
+    loadGoals();
   }, []);
 
-  const activeGoal = goals[goalIndex] || sampleGoals[0];
+  const activeGoal = goals[goalIndex] || sampleGoals[goalIndex];
 
   const progressPercent = Math.min(
     100,
