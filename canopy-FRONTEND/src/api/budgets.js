@@ -1,36 +1,21 @@
 const API = import.meta.env.VITE_APP_BASE_URL
 
-export async function createNewCategory() {
+export async function viewBudget(timeframe) {
+    const params = new URLSearchParams({ timeframe });
 
+    const res = await fetch(`${API}/budgets/view?${params.toString()}`, {
+        method: "GET",
+        credentials: "include",
+    });
 
-    if (!res.ok) {
-        throw new Error(data.error || "Failed to create new category");
-    }
-
-    return data;
-}
-
-export async function getSingleCategory() {
-
+    const data = await res.json();
 
     if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch category");
+        throw new Error(data.error || "Failed to fetch budget");
     }
 
-    return data;
+    return data.budget;
 }
-
-export async function editSingleCategory() {
-
-
-    if (!res.ok) {
-        throw new Error(data.error || "Failed to edit category");
-    }
-
-    return data;
-}
-
-export async function viewBudget(timeframe) {}
 
 export async function deleteSingleCategory() {
 
