@@ -45,8 +45,17 @@ export default function ExpensePage() {
   const [savedExpenses, setSavedExpenses] = useState([]);
 
   useEffect(() => {
-    const storedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
-    setSavedExpenses(storedExpenses);
+    async function loadExpenses() {
+      try {
+        const data = await getAllExpenses();
+        setSavedExpenses(data || []);
+      } catch (err) {
+        console.error(err);
+        setSavedExpenses([]);
+      }
+    }
+
+    loadExpenses();
   }, []);
 
   const sampleExpenses = [
@@ -97,7 +106,7 @@ export default function ExpensePage() {
     },
   ];
 
-  const allExpenses = [...sampleExpenses, ...savedExpenses];
+  const allExpenses = [...sampleExpenses];
 
   const formatDate = (date) => date.toISOString().split("T")[0];
 
