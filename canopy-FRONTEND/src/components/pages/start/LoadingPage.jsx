@@ -5,6 +5,9 @@ import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import { useNavigate } from "react-router-dom";
 import mainLogo from "./images/mainLogo.png";
 
+import { useEffect, useState } from "react";
+import { getUserSession } from "../../../api/users";
+
 export default function LoadingPage() {
   const navigate = useNavigate();
 
