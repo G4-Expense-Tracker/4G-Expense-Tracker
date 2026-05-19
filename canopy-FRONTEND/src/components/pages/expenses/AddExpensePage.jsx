@@ -14,6 +14,9 @@ import WifiIcon from "@mui/icons-material/Wifi";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
+import { createNewExpense } from "../../../api/expenses";
+import { setBudget } from "../../../api/budgets";
+
 export default function AddExpensePage() {
   const navigate = useNavigate();
 
@@ -42,72 +45,59 @@ export default function AddExpensePage() {
   // =========================
   // Save Expense
   // =========================
-  const handleSaveExpense = () => {
-    if (!expenseName || !amount || !category) {
-      alert("Please fill Expense Name, Amount and Category.");
-      return;
+  const handleSaveExpense = async () => {
+    try {
+      if (!expenseName || !amount || !category) {
+        alert("Please fill Expense Name, Amount and Category.");
+        return;
+      }
+
+      const newExpense = {
+        category_id: Number(category),
+        title: expenseName,
+        amount: Number(amount),
+        date,
+        note: "",
+        quick_expense: quickExpense,
+      };
+
+      console.log(newExpense);
+
+      await createNewExpense(newExpense);
+
+      alert("Expense saved successfully!");
+
+      navigate("/expenses");
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
     }
-
-    const newExpense = {
-      id: Date.now(),
-      date,
-      time: "7:05am",
-      title: expenseName,
-      category,
-      amount: `$${Number(amount).toFixed(2)}`,
-      quickExpense,
-      iconType: category.toLowerCase(),
-    };
-
-    const savedExpenses =
-      JSON.parse(localStorage.getItem("expenses")) || [];
-
-    const updatedExpenses = [...savedExpenses, newExpense];
-
-    localStorage.setItem(
-      "expenses",
-      JSON.stringify(updatedExpenses)
-    );
-
-    console.log("Saved expenses:", updatedExpenses);
-
-    alert("Expense saved successfully!");
-
-    navigate("/expenses");
   };
 
   // =========================
   // Save Budget
   // =========================
-  const handleSaveBudget = () => {
-    if (!budgetAmount || !budgetCategory) {
-      alert("Please fill Amount and Category.");
-      return;
+  const handleSaveBudget = async () => {
+    try {
+      if (!budgetAmount || !budgetType) {
+        alert("Please fill Amount and Budget Type.");
+        return;
+      }
+
+      const newBudget = {
+        timeframe: budgetType.toLowerCase(),
+        amount: Number(budgetAmount),
+      };
+
+      await setBudget(newBudget);
+
+      alert("Budget saved successfully!");
+
+      navigate("/expenses");
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
     }
-
-    const newBudget = {
-      id: Date.now(),
-      type: budgetType,
-      amount: `$${Number(budgetAmount).toFixed(2)}`,
-      date: budgetDate,
-      category: budgetCategory,
-    };
-
-    const savedBudgets =
-      JSON.parse(localStorage.getItem("budgets")) || [];
-
-    const updatedBudgets = [...savedBudgets, newBudget];
-
-    localStorage.setItem(
-      "budgets",
-      JSON.stringify(updatedBudgets)
-    );
-
-    console.log("Saved budgets:", updatedBudgets);
-
-    alert("Budget saved successfully!");
-
-    navigate("/expenses");
   };
 
   return (
@@ -285,6 +275,7 @@ export default function AddExpensePage() {
 
               <TextField
                 fullWidth
+                type="number"
                 value={expenseName}
                 onChange={(e) =>
                   setExpenseName(e.target.value)
@@ -545,6 +536,7 @@ export default function AddExpensePage() {
 
                   <TextField
                     fullWidth
+                    type="number"
                     value={budgetAmount}
                     onChange={(e) =>
                       setBudgetAmount(
