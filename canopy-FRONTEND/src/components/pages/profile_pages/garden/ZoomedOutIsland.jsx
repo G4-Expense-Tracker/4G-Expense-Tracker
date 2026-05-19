@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import Island from "./Island";
+import Island from "./GardenIsland";
 
 export default function ZoomedOutGarden({ trees }) {
   const islands = [
