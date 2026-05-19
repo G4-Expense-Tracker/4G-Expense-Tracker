@@ -96,8 +96,8 @@ router.post('/:goalId/edit', requireLogin, async (req, res) => {
 router.post('/:goalId/progress/update', requireLogin, async (req, res) => {
     try {
         const goal_id = req.params.goalId;
-        const { uncleanProgress } = req.body;
-        const progress = parseInt(uncleanProgress)
+        const { amount } = req.body;
+        const progress = parseInt(amount);
 
         const progressedGoal = await editProgress(goal_id, { progress })
 
@@ -107,7 +107,8 @@ router.post('/:goalId/progress/update', requireLogin, async (req, res) => {
 
         return res.json({ 
             success: true,
-            message: 'Goal progressed'
+            message: 'Goal progressed',
+            goal: progressedGoal.goal
         })
     } catch(err) {
         console.error(err);
