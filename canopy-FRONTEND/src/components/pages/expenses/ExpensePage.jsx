@@ -30,6 +30,8 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import FooterNav from "../../Footer/FooterNav.jsx";
 import ExpenseHeader from "../../headers/ExpenseHeader.jsx";
 
+import { getAllExpenses, deleteExpense } from "../../../api/expenses";
+
 setOptions({
   theme: "ios",
   themeVariant: "light",
@@ -65,12 +67,11 @@ export default function ExpensePage() {
   useEffect(() => {
     async function loadExpenses() {
       try {
-        const expenses = await getAllExpenses();
-        console.log("expenses from backend:", expenses);
-
-        setSavedExpenses(Array.isArray(expenses) ? expenses : []);
-      } catch (error) {
-        console.log("Error loading expenses:", error);
+        const data = await getAllExpenses();
+        setSavedExpenses(data || []);
+      } catch (err) {
+        console.error(err);
+        setSavedExpenses([]);
       }
     }
 
@@ -125,11 +126,7 @@ export default function ExpensePage() {
     },
   ];
 
-  const visibleSampleExpenses = sampleExpenses.filter(
-    (expense) => !deletedSampleIds.includes(expense.id)
-  );
-
-  const allExpenses = [...visibleSampleExpenses, ...savedExpenses];
+  const allExpenses = [...sampleExpenses];
 
   const formatDate = (date) => date.toISOString().split("T")[0];
 
@@ -213,6 +210,20 @@ export default function ExpensePage() {
       console.log("Error deleting expense:", error);
     }
   };
+
+  // const handleDeleteExpense = async (expenseId) => {
+  //   try {
+  //     await deleteExpense(expenseId);
+
+  //     setSavedExpenses((prev) =>
+  //       prev.filter((e) => e.expense_id !== expenseId)
+  //     );
+
+  //     setOpenMenuIndex(null);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   return (
     <Box
