@@ -8,7 +8,6 @@ import SignupPage from "./components/pages/start/SignupPage";
 import LoadingPage from "./components/pages/start/LoadingPage";
 import Goal from "./components/pages/goal_pages/Goal";
 
-
 import DashboardPage from "./components/pages/dashboard/DashboardPage";
 import ExpenseDashboard from "./components/pages/dashboard/ExpenseDashboard";
 import CategoryPage from "./components/pages/profile_pages/category/CategoryPage";
@@ -25,7 +24,7 @@ import ExpensePage from "./components/pages/expenses/ExpensePage";
 import EditExpensePage from "./components/pages/expenses/EditExpensePage";
 import AddExpensePage from "./components/pages/expenses/AddExpensePage";
 import Insights from "./components/pages/insights_pages/Insight";
-
+import GardenPage from "./components/pages/profile_pages/garden/GardenPage";
 
 function App() {
   return (
@@ -53,10 +52,10 @@ function App() {
         <Route path="/edit-expense/:id" element={<EditExpensePage />} />
         <Route path="/add-expense" element={<AddExpensePage />} />
         <Route path="/insights" element={<Insights />} />
+        <Route path="/garden" element={<GardenPage />} />
       </Routes>
-      
     </BrowserRouter>
-  )
+  );
 }
 
 export default App;
