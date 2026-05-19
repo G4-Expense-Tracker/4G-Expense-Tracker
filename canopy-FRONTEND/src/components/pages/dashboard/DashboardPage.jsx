@@ -44,6 +44,19 @@ export default function DashboardPage() {
     setDashboardCards(
       createDashboardCards(savedBudgets, savedExpenses, savedGoals)
     );
+
+    async function getUser() {
+      try {
+        const sessionData = await getUserSession();
+        setUser(sessionData.user);
+      } catch (err) {
+        console.error("Failed to fetch user session:", err);
+      } finally {
+        setLoadingUser(false);
+      }
+    }
+
+    getUser();
   }, []);
 
   const currentGoal = goals[currentIndex];
