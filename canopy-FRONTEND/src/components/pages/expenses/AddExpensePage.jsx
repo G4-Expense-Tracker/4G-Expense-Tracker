@@ -35,6 +35,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
+import { createNewExpense } from "../../../api/expenses";
+import { setBudget } from "../../../api/budgets";
+
 export default function AddExpensePage() {
   const navigate = useNavigate();
     /* =========================================================
@@ -62,6 +65,15 @@ export default function AddExpensePage() {
   const [budgetDate, setBudgetDate] = useState("2026-04-13");
   const [budgetType, setBudgetType] = useState("Monthly");
 
+  // =========================
+  // Save Expense
+  // =========================
+  const handleSaveExpense = async () => {
+    try {
+      if (!expenseName || !amount || !category) {
+        alert("Please fill Expense Name, Amount and Category.");
+        return;
+      }
   //Backend Code:
   /* =========================================================
      FETCH QUICK EXPENSES FROM BACKEND
@@ -244,6 +256,20 @@ export default function AddExpensePage() {
       return;
     }
 
+      const newExpense = {
+        category_id: Number(category),
+        title: expenseName,
+        amount: Number(amount),
+        date,
+        note: "",
+        quick_expense: quickExpense,
+      };
+
+      console.log(newExpense);
+
+      await createNewExpense(newExpense);
+
+      alert("Expense saved successfully!");
     const newExpense = {
       id: Date.now(),
       date,
@@ -282,15 +308,36 @@ export default function AddExpensePage() {
       setQuickExpenses(updatedQuickExpenses);
     }
 
-    navigate("/expenses");
+      navigate("/expenses");
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
   };
 
+  // =========================
+  // Save Budget
+  // =========================
+  const handleSaveBudget = async () => {
+    try {
+      if (!budgetAmount || !budgetType) {
+        alert("Please fill Amount and Budget Type.");
+        return;
+      }
   const handleSaveBudget = () => {
     if (!budgetAmount) {
       alert("Please fill Amount.");
       return;
     }
 
+      const newBudget = {
+        timeframe: budgetType.toLowerCase(),
+        amount: Number(budgetAmount),
+      };
+
+      await setBudget(newBudget);
+
+      alert("Budget saved successfully!");
     const newBudget = {
       id: Date.now(),
       type: budgetType,
@@ -305,6 +352,11 @@ export default function AddExpensePage() {
       JSON.stringify([...savedBudgets, newBudget])
     );
 
+      navigate("/expenses");
+    } catch (err) {
+      console.error(err);
+      alert(err.message);
+    }
     navigate("/dashboard");
   };
 
@@ -448,6 +500,22 @@ export default function AddExpensePage() {
           <>
             <Typography sx={{ fontSize: 16, mb: 1 }}>Expense Name</Typography>
 
+              <TextField
+                fullWidth
+                type="number"
+                value={expenseName}
+                onChange={(e) =>
+                  setExpenseName(e.target.value)
+                }
+                sx={{
+                  mb: 4,
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 30,
+                    backgroundColor: "#fff",
+                    height: 56,
+                  },
+                }}
+              />
             <TextField
               fullWidth
               value={expenseName}
@@ -621,6 +689,25 @@ export default function AddExpensePage() {
               <Box sx={{ flex: 1 }}>
                 <Typography sx={{ fontSize: 16, mb: 1 }}>Amount</Typography>
 
+                  <TextField
+                    fullWidth
+                    type="number"
+                    value={budgetAmount}
+                    onChange={(e) =>
+                      setBudgetAmount(
+                        e.target.value
+                      )
+                    }
+                    placeholder="$"
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: 30,
+                        backgroundColor: "#fff",
+                        height: 56,
+                      },
+                    }}
+                  />
+                </Box>
                 <TextField
                   fullWidth
                   value={budgetAmount}
