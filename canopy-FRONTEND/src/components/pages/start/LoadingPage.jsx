@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
-import WifiIcon from "@mui/icons-material/Wifi";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+// import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
+// import WifiIcon from "@mui/icons-material/Wifi";
+// import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import { useNavigate } from "react-router-dom";
 import mainLogo from "./images/mainLogo.png";
 
@@ -59,13 +59,13 @@ export default function LoadingPage() {
           color: "text.secondary",
         }}
       >
-        <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
+        {/* <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography> */}
 
-        <Box sx={{ display: "flex", gap: 0.3 }}>
+        {/* <Box sx={{ display: "flex", gap: 0.3 }}>
           <SignalCellular4BarIcon sx={{ fontSize: 14 }} />
           <WifiIcon sx={{ fontSize: 14 }} />
           <BatteryFullIcon sx={{ fontSize: 17 }} />
-        </Box>
+        </Box> */}
       </Box>
 
       <Box
