@@ -8,7 +8,7 @@ export async function getExpensesByUser(user_id) {
       ON c.category_id = e.category_id
     INNER JOIN icon i
       ON i.icon_id = c.icon_id
-    WHERE user_id = :user_id
+    WHERE e.user_id = :user_id
     ORDER BY date DESC;
     `;
 
@@ -18,7 +18,8 @@ export async function getExpensesByUser(user_id) {
 
   try {
     const results = await database.query(query, params);
-    // console.log(results[0]);
+    // console.log('results is'+ results[0])
+    console.log(results[0]);
     return results[0];
   } catch (err) {
     console.log("Error selecting from expense table");
@@ -35,7 +36,7 @@ export async function getQuickExpenses(user_id) {
       ON c.category_id = e.category_id
     INNER JOIN icon i
       ON i.icon_id = c.icon_id
-    WHERE user_id = :user_id AND quick_expense = 1
+    WHERE e.user_id = :user_id AND quick_expense = 1
     ORDER BY date DESC;
     `;
 
@@ -45,7 +46,8 @@ export async function getQuickExpenses(user_id) {
 
   try {
     const results = await database.query(query, params);
-    // console.log(results[0]);
+    console.log('results is'+ results)
+    console.log(results[0]);
     return results[0];
   } catch (err) {
     console.log("Error selecting from expense table");

@@ -15,6 +15,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
+import theme from "../../../theme/theme.jsx";
+
 export default function AddExpensePage() {
   const navigate = useNavigate();
 
@@ -62,11 +64,11 @@ export default function AddExpensePage() {
     }
 
     const newExpense = {
-      name:expenseName,
+      title: expenseName,
       amount: Number(amount),
-      category: category,
+      category_id: category,
       date: date,
-      quickExpense: quickExpense,
+      quick_expense: quickExpense,
     };
 
     // const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
