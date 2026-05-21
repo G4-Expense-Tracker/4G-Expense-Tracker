@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createNewExpense } from "../../../api/expenses.js";
 
 import {
   Box,
@@ -54,51 +55,55 @@ export default function AddExpensePage() {
     );
   };
 
-  const handleSaveExpense = () => {
+  const handleSaveExpense = async () => {
     if (!expenseName || !amount || !category) {
       alert("Please fill Expense Name, Amount and Category.");
       return;
     }
 
     const newExpense = {
-      id: Date.now(),
-      date,
-      time: "7:05am",
-      title: expenseName,
-      category,
-      amount: `$${Number(amount).toFixed(2)}`,
-      quickExpense,
-      iconType: category.toLowerCase(),
+      name:expenseName,
+      amount: Number(amount),
+      category: category,
+      date: date,
+      quickExpense: quickExpense,
     };
 
-    const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
+    // const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
 
-    localStorage.setItem(
-      "expenses",
-      JSON.stringify([...savedExpenses, newExpense])
-    );
+    // localStorage.setItem(
+    //   "expenses",
+    //   JSON.stringify([...savedExpenses, newExpense])
+    // );
 
-    if (quickExpense) {
-      const newQuickExpense = {
-        id: Date.now() + 1,
-        name: expenseName,
-        category: category === "Food" ? "Foods and Drinks" : category,
-      };
+    // if (quickExpense) {
+    //   const newQuickExpense = {
+    //     id: Date.now() + 1,
+    //     name: expenseName,
+    //     category: category === "Food" ? "Foods and Drinks" : category,
+    //   };
 
-      const savedQuickExpenses =
-        JSON.parse(localStorage.getItem("quickExpenses")) || [];
+    //   const savedQuickExpenses =
+    //     JSON.parse(localStorage.getItem("quickExpenses")) || [];
 
-      const updatedQuickExpenses = [...savedQuickExpenses, newQuickExpense];
+    //   const updatedQuickExpenses = [...savedQuickExpenses, newQuickExpense];
 
-      localStorage.setItem(
-        "quickExpenses",
-        JSON.stringify(updatedQuickExpenses)
-      );
+    //   localStorage.setItem(
+    //     "quickExpenses",
+    //     JSON.stringify(updatedQuickExpenses)
+    //   );
 
-      setQuickExpenses(updatedQuickExpenses);
-    }
+    //   setQuickExpenses(updatedQuickExpenses);
+    // }
 
-    navigate("/expenses");
+    // navigate("/expenses");
+    try {
+      await createNewExpense(newExpense);
+      navigate("/expenses");
+    } catch (error) {
+    console.error("Error creating expense:", error);
+    alert(error.message || "Failed to save expense.");
+  }
   };
 
   const handleSaveBudget = () => {
@@ -129,7 +134,7 @@ export default function AddExpensePage() {
       sx={{
         width: "100%",
         minHeight: "100vh",
-        backgroundColor: "#000",
+        backgroundColor: "background.default",
         display: "flex",
         justifyContent: "center",
       }}
@@ -139,11 +144,15 @@ export default function AddExpensePage() {
           width: "100%",
           maxWidth: 430,
           minHeight: "100vh",
-          background: "linear-gradient(180deg, #289173 0%, #A6C178 100%)",
+          background: `linear-gradient(
+            180deg,
+            ${theme.palette.background.green} 0%,
+            ${theme.palette.secondary.main} 100%
+          )`,
           px: 3,
           pt: 5,
           pb: 5,
-          color: "#fff",
+          color: "primary.contrastText",
         }}
       >
         {/* QUICK EXPENSES */}
@@ -153,7 +162,7 @@ export default function AddExpensePage() {
               Quick Expenses
             </Typography>
 
-            <EditIcon sx={{ fontSize: 20, color: "#FFFFFF" }} />
+            <EditIcon sx={{ fontSize: 20, color: "primary.contrastText" }} />
           </Box>
 
           {quickExpenses.map((item) => (
@@ -162,8 +171,8 @@ export default function AddExpensePage() {
               sx={{
                 minHeight: 64,
                 borderRadius: "16px",
-                backgroundColor: "#DCE5C8",
-                border: "1px solid #D7EEA7",
+                backgroundColor: "secondary.light",
+                border: `1px solid ${theme.palette.secondary.main}`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
@@ -175,7 +184,7 @@ export default function AddExpensePage() {
                 sx={{
                   fontSize: 17,
                   fontWeight: 700,
-                  color: "#000000",
+                  color: "primary.dark",
                 }}
               >
                 {item.name}
@@ -186,7 +195,7 @@ export default function AddExpensePage() {
                   sx={{
                     fontSize: 16,
                     fontWeight: 500,
-                    color: "#111111",
+                    color: "primary.dark",
                   }}
                 >
                   {item.category}
@@ -194,7 +203,7 @@ export default function AddExpensePage() {
 
                 <IconButton
                   onClick={() => deleteQuickExpense(item.id)}
-                  sx={{ color: "#005242", p: 0 }}
+                  sx={{ color: "primary.main", p: 0 }}
                 >
                   <DeleteOutlineOutlinedIcon sx={{ fontSize: 22 }} />
                 </IconButton>
@@ -213,7 +222,7 @@ export default function AddExpensePage() {
               sx={{
                 fontSize: 24,
                 fontWeight: 700,
-                color: activeTab === "expense" ? "#FFFFFF" : "#003F33",
+                color: activeTab === "expense" ? "primary.contrastText" : "primary.dark",
               }}
             >
               Expense
@@ -225,7 +234,7 @@ export default function AddExpensePage() {
                   width: 150,
                   height: 5,
                   borderRadius: 10,
-                  backgroundColor: "#E7F7A5",
+                  backgroundColor: "secondary.light",
                   mt: 1.5,
                 }}
               />
@@ -240,7 +249,7 @@ export default function AddExpensePage() {
               sx={{
                 fontSize: 24,
                 fontWeight: 700,
-                color: activeTab === "budget" ? "#FFFFFF" : "#003F33",
+                color: activeTab === "budget" ? "primary.contrastText" : "primary.dark",
               }}
             >
               Budget
@@ -252,7 +261,7 @@ export default function AddExpensePage() {
                   width: 150,
                   height: 5,
                   borderRadius: 10,
-                  backgroundColor: "#E7F7A5",
+                  backgroundColor: "secondary.light",
                   mt: 1.5,
                 }}
               />
@@ -273,7 +282,7 @@ export default function AddExpensePage() {
                 "& .MuiOutlinedInput-root": {
                   height: 54,
                   borderRadius: 30,
-                  backgroundColor: "#FFFFFF",
+                  backgroundColor: "background.paper",
                 },
               }}
             />
@@ -291,7 +300,7 @@ export default function AddExpensePage() {
                     "& .MuiOutlinedInput-root": {
                       height: 54,
                       borderRadius: 30,
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "background.paper",
                       fontSize: 22,
                     },
                   }}
@@ -310,7 +319,7 @@ export default function AddExpensePage() {
                     "& .MuiOutlinedInput-root": {
                       height: 54,
                       borderRadius: 30,
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "background.paper",
                     },
                   }}
                 />
@@ -323,7 +332,7 @@ export default function AddExpensePage() {
               sx={{
                 height: 54,
                 borderRadius: 30,
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "background.paper",
                 display: "flex",
                 alignItems: "center",
                 px: 2,
@@ -338,7 +347,7 @@ export default function AddExpensePage() {
                 sx={{ flex: 1 }}
               />
 
-              <ChevronRightIcon sx={{ fontSize: 36, color: "#005242" }} />
+              <ChevronRightIcon sx={{ fontSize: 36, color: "primary.main" }} />
             </Box>
 
             <Box
@@ -354,8 +363,8 @@ export default function AddExpensePage() {
                 checked={quickExpense}
                 onChange={(e) => setQuickExpense(e.target.checked)}
                 sx={{
-                  color: "#FFFFFF",
-                  "&.Mui-checked": { color: "#FFFFFF" },
+                  color: "primary.contrastText",
+                  "&.Mui-checked": { color: "primary.contrastText" },
                 }}
               />
 
@@ -371,12 +380,12 @@ export default function AddExpensePage() {
                   width: 230,
                   height: 60,
                   borderRadius: 40,
-                  backgroundColor: "#005242",
-                  color: "#FFFFFF",
+                  backgroundColor: "primary.main",
+                  color: "primary.contrastText",
                   fontSize: 20,
                   fontWeight: 700,
                   textTransform: "none",
-                  "&:hover": { backgroundColor: "#005242" },
+                  "&:hover": { backgroundColor: "primary.dark" },
                 }}
               >
                 Save
@@ -393,7 +402,7 @@ export default function AddExpensePage() {
                 mx: "auto",
                 mb: 5,
                 borderRadius: 40,
-                backgroundColor: "#005242",
+                backgroundColor: "primary.main",
                 display: "flex",
                 p: 0.5,
               }}
@@ -411,11 +420,15 @@ export default function AddExpensePage() {
                     cursor: "pointer",
                     fontSize: 18,
                     fontWeight: 700,
-                    color: "#FFFFFF",
+                    color: "primary.contrastText",
                     transition: "0.3s",
                     background:
                       budgetType === type
-                        ? "linear-gradient(180deg, #2C7D6C 0%, #005242 100%)"
+                        ? `linear-gradient(
+                            180deg, 
+                            ${theme.palette.background.green} 0%, 
+                            ${theme.palette.primary.main} 100%
+                            )`
                         : "transparent",
                     boxShadow:
                       budgetType === type
@@ -446,7 +459,7 @@ export default function AddExpensePage() {
                     "& .MuiOutlinedInput-root": {
                       height: 54,
                       borderRadius: 30,
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "background.paper",
                     },
                   }}
                 />
@@ -464,7 +477,7 @@ export default function AddExpensePage() {
                     "& .MuiOutlinedInput-root": {
                       height: 54,
                       borderRadius: 30,
-                      backgroundColor: "#FFFFFF",
+                      backgroundColor: "background.paper",
                     },
                   }}
                 />
@@ -479,12 +492,12 @@ export default function AddExpensePage() {
                   width: 230,
                   height: 60,
                   borderRadius: 40,
-                  backgroundColor: "#005242",
-                  color: "#FFFFFF",
+                  backgroundColor: "primary.main",
+                  color: "primary.contrastText",
                   fontSize: 20,
                   fontWeight: 700,
                   textTransform: "none",
-                  "&:hover": { backgroundColor: "#005242" },
+                  "&:hover": { backgroundColor: "primary.dark" },
                 }}
               >
                 Save

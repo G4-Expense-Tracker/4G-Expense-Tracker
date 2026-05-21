@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import FooterNav from "../../Footer/FooterNav"
 import ExpenseHeader from "../../headers/ExpenseHeader"
+import Top3 from "./top3/Top3"
 
 function Insights(){
     return(
@@ -18,9 +19,9 @@ function Insights(){
 
             {/* WeeklyInsight or MonthlyInsight component */}
 
-            {/* <PieChart/>
+            {/* <PieChart/> */}
 
-            <Top3/> */}
+            <Top3/>
 
             <FooterNav/> 
 

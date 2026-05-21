@@ -230,19 +230,21 @@ export async function getCategoryComparison(
 ) {
   const query = `
     SELECT 
-      category_id,
+      c.name AS category,
       SUM(CASE 
-        WHEN date BETWEEN :currentStart AND :currentEnd THEN amount 
+        WHEN e.date BETWEEN :currentStart AND :currentEnd THEN e.amount 
         ELSE 0 
       END) as current_total,
       SUM(CASE 
-        WHEN date BETWEEN :prevStart AND :prevEnd THEN amount 
+        WHEN e.date BETWEEN :prevStart AND :prevEnd THEN e.amount 
         ELSE 0 
       END) as previous_total
-    FROM expense
-    WHERE user_id = :user_id
-      AND date BETWEEN :prevStart AND :currentEnd
-    GROUP BY category_id;
+    FROM expense e
+    INNER JOIN category c
+      ON c.category_id = e.category_id
+    WHERE e.user_id = :user_id
+      AND e.date BETWEEN :prevStart AND :currentEnd
+    GROUP BY c.category_id, c.name;
   `;
 
   try {
@@ -273,7 +275,7 @@ function calculateChanges(rows) {
     else percentChange = ((curr - prev) / prev) * 100;
 
     return {
-      category_id: row.category_id,
+      category: row.category,
       current: curr,
       previous: prev,
       percentChange,

@@ -9,6 +9,7 @@ import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -24,7 +25,7 @@ export default function FooterNav() {
         left: "50%",
         transform: "translateX(-50%)",
         width: "100%",
-        maxWidth: "390px",
+        maxWidth: 390,
         zIndex: 100,
       }}
     >
@@ -39,22 +40,20 @@ export default function FooterNav() {
           width: "58px",
           height: "58px",
           borderRadius: "50%",
-          bgcolor: "#fff8cc",
-          border: "4px solid #9ab68c",
-
+          bgcolor: "text.cream",
+          border: "4px solid",
+          borderColor: "secondary.main",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-
           cursor: "pointer",
           zIndex: 10,
-
           boxShadow: "0px 4px 10px rgba(0,0,0,0.15)",
         }}
       >
         <AddIcon
           sx={{
-            color: "#00503f",
+            color: "primary.main",
             fontSize: 34,
           }}
         />
@@ -63,13 +62,11 @@ export default function FooterNav() {
       {/* Footer Background */}
       <Box
         sx={{
-          bgcolor: "#c8d99d",
+          bgcolor: "secondary.main",
           borderTopLeftRadius: "18px",
           borderTopRightRadius: "18px",
-
           pt: 1,
           pb: 1,
-
           boxShadow: "0px -3px 10px rgba(0,0,0,0.08)",
         }}
       >
@@ -80,47 +77,43 @@ export default function FooterNav() {
             bgcolor: "transparent",
           }}
         >
-          {/* HOME */}
           <BottomNavigationAction
             label="Home"
             value="/dashboard"
             icon={<HomeIcon />}
             onClick={() => navigate("/dashboard")}
             sx={{
-              color: "#00503f",
+              color: "primary.main",
             }}
           />
 
-          {/* EXPENSE */}
           <BottomNavigationAction
             label="Expense"
             value="/expense"
             icon={<BarChartRoundedIcon />}
             onClick={() => navigate("/expense")}
             sx={{
-              color: "#00503f",
+              color: "primary.main",
             }}
           />
 
-          {/* GOAL */}
           <BottomNavigationAction
             label="Goal"
             value="/goals"
             icon={<EmojiEventsIcon />}
             onClick={() => navigate("/goals")}
             sx={{
-              color: "#00503f",
+              color: "primary.main",
             }}
           />
 
-          {/* PROFILE */}
           <BottomNavigationAction
             label="Profile"
             value="/profile"
             icon={<PersonIcon />}
             onClick={() => navigate("/profile")}
             sx={{
-              color: "#00503f",
+              color: "primary.main",
             }}
           />
         </BottomNavigation>

@@ -1,9 +1,9 @@
 import { Box, Typography, TextField, Button, IconButton } from "@mui/material";
 
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
-import WifiIcon from "@mui/icons-material/Wifi";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+// import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
+// import WifiIcon from "@mui/icons-material/Wifi";
+// import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 import { useNavigate } from "react-router-dom";
@@ -88,16 +88,16 @@ export default function AccountPage() {
         width: 390,
         minHeight: 844,
         mx: "auto",
-        bgcolor: "#FAFCF4",
+        bgcolor: "background.default",
         display: "flex",
         flexDirection: "column",
-        color: "#005844",
+        color: "primary.main",
       }}
     >
       {/* ================= HEADER ================= */}
       <Box
         sx={{
-          bgcolor: "#A8BF7E",
+          bgcolor: "secondary.main",
           px: "22px",
           pt: "24px",
           pb: "20px",
@@ -114,7 +114,7 @@ export default function AccountPage() {
             px: "10px",
           }}
         >
-          <Typography sx={{ fontWeight: 700, fontSize: 14, color: "#333" }}>
+          {/* <Typography sx={{ fontWeight: 700, fontSize: 14, color: "#333" }}>
             9:41
           </Typography>
 
@@ -122,7 +122,7 @@ export default function AccountPage() {
             <SignalCellular4BarIcon sx={{ fontSize: 17, color: "#333" }} />
             <WifiIcon sx={{ fontSize: 17, color: "#333" }} />
             <BatteryFullIcon sx={{ fontSize: 21, color: "#333" }} />
-          </Box>
+          </Box> */}
         </Box>
 
         {/* Back Button + Title */}
@@ -134,8 +134,8 @@ export default function AccountPage() {
             alignItems: "center",
           }}
         >
-          <IconButton onClick={() => navigate("/dashboard")} sx={{ p: 0 }}>
-            <ArrowBackIosNewIcon sx={{ fontSize: 31, color: "#344D59" }} />
+          <IconButton onClick={() => navigate("/profile")} sx={{ p: 0 }}>
+            <ArrowBackIosNewIcon sx={{ fontSize: 31, color: "primary.main" }} />
           </IconButton>
 
           <Typography
@@ -145,7 +145,7 @@ export default function AccountPage() {
               transform: "translateX(-50%)",
               fontSize: 32,
               fontWeight: 800,
-              color: "#005844",
+              color: "primary.main",
               whiteSpace: "nowrap",
             }}
           >
@@ -198,7 +198,7 @@ export default function AccountPage() {
                 p: 0,
               }}
             >
-              <EditOutlinedIcon sx={{ fontSize: 23, color: "#005844" }} />
+              <EditOutlinedIcon sx={{ fontSize: 23, color: "primary.main" }} />
             </IconButton>
           </Box>
         </Box>
@@ -272,15 +272,15 @@ export default function AccountPage() {
               width: 210,
               height: 64,
               borderRadius: "30px",
-              bgcolor: "#005844",
-              color: "#fff",
+              bgcolor: "primary.main",
+              color: "primary.contrastText",
               fontSize: 20,
               fontWeight: 600,
               textTransform: "none",
               boxShadow: "none",
 
               "&:hover": {
-                bgcolor: "#004333",
+                bgcolor: "primary.dark",
               },
             }}
           >
@@ -299,7 +299,7 @@ export default function AccountPage() {
 const labelStyle = {
   fontSize: 17,
   mb: "8px",
-  color: "#111",
+  color: "text.primary",
 };
 
 /* ================= INPUT STYLE ================= */
@@ -307,19 +307,19 @@ const inputStyle = {
   "& .MuiOutlinedInput-root": {
     height: 48,
     borderRadius: "30px",
-    bgcolor: "#fff",
+    bgcolor: "background.paper",
     fontSize: 16,
 
     "& fieldset": {
-      borderColor: "#8FCFC0",
+      borderColor: "secondary.main",
     },
 
     "&:hover fieldset": {
-      borderColor: "#009D7A",
+      borderColor: "background.main",
     },
 
     "&.Mui-focused fieldset": {
-      borderColor: "#005844",
+      borderColor: "primary.main",
     },
   },
 };

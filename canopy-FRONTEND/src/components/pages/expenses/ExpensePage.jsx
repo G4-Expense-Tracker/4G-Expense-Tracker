@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 import { Box, Typography, IconButton, Button } from "@mui/material";
 
-import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
-import WifiIcon from "@mui/icons-material/Wifi";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+// import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
+// import WifiIcon from "@mui/icons-material/Wifi";
+// import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import DirectionsBusIcon from "@mui/icons-material/DirectionsBus";
@@ -18,6 +18,8 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 
 import { getAllExpenses, deleteExpense } from "../../../api/expenses.js";
 
+
+// Running Calender file: npm install -g @mobiscroll/cli
 import {
   Eventcalendar,
   CalendarPrev,
@@ -77,55 +79,55 @@ export default function ExpensePage() {
     loadExpenses();
   }, []);
 
-  const sampleExpenses = [
-    {
-      id: "sample-1",
-      date: "2026-04-07",
-      time: "6:00am",
-      title: "Bus Fare",
-      category: "Transport",
-      amount: "$6.00",
-      iconType: "bus",
-    },
-    {
-      id: "sample-2",
-      date: "2026-04-07",
-      time: "7:15am",
-      title: "Starbucks",
-      category: "Drink",
-      amount: "$9.50",
-      iconType: "drink",
-    },
-    {
-      id: "sample-3",
-      date: "2026-04-07",
-      time: "3:45am",
-      title: "Save on Foods",
-      category: "Groceries",
-      amount: "$55.50",
-      iconType: "groceries",
-    },
-    {
-      id: "sample-4",
-      date: "2026-04-06",
-      time: "3:45am",
-      title: "Save on Foods",
-      category: "Groceries",
-      amount: "$55.50",
-      iconType: "groceries",
-    },
-    {
-      id: "sample-5",
-      date: "2026-04-05",
-      time: "5:35am",
-      title: "Yoga",
-      category: "Health",
-      amount: "$22.50",
-      iconType: "health",
-    },
-  ];
+  // const sampleExpenses = [
+  //   {
+  //     id: "sample-1",
+  //     date: "2026-04-07",
+  //     time: "6:00am",
+  //     title: "Bus Fare",
+  //     category: "Transport",
+  //     amount: "$6.00",
+  //     iconType: "bus",
+  //   },
+  //   {
+  //     id: "sample-2",
+  //     date: "2026-04-07",
+  //     time: "7:15am",
+  //     title: "Starbucks",
+  //     category: "Drink",
+  //     amount: "$9.50",
+  //     iconType: "drink",
+  //   },
+  //   {
+  //     id: "sample-3",
+  //     date: "2026-04-07",
+  //     time: "3:45am",
+  //     title: "Save on Foods",
+  //     category: "Groceries",
+  //     amount: "$55.50",
+  //     iconType: "groceries",
+  //   },
+  //   {
+  //     id: "sample-4",
+  //     date: "2026-04-06",
+  //     time: "3:45am",
+  //     title: "Save on Foods",
+  //     category: "Groceries",
+  //     amount: "$55.50",
+  //     iconType: "groceries",
+  //   },
+  //   {
+  //     id: "sample-5",
+  //     date: "2026-04-05",
+  //     time: "5:35am",
+  //     title: "Yoga",
+  //     category: "Health",
+  //     amount: "$22.50",
+  //     iconType: "health",
+  //   },
+  // ];
 
-  const allExpenses = [...sampleExpenses];
+  const allExpenses = savedExpenses;
 
   const formatDate = (date) => date.toISOString().split("T")[0];
 
@@ -229,7 +231,7 @@ export default function ExpensePage() {
       sx={{
         width: "100%",
         minHeight: "100vh",
-        backgroundColor: "#FAFCF7",
+        backgroundColor: "background.default",
         display: "flex",
         justifyContent: "center",
       }}
@@ -239,7 +241,7 @@ export default function ExpensePage() {
           width: "100%",
           maxWidth: 430,
           minHeight: "100vh",
-          backgroundColor: "#FAFCF7",
+          backgroundColor: "background.default",
           position: "relative",
           overflowX: "hidden",
           px: { xs: "18px", sm: "24px" },
@@ -256,7 +258,7 @@ export default function ExpensePage() {
             px: "4px",
           }}
         >
-          <Typography sx={{ fontSize: "22px", fontWeight: 600 }}>
+          {/* <Typography sx={{ fontSize: "22px", fontWeight: 600 }}>
             9:41
           </Typography>
 
@@ -264,7 +266,7 @@ export default function ExpensePage() {
             <SignalCellular4BarIcon sx={{ fontSize: 20 }} />
             <WifiIcon sx={{ fontSize: 20 }} />
             <BatteryFullIcon sx={{ fontSize: 23 }} />
-          </Box>
+          </Box> */}
         </Box>
 
         {/* Tabs */}
@@ -281,7 +283,7 @@ export default function ExpensePage() {
               sx={{
                 fontSize: { xs: "24px", sm: "26px" },
                 fontWeight: 700,
-                color: "#004B3B",
+                color: "primary.dark",
               }}
             >
               Expense
@@ -292,7 +294,7 @@ export default function ExpensePage() {
                 width: { xs: 130, sm: 145 },
                 height: 5,
                 borderRadius: "10px",
-                backgroundColor: "#A7C26E",
+                backgroundColor: "success.main",
                 mt: "12px",
               }}
             />
@@ -302,7 +304,7 @@ export default function ExpensePage() {
             sx={{
               fontSize: { xs: "24px", sm: "26px" },
               fontWeight: 700,
-              color: "#91AE5F",
+              color: "success.main",
             }}
           >
             Insight
@@ -326,52 +328,66 @@ export default function ExpensePage() {
             sx={{
               fontSize: "20px",
               fontWeight: 700,
-              color: "#163D2B",
+              color: "primary.dark",
             }}
           >
             {calendarMode === "week" ? "Weekly" : "Monthly"}
           </Typography>
 
-          <KeyboardArrowRightIcon sx={{ fontSize: 24, color: "#163D2B" }} />
+          <KeyboardArrowRightIcon sx={{ fontSize: 24, color: "primary.dark" }} />
         </Box>
 
         <Box
           sx={{
-            border: "1px solid #1C9A72",
+            border: "1px solid",
+            borderColor: "success.main",
             borderRadius: "7px",
             overflow: "hidden",
             mb: "14px",
-            backgroundColor: "#FAFCF7",
+            backgroundColor: "background.default",
 
             "& .mbsc-calendar": {
-              backgroundColor: "#FAFCF7",
+              backgroundColor: "background.default",
             },
             "& .mbsc-calendar-wrapper": {
-              backgroundColor: "#FAFCF7",
+              backgroundColor: "background.default",
             },
             "& .mbsc-calendar-week-day": {
-              color: "#005242",
+              color: "primary.main",
               fontSize: "15px",
               fontWeight: 500,
             },
             "& .mbsc-calendar-cell-text": {
-              color: "#005242",
+              color: "primary.main",
               fontSize: "18px",
               width: "30px",
               height: "30px",
               lineHeight: "30px",
             },
             "& .mbsc-selected .mbsc-calendar-cell-text": {
-              backgroundColor: "#005242",
-              color: "#FFFFFF",
+              backgroundColor: "primary.main",
+              color: "background.default",
               borderRadius: "50%",
               fontWeight: 700,
             },
             "& .mbsc-button": {
-              color: "#1C9A72",
+              color: "primary.main",
             },
             "& .mbsc-calendar-cell": {
               border: "none",
+            },
+             // ================= REMOVE TRIAL TEXT =================
+             "& .mbsc-schedule-grid-scroll-item-label": {
+              display: "none",
+            },
+            "& .mbsc-calendar-label-text": {
+              display: "none",
+            },
+            "& .mbsc-calendar-label": {
+              display: "none",
+            },
+            "& .mbsc-label": {
+              display: "none",
             },
           }}
         >
@@ -394,7 +410,7 @@ export default function ExpensePage() {
                   display: "grid",
                   gridTemplateColumns: "40px 1fr 40px",
                   alignItems: "center",
-                  backgroundColor: "#FAFCF7",
+                  backgroundColor: "background.default",
                   px: 1,
                 }}
               >
@@ -407,7 +423,7 @@ export default function ExpensePage() {
                     textAlign: "center",
                     fontSize: { xs: "16px", sm: "18px" },
                     fontWeight: 700,
-                    color: "#005242",
+                    color: "primary.main",
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -439,7 +455,8 @@ export default function ExpensePage() {
         >
           <Box
             sx={{
-              border: "1px solid #1C9A72",
+              border: "1px solid",
+              borderColor: "success.main",
               borderRadius: "30px",
               px: 1.5,
               py: 0.6,
@@ -456,7 +473,7 @@ export default function ExpensePage() {
               sx={{
                 fontSize: "18px",
                 fontWeight: 700,
-                color: "#005242",
+                color: "primary.main",
               }}
             >
               ${totalAmount.toFixed(2)}
@@ -465,7 +482,7 @@ export default function ExpensePage() {
 
           <FilterAltOutlinedIcon
             onClick={() => setFilterModalOpen(true)}
-            sx={{ color: "#005242", fontSize: 32, cursor: "pointer" }}
+            sx={{ color: "primary.main", fontSize: 32, cursor: "pointer" }}
           />
         </Box>
 
@@ -476,14 +493,15 @@ export default function ExpensePage() {
                 key={getExpenseId(expense)}
                 sx={{
                   minHeight: 86,
-                  border: "1px solid #1C9A72",
+                  border: "1px solid",
+                  borderColor: "success.main",
                   borderRadius: "7px",
                   px: 1.5,
                   py: 1,
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  backgroundColor: "#FAFCF7",
+                  backgroundColor: "background.default",
                   gap: 1,
                 }}
               >
@@ -495,12 +513,12 @@ export default function ExpensePage() {
                     minWidth: 0,
                   }}
                 >
-                  <Box sx={{ color: "#005242", "& svg": { fontSize: 32 } }}>
+                  <Box sx={{ color: "primary.main", "& svg": { fontSize: 32 } }}>
                     {getExpenseIcon(expense)}
                   </Box>
 
                   <Box sx={{ minWidth: 0 }}>
-                    <Typography sx={{ fontSize: "13px", color: "#005242" }}>
+                    <Typography sx={{ fontSize: "13px", color: "primary.main" }}>
                       {expense.time || "7:05am"}
                     </Typography>
 
@@ -508,7 +526,7 @@ export default function ExpensePage() {
                       sx={{
                         fontSize: "18px",
                         fontWeight: 700,
-                        color: "#005242",
+                        color: "primary.main",
                         lineHeight: 1.1,
                         overflow: "hidden",
                         textOverflow: "ellipsis",
@@ -540,7 +558,7 @@ export default function ExpensePage() {
                       onClick={() => handleEditExpense(expense)}
                       sx={{
                         textAlign: "center",
-                        color: "#005242",
+                        color: "primary.main",
                         cursor: "pointer",
                       }}
                     >
@@ -563,7 +581,7 @@ export default function ExpensePage() {
                       }}
                       sx={{
                         textAlign: "center",
-                        color: "#005242",
+                        color: "primary.main",
                         cursor: "pointer",
                       }}
                     >
@@ -584,7 +602,7 @@ export default function ExpensePage() {
                       sx={{
                         fontSize: "22px",
                         fontWeight: 700,
-                        color: "#005242",
+                        color: "primary.main",
                       }}
                     >
                       ${Number(String(expense.amount || 0).replace("$", "")).toFixed(2)}
@@ -596,7 +614,7 @@ export default function ExpensePage() {
                         setOpenMenuIndex(openMenuIndex === index ? null : index)
                       }
                     >
-                      <MoreHorizIcon sx={{ fontSize: 20, color: "#1C9A72" }} />
+                      <MoreHorizIcon sx={{ fontSize: 20, color: "success.main" }} />
                     </IconButton>
                   </Box>
                 )}
@@ -606,7 +624,7 @@ export default function ExpensePage() {
             <Typography
               sx={{
                 textAlign: "center",
-                color: "#005242",
+                color: "primary.main",
                 fontSize: "18px",
                 mt: 4,
               }}
@@ -659,7 +677,7 @@ export default function ExpensePage() {
                   onClick={() => setFilterModalOpen(false)}
                   sx={{
                     fontSize: 34,
-                    color: "#005242",
+                    color: "primary.main",
                     cursor: "pointer",
                     lineHeight: 1,
                   }}
@@ -675,7 +693,7 @@ export default function ExpensePage() {
                     height: 48,
                     borderRadius: 30,
                     backgroundColor: "#fff",
-                    color: "#005242",
+                    color: "primary.main",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
@@ -714,8 +732,8 @@ export default function ExpensePage() {
                           border: "1px solid #93AF58",
                           backgroundColor:
                             selectedCategoryFilter === cat
-                              ? "#005242"
-                              : "#EAF4D4",
+                              ? "primary.main"
+                              : "secondary.light",
                           color:
                             selectedCategoryFilter === cat ? "#fff" : "#000",
                           textTransform: "none",
@@ -740,7 +758,7 @@ export default function ExpensePage() {
                     flex: 1,
                     height: 56,
                     borderRadius: 30,
-                    color: "#005242",
+                    color: "primary.main",
                     fontSize: 22,
                     fontWeight: 700,
                     border: "2px solid white",
@@ -763,7 +781,7 @@ export default function ExpensePage() {
                     color: "#fff",
                     fontSize: 22,
                     fontWeight: 700,
-                    backgroundColor: "#005242",
+                    backgroundColor: "primary.main",
                     textTransform: "none",
                   }}
                 >
@@ -817,7 +835,7 @@ export default function ExpensePage() {
                     flex: 1,
                     height: 55,
                     borderRadius: 30,
-                    color: "#005242",
+                    color: "primary.main",
                     fontSize: 22,
                     fontWeight: 700,
                     border: "2px solid white",
@@ -841,7 +859,7 @@ export default function ExpensePage() {
                     color: "#fff",
                     fontSize: 22,
                     fontWeight: 700,
-                    backgroundColor: "#005242",
+                    bgcolor: "primary.main",
                     textTransform: "none",
                   }}
                 >

@@ -61,23 +61,30 @@ export default function EditExpensePage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        px: 2,
       }}
     >
       <Box
         sx={{
-          width: 390,
+          width: "100%",
+          maxWidth: 390,
           minHeight: 390,
           borderRadius: "35px",
-          background: "linear-gradient(180deg, #289173 0%, #A9BF7E 100%)",
-          px: 4,
+          background: `linear-gradient(
+            180deg,
+            ${theme.palette.primary.main} 0%,
+            ${theme.palette.success.main} 100%
+          )`,
+          px: { xs: 3, sm: 4 },
           py: 4,
-          color: "#FFFFFF",
+          color: "primary.contrastText",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.25)",
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 4 }}>
-          <EditIcon sx={{ fontSize: 30 }} />
+          <EditIcon sx={{ fontSize: 30, color: "primary.contrastText" }} />
 
-          <Typography sx={{ fontSize: "30px", fontWeight: 700 }}>
+          <Typography sx={{ fontSize: "30px", fontWeight: 700, color: "primary.contrastText" }}>
             Edit
           </Typography>
         </Box>
@@ -88,16 +95,17 @@ export default function EditExpensePage() {
             gridTemplateColumns: "120px 1fr",
             alignItems: "center",
             mb: 2.5,
+            gap: 1,
           }}
         >
-          <Typography sx={{ fontSize: "26px" }}>Name</Typography>
+          <Typography sx={{ fontSize: "26px", color: "primary.contrastText" }}>Name</Typography>
 
           <TextField
             value={name}
             onChange={(e) => setName(e.target.value)}
             size="small"
             sx={{
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "background.paper",
               borderRadius: "30px",
               "& .MuiOutlinedInput-root": {
                 borderRadius: "30px",
@@ -113,16 +121,17 @@ export default function EditExpensePage() {
             gridTemplateColumns: "120px 1fr",
             alignItems: "center",
             mb: 2.5,
+            gap: 1,
           }}
         >
-          <Typography sx={{ fontSize: "26px" }}>Category</Typography>
+          <Typography sx={{ fontSize: "26px", color: "primary.contrastText" }}>Category</Typography>
 
           <TextField
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             size="small"
             sx={{
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "background.paper",
               borderRadius: "30px",
               "& .MuiOutlinedInput-root": {
                 borderRadius: "30px",
@@ -138,16 +147,17 @@ export default function EditExpensePage() {
             gridTemplateColumns: "120px 1fr",
             alignItems: "center",
             mb: 2.5,
+            gap: 1,
           }}
         >
-          <Typography sx={{ fontSize: "26px" }}>Amount</Typography>
+          <Typography sx={{ fontSize: "26px", color: "primary.contrastText" }}>Amount</Typography>
 
           <TextField
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             size="small"
             sx={{
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "background.paper",
               borderRadius: "30px",
               "& .MuiOutlinedInput-root": {
                 borderRadius: "30px",
@@ -163,9 +173,10 @@ export default function EditExpensePage() {
             gridTemplateColumns: "120px 1fr",
             alignItems: "center",
             mb: 3,
+            gap: 1,
           }}
         >
-          <Typography sx={{ fontSize: "26px" }}>Date</Typography>
+          <Typography sx={{ fontSize: "26px", color: "primary.contrastText" }}>Date</Typography>
 
           <TextField
             type="date"
@@ -173,7 +184,7 @@ export default function EditExpensePage() {
             onChange={(e) => setDate(e.target.value)}
             size="small"
             sx={{
-              backgroundColor: "#FFFFFF",
+              backgroundColor: "background.paper",
               borderRadius: "30px",
               "& .MuiOutlinedInput-root": {
                 borderRadius: "30px",
@@ -184,17 +195,17 @@ export default function EditExpensePage() {
           />
         </Box>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2, mt: 2 }}>
           <Button
             onClick={() => navigate("/expenses")}
             sx={{
               width: 140,
               height: 58,
               borderRadius: "35px",
-              color: "#005242",
+              color: "primary.dark",
               fontSize: "24px",
               fontWeight: 700,
-              border: "2px solid #FFFFFF",
+              border: `2px solid ${theme.palette.primary.contrastText}`,
               backgroundColor: "rgba(255,255,255,0.35)",
               textTransform: "none",
             }}
@@ -208,13 +219,13 @@ export default function EditExpensePage() {
               width: 140,
               height: 58,
               borderRadius: "35px",
-              color: "#FFFFFF",
+              color: "primary.contrastText",
               fontSize: "24px",
               fontWeight: 700,
-              backgroundColor: "#005242",
+              bgcolor: "primary.dark",
               textTransform: "none",
               "&:hover": {
-                backgroundColor: "#005242",
+                bgcolor: "primary.dark",
               },
             }}
           >

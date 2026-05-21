@@ -7,9 +7,9 @@ import {
   InputAdornment,
 } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
-import WifiIcon from "@mui/icons-material/Wifi";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+//import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
+//import WifiIcon from "@mui/icons-material/Wifi";
+//import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -41,13 +41,13 @@ export default function LoginPage() {
         width: 390,
         minHeight: 844,
         mx: "auto",
-        bgcolor: "#FAFCF4",
+        bgcolor: "background.default",
         px: "22px",
         pt: "24px",
         pb: "34px",
         display: "flex",
         flexDirection: "column",
-        color: "#005844",
+        color: "primary.main",
       }}
     >
       {/* Status Bar */}
@@ -60,21 +60,21 @@ export default function LoginPage() {
           px: "10px",
         }}
       >
-        <Typography sx={{ fontWeight: 700, fontSize: 14, color: "#333" }}>
+        {/* <Typography sx={{ fontWeight: 700, fontSize: 14, color: "#333" }}>
           9:41
-        </Typography>
+        </Typography> */}
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 0.3 }}>
+        {/* <Box sx={{ display: "flex", alignItems: "center", gap: 0.3 }}>
           <SignalCellular4BarIcon sx={{ fontSize: 17, color: "#333" }} />
           <WifiIcon sx={{ fontSize: 17, color: "#333" }} />
           <BatteryFullIcon sx={{ fontSize: 21, color: "#333" }} />
-        </Box>
+        </Box> */}
       </Box>
 
       {/* Back Button */}
       <Box sx={{ mb: "48px" }}>
         <IconButton onClick={() => navigate("/main")} sx={{ p: 0 }}>
-          <ArrowBackIosNewIcon sx={{ fontSize: 31, color: "#344D59" }} />
+          <ArrowBackIosNewIcon sx={{ fontSize: 31, color: "primary.main" }} />
         </IconButton>
       </Box>
 
@@ -85,14 +85,14 @@ export default function LoginPage() {
             fontSize: 36,
             fontWeight: 800,
             mb: "30px",
-            color: "#005844",
+            color: "primary.main",
             lineHeight: 1.1,
           }}
         >
           Welcome back!
         </Typography>
 
-        <Typography sx={{ mb: "8px", fontSize: 17, color: "#111" }}>
+        <Typography sx={{ mb: "8px", fontSize: 17, color: "text.primary" }}>
           User Name or Email Address *
         </Typography>
 
@@ -108,21 +108,21 @@ export default function LoginPage() {
             "& .MuiOutlinedInput-root": {
               height: 58,
               borderRadius: "30px",
-              bgcolor: "#fff",
+              bgcolor: "background.paper",
               "& fieldset": {
-                borderColor: "#8FCFC0",
+                borderColor: "secondary.main",
               },
               "&:hover fieldset": {
-                borderColor: "#005844",
+                borderColor: "primary.main",
               },
               "&.Mui-focused fieldset": {
-                borderColor: "#005844",
+                borderColor: "primary.main",
               },
             },
           }}
         />
 
-        <Typography sx={{ mb: "8px", fontSize: 17, color: "#111" }}>
+        <Typography sx={{ mb: "8px", fontSize: 17, color: "text.primary" }}>
           Password *
         </Typography>
 
@@ -137,7 +137,7 @@ export default function LoginPage() {
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <VisibilityOffOutlinedIcon sx={{ color: "#566274" }} />
+                <VisibilityOffOutlinedIcon sx={{ color: "primary.main" }} />
               </InputAdornment>
             ),
           }}
@@ -146,15 +146,15 @@ export default function LoginPage() {
             "& .MuiOutlinedInput-root": {
               height: 58,
               borderRadius: "30px",
-              bgcolor: "#fff",
+              bgcolor: "background.paper",
               "& fieldset": {
-                borderColor: "#009D7A",
+                borderColor: "secondary.main",
               },
               "&:hover fieldset": {
-                borderColor: "#005844",
+                borderColor: "primary.main",
               },
               "&.Mui-focused fieldset": {
-                borderColor: "#005844",
+                borderColor: "primary.main",
               },
             },
           }}
@@ -176,15 +176,15 @@ export default function LoginPage() {
             fontSize: 20,
             fontWeight: 700,
             textTransform: "none",
-            bgcolor: "#005844",
+            bgcolor: "primary.main",
             color: "#fff",
             mb: "22px",
             boxShadow: "none",
             "&:hover": {
-              bgcolor: "#004333",
+              bgcolor: "primary.dark",
             },
             "&.Mui-disabled": {
-              bgcolor: "#005844",
+              bgcolor: "primary.main",
               color: "#fff",
               opacity: 1,
             },
@@ -197,7 +197,7 @@ export default function LoginPage() {
           sx={{
             fontSize: 17,
             fontWeight: 700,
-            color: "#005844",
+            color: "primary.main",
             ml: "8px",
           }}
         >
@@ -207,7 +207,7 @@ export default function LoginPage() {
 
       {/* Bottom Sign Up */}
       <Box sx={{ textAlign: "center", mb: "72px" }}>
-        <Typography sx={{ fontSize: 17, color: "#111" }}>
+        <Typography sx={{ fontSize: 17, color: "text.primary" }}>
           Don’t have an account?{" "}
           <Box
             component="span"

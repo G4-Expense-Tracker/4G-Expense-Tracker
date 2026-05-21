@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, TextField, IconButton, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  IconButton,
+  Button,
+} from "@mui/material";
+
+import { useTheme } from "@mui/material/styles";
 
 import {
   SignalCellular4Bar,
@@ -22,9 +30,13 @@ import LocalHospitalOutlinedIcon from "@mui/icons-material/LocalHospitalOutlined
 import SoapOutlinedIcon from "@mui/icons-material/SoapOutlined";
 import FastfoodOutlinedIcon from "@mui/icons-material/FastfoodOutlined";
 import DirectionsBikeOutlinedIcon from "@mui/icons-material/DirectionsBikeOutlined";
+
 import FooterNav from "../../../Footer/FooterNav.jsx";
 
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 
 // This list stores the icon name and actual MUI icon
 const iconList = [
@@ -47,7 +59,10 @@ const iconList = [
 export default function AddCategoryPage() {
   const navigate = useNavigate();
 
-  // Reads the editIndex from the URL, for example: /add-category?editIndex=0
+  // ================= THEME =================
+  const theme = useTheme();
+
+  // Reads the editIndex from the URL
   const [searchParams] = useSearchParams();
   const editIndex = searchParams.get("editIndex");
 
@@ -55,27 +70,37 @@ export default function AddCategoryPage() {
   const isEditMode = editIndex !== null;
 
   // Category name input state
-  const [categoryName, setCategoryName] = useState("");
+  const [categoryName, setCategoryName] =
+    useState("");
 
   // Selected icon state
-  const [selectedIconName, setSelectedIconName] = useState("heart");
+  const [selectedIconName, setSelectedIconName] =
+    useState("heart");
 
   // Find the selected icon component
   const SelectedIcon =
-    iconList.find((item) => item.name === selectedIconName)?.icon ||
-    FavoriteBorderIcon;
+    iconList.find(
+      (item) => item.name === selectedIconName
+    )?.icon || FavoriteBorderIcon;
 
   // If editing, load the old category name and icon
   useEffect(() => {
     if (isEditMode) {
       const savedCategories =
-        JSON.parse(localStorage.getItem("customCategories")) || [];
+        JSON.parse(
+          localStorage.getItem(
+            "customCategories"
+          )
+        ) || [];
 
-      const categoryToEdit = savedCategories[Number(editIndex)];
+      const categoryToEdit =
+        savedCategories[Number(editIndex)];
 
       if (categoryToEdit) {
         setCategoryName(categoryToEdit.title);
-        setSelectedIconName(categoryToEdit.iconName);
+        setSelectedIconName(
+          categoryToEdit.iconName
+        );
       }
     }
   }, [editIndex, isEditMode]);
@@ -88,25 +113,43 @@ export default function AddCategoryPage() {
     }
 
     const savedCategories =
-      JSON.parse(localStorage.getItem("customCategories")) || [];
+      JSON.parse(
+        localStorage.getItem(
+          "customCategories"
+        )
+      ) || [];
 
     const updatedCategory = {
-      id: isEditMode ? savedCategories[Number(editIndex)].id : Date.now(),
+      id: isEditMode
+        ? savedCategories[Number(editIndex)].id
+        : Date.now(),
+
       title: categoryName.trim(),
+
       iconName: selectedIconName,
     };
 
     let updatedCategories;
 
     if (isEditMode) {
-      updatedCategories = savedCategories.map((category, index) =>
-        index === Number(editIndex) ? updatedCategory : category
+      updatedCategories = savedCategories.map(
+        (category, index) =>
+          index === Number(editIndex)
+            ? updatedCategory
+            : category
       );
     } else {
-      updatedCategories = [...savedCategories, updatedCategory];
+      updatedCategories = [
+        ...savedCategories,
+        updatedCategory,
+      ];
     }
 
-    localStorage.setItem("customCategories", JSON.stringify(updatedCategories));
+    localStorage.setItem(
+      "customCategories",
+      JSON.stringify(updatedCategories)
+    );
+
     navigate("/category");
   }
 
@@ -115,143 +158,244 @@ export default function AddCategoryPage() {
       sx={{
         width: "100%",
         maxWidth: 390,
+
         minHeight: "100svh",
+
         mx: "auto",
-        bgcolor: "#a8c278",
+
+        // ================= MUI THEME =================
+        bgcolor: "secondary.main",
+
         position: "relative",
+
         overflowX: "hidden",
+
+        pb: "86px",
       }}
     >
-      {/* Status bar */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", px: 3, pt: 2 }}>
-        <Typography sx={{ fontWeight: 700 }}>9:41</Typography>
-
-        <Box sx={{ display: "flex", gap: 0.5 }}>
-          <SignalCellular4Bar sx={{ fontSize: 16 }} />
-          <Wifi sx={{ fontSize: 16 }} />
-          <BatteryFull sx={{ fontSize: 18 }} />
-        </Box>
-      </Box>
-
-      {/* Back button */}
+      {/* ================= BACK BUTTON ================= */}
       <IconButton
         onClick={() => navigate("/category")}
         sx={{
           position: "absolute",
+
           top: 72,
           left: 18,
-          color: "#23343b",
+
+          // ================= MUI THEME =================
+          color: "primary.dark",
+
           zIndex: 5,
         }}
       >
         <ArrowBackIosNew />
       </IconButton>
 
-      {/* Main green panel */}
+      {/* ================= MAIN PANEL ================= */}
       <Box
         sx={{
           mt: 10,
-          minHeight: "calc(100svh - 96px)",
+
+          minHeight:
+            "calc(100svh - 96px)",
+
           borderTopLeftRadius: 38,
           borderTopRightRadius: 38,
+
           px: 3,
           pt: 6,
           pb: 5,
-          background: "linear-gradient(180deg, #24936d 0%, #9bc47d 100%)",
+
+          // ================= MUI THEME =================
+          background: `linear-gradient(
+            180deg,
+            ${theme.palette.background.green} 0%,
+            ${theme.palette.secondary.main} 100%
+          )`,
         }}
       >
-        {/* Page title changes depending on mode */}
+        {/* ================= PAGE TITLE ================= */}
         <Typography
           sx={{
-            color: "white",
+            color:
+              "primary.contrastText",
+
             fontSize: 38,
             fontWeight: 800,
+
             textAlign: "center",
+
             mb: 4,
           }}
         >
-          {isEditMode ? "Edit Category" : "Add Category"}
+          {isEditMode
+            ? "Edit Category"
+            : "Add Category"}
         </Typography>
 
-        {/* Category name input */}
+        {/* ================= CATEGORY INPUT ================= */}
         <TextField
           fullWidth
           value={categoryName}
-          onChange={(e) => setCategoryName(e.target.value)}
+          onChange={(e) =>
+            setCategoryName(e.target.value)
+          }
           placeholder="Category name"
           sx={{
             mb: 3,
+
             "& .MuiOutlinedInput-root": {
               height: 58,
+
               borderRadius: 10,
-              bgcolor: "#f7faf2",
-              "& fieldset": { border: "none" },
+
+              // ================= MUI THEME =================
+              bgcolor:
+                "background.default",
+
+              "& fieldset": {
+                border: "none",
+              },
             },
           }}
         />
 
-        <Typography sx={{ color: "white", fontSize: 18, mb: 1.5 }}>
+        {/* ================= ICON TITLE ================= */}
+        <Typography
+          sx={{
+            color:
+              "primary.contrastText",
+
+            fontSize: 18,
+
+            mb: 1.5,
+          }}
+        >
           Icons
         </Typography>
 
-        {/* Selected icon preview */}
+        {/* ================= SELECTED ICON PREVIEW ================= */}
         <Box
           sx={{
             height: 58,
+
             borderRadius: 10,
-            bgcolor: "#f7faf2",
+
+            // ================= MUI THEME =================
+            bgcolor:
+              "background.default",
+
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+
             mb: 3,
           }}
         >
-          <SelectedIcon sx={{ fontSize: 40, color: "#004638" }} />
+          <SelectedIcon
+            sx={{
+              fontSize: 40,
+
+              // ================= MUI THEME =================
+              color: "primary.main",
+            }}
+          />
         </Box>
 
-        {/* Icon grid */}
+        {/* ================= ICON GRID ================= */}
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
+
+            gridTemplateColumns:
+              "repeat(4, 1fr)",
+
             justifyItems: "center",
+
             rowGap: 2.5,
+
             mb: 4,
           }}
         >
-          {iconList.map(({ name, icon: Icon }) => (
-            <IconButton
-              key={name}
-              onClick={() => setSelectedIconName(name)}
-              sx={{
-                color: selectedIconName === name ? "#004638" : "white",
-              }}
-            >
-              <Icon sx={{ fontSize: 34 }} />
-            </IconButton>
-          ))}
+          {iconList.map(
+            ({ name, icon: Icon }) => (
+              <IconButton
+                key={name}
+                onClick={() =>
+                  setSelectedIconName(name)
+                }
+                sx={{
+                  color:
+                    selectedIconName === name
+                      ? "primary.main"
+                      : "primary.contrastText",
+                }}
+              >
+                <Icon
+                  sx={{
+                    fontSize: 34,
+                  }}
+                />
+              </IconButton>
+            )
+          )}
         </Box>
 
-        {/* Save/update button */}
+        {/* ================= SAVE BUTTON ================= */}
         <Button
           fullWidth
           onClick={handleSave}
           sx={{
             width: "72%",
+
             height: 56,
+
             mx: "auto",
+
             display: "block",
+
             borderRadius: 10,
-            bgcolor: "#004638",
-            color: "white",
+
+            // ================= MUI THEME =================
+            bgcolor: "primary.main",
+
+            color:
+              "primary.contrastText",
+
             fontSize: 22,
             fontWeight: 800,
+
             textTransform: "none",
-            "&:hover": { bgcolor: "#00352d" },
+
+            "&:hover": {
+              bgcolor: "primary.dark",
+            },
           }}
         >
-          {isEditMode ? "Update" : "Save"}
+          {isEditMode
+            ? "Update"
+            : "Save"}
         </Button>
+      </Box>
+
+      {/* ================= FOOTER ================= */}
+      <Box
+        sx={{
+          position: "fixed",
+
+          bottom: 0,
+          left: "50%",
+
+          transform:
+            "translateX(-50%)",
+
+          width: "100%",
+          maxWidth: 390,
+
+          zIndex: 20,
+        }}
+      >
+        <FooterNav />
       </Box>
     </Box>
   );

@@ -10,9 +10,9 @@ import {
   Button,
   InputAdornment,
 } from "@mui/material";
-import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
-import WifiIcon from "@mui/icons-material/Wifi";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+// import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
+// import WifiIcon from "@mui/icons-material/Wifi";
+// import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
@@ -65,8 +65,14 @@ export default function SignupPage() {
     "& .MuiOutlinedInput-root": {
       height: 46,
       borderRadius: "28px",
-      bgcolor: "#ffffff",
-      "& fieldset": { borderColor: "#8FCDBE" },
+      bgcolor: "background.paper",
+      "& fieldset": { borderColor: "secondary.main" },
+      "&: hover fieldset": {
+        borderColor: "primary.main",
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: "primary.main",
+      }
     },
   };
 
@@ -86,7 +92,7 @@ export default function SignupPage() {
       }}
     >
       {/* Status Bar */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+      {/* <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <Typography sx={{ fontWeight: 700, fontSize: 14 }}>9:41</Typography>
 
         <Box sx={{ display: "flex", gap: 0.3 }}>
@@ -94,25 +100,25 @@ export default function SignupPage() {
           <WifiIcon sx={{ fontSize: 14 }} />
           <BatteryFullIcon sx={{ fontSize: 17 }} />
         </Box>
-      </Box>
+      </Box> */}
 
       {/* Back Button */}
       <Box sx={{ mb: 3 }}>
         <IconButton onClick={() => navigate("/login")} sx={{ p: 0 }}>
-          <ArrowBackIosNewIcon sx={{ fontSize: 22 }} />
+          <ArrowBackIosNewIcon sx={{ fontSize: 22, color: "primary.main" }} />
         </IconButton>
       </Box>
 
       {/* Content */}
       <Box sx={{ flexGrow: 1 }}>
-        <Typography sx={{ mb: 3, fontSize: 32, fontWeight: 800 }}>
+        <Typography sx={{ mb: 3, fontSize: 32, fontWeight: 800, color: "primary.main"  }}>
           Create an account
         </Typography>
 
         {/* Name Row */}
         <Box sx={{ display: "flex", gap: 2 }}>
           <Box sx={{ flex: 1 }}>
-            <Typography sx={{ fontSize: 14, mb: 0.5 }}>
+            <Typography sx={{ fontSize: 14, mb: 0.5, color: "text.primary" }}>
               First Name *
             </Typography>
             <TextField 
@@ -123,7 +129,7 @@ export default function SignupPage() {
           </Box>
 
           <Box sx={{ flex: 1 }}>
-            <Typography sx={{ fontSize: 14, mb: 0.5 }}>
+            <Typography sx={{ fontSize: 14, mb: 0.5, color: "text.primary" }}>
               Last Name *
             </Typography>
             <TextField 
@@ -134,14 +140,14 @@ export default function SignupPage() {
           </Box>
         </Box>
 
-        <Typography sx={{ fontSize: 14, mb: 0.5 }}>Email *</Typography>
+        <Typography sx={{ fontSize: 14, mb: 0.5, color: "text.primary" }}>Email *</Typography>
         <TextField 
           fullWidth
           onChange={(e) => setEmail(e.target.value)}
           sx={inputStyle} 
         />
 
-        <Typography sx={{ fontSize: 14, mb: 0.5 }}>
+        <Typography sx={{ fontSize: 14, mb: 0.5, color: "text.primary" }}>
           Phone Number *
         </Typography>
         <TextField 
@@ -150,7 +156,7 @@ export default function SignupPage() {
           sx={inputStyle} 
         />
 
-        <Typography sx={{ fontSize: 14, mb: 0.5 }}>
+        <Typography sx={{ fontSize: 14, mb: 0.5, color: "text.primary" }}>
           Password *
         </Typography>
         <TextField
@@ -173,7 +179,7 @@ export default function SignupPage() {
           }}
         />
 
-        <Typography sx={{ fontSize: 14, mb: 0.5 }}>
+        <Typography sx={{ fontSize: 14, mb: 0.5, color: "text.primary" }}>
           Confirm Password *
         </Typography>
         <TextField
@@ -197,13 +203,20 @@ export default function SignupPage() {
         />
 
         <FormControlLabel
-          control={<Checkbox 
+          control={
+          <Checkbox 
             size="small"
             checked={agreed}
             onChange={(e) => setAgreed(e.target.checked)}
+            sx={{
+              color: "primary.main",
+              "&.Mui-checked": {
+                color: "primary.main",
+              }
+            }}
           />}
           label={
-            <Typography sx={{ fontSize: 13 }}>
+            <Typography sx={{ fontSize: 13, color: "primary.main",}}>
               I agree to the{" "}
               <Link sx={{ color: "#2f6df6" }}>
                 Terms of Service
@@ -212,6 +225,18 @@ export default function SignupPage() {
           }
           sx={{ mb: 2 }}
         />
+        {/* ERROR MESSAGE */}
+        {error && (
+          <Typography
+            sx={{
+              color: "error.main",
+              mb: 2,
+              fontSize: 14,
+            }}
+            >
+              {error}
+            </Typography>
+        )}
 
         <Button
           fullWidth
@@ -220,10 +245,13 @@ export default function SignupPage() {
             height: 52,
             borderRadius: "28px",
             bgcolor: "primary.main",
-            color: "#fff",
+            color: "primary.contrastText",
             fontSize: 17,
             fontWeight: 700,
             textTransform: "none",
+            "&:hover": {
+              bgcolor: "primary.dark"
+            }
           }}
         >
           Create Account
@@ -232,9 +260,9 @@ export default function SignupPage() {
 
       {/* Bottom */}
       <Box sx={{ mt: 3, textAlign: "center" }}>
-        <Typography sx={{ fontSize: 14 }}>
+        <Typography sx={{ fontSize: 14, color: "text.primary", }}>
           Already have an account?{" "}
-          <Link onClick={() => navigate("/login")} underline="none">
+          <Link onClick={() => navigate("/login")} underline="none" sx={{color: "#2F6DF6", cursor: "pointer"}}>
             Sign in
           </Link>
         </Typography>

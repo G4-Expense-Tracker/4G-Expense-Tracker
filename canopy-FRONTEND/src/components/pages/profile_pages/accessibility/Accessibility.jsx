@@ -1,96 +1,142 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+
 import FooterNav from "../../../Footer/FooterNav.jsx";
-import Header from "../Header"
-import FormatSizeIcon from '@mui/icons-material/FormatSize';
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import FormatBoldIcon from '@mui/icons-material/FormatBold';
-import SettingsIcon from '@mui/icons-material/Settings';
-import InterpreterModeIcon from '@mui/icons-material/InterpreterMode';
+
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import FormatSizeIcon from "@mui/icons-material/FormatSize";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import FormatBoldIcon from "@mui/icons-material/FormatBold";
+import SettingsIcon from "@mui/icons-material/Settings";
+import InterpreterModeIcon from "@mui/icons-material/InterpreterMode";
 
 function Accessibility() {
-    return (
-        <Box
-            sx={{
-                display: "flex",
-                flexDirection: "column",
-                minHeight: "100vh",
-            }}
+  const navigate = useNavigate();
+
+  const menuItems = [
+    {
+      label: "Larger Text",
+      icon: <FormatSizeIcon />,
+    },
+    {
+      label: "Bold Text",
+      icon: <FormatBoldIcon />,
+    },
+    {
+      label: "Contrast",
+      icon: <SettingsIcon />,
+    },
+    {
+      label: "Text To Speech",
+      icon: <InterpreterModeIcon />,
+    },
+  ];
+
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        maxWidth: 390,
+        minHeight: "100vh",
+        mx: "auto",
+        bgcolor: "background.default",
+        display: "flex",
+        flexDirection: "column",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* ================= HEADER ================= */}
+      <Box
+        sx={{
+          height: 158,
+          bgcolor: "secondary.main",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "relative",
+        }}
+      >
+        <IconButton
+          onClick={() => navigate("/profile")}
+          sx={{
+            position: "absolute",
+            left: 14,
+            top: 76,
+            color: "primary.main",
+          }}
         >
-            <Header title="Accessibility" />
+          <ArrowBackIosNewIcon sx={{ fontSize: 28 }} />
+        </IconButton>
 
-            {/* MENU OPTION LIST */}
-            <Box sx={{
-                display: "block",
-            }}>
-                {/* larger text */}
-                <Box
-                    sx={{
-                        display: "flex",
-                        padding: "1rem"
-                    }}>
-                    <FormatSizeIcon />
+        <Typography
+          sx={{
+            fontSize: 30,
+            fontWeight: 800,
+            color: "primary.main",
+          }}
+        >
+          Accessibility
+        </Typography>
+      </Box>
 
-                    <Typography variant="body1" component="p">
-                        Larger Text
-                    </Typography>
+      {/* ================= MENU OPTION LIST ================= */}
+      <Box
+        sx={{
+          flexGrow: 1,
+          pt: "28px",
+          px: "46px",
+        }}
+      >
+        {menuItems.map((item) => (
+          <Box
+            key={item.label}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "36px 1fr 30px",
+              alignItems: "center",
+              mb: "28px",
+              cursor: "pointer",
+            }}
+          >
+            <Box
+              sx={{
+                color: "primary.main",
+                display: "flex",
+                alignItems: "center",
 
-                    <KeyboardArrowRightIcon />
-
-                </Box>
-
-                {/* Bold Text */}
-                <Box
-                    sx={{
-                        display: "flex",
-                        padding: "1rem"
-                    }}>
-                    <FormatBoldIcon />
-
-                    <Typography variant="body1" component="p">
-                        Bold Text
-                    </Typography>
-
-                    <KeyboardArrowRightIcon />
-
-                </Box>
-
-                {/* Contrast*/}
-                <Box
-                    sx={{
-                        display: "flex",
-                        padding: "1rem"
-                    }}>
-                    <SettingsIcon />
-
-                    <Typography variant="body1" component="p">
-                        Contrast
-                    </Typography>
-
-                    <KeyboardArrowRightIcon />
-
-                </Box>
-
-                {/* Text to Speech*/}
-                <Box
-                    sx={{
-                        display: "flex",
-                        padding: "1rem"
-                    }}>
-                    <InterpreterModeIcon />
-
-                    <Typography variant="body1" component="p">
-                        Text to Speech
-                    </Typography>
-
-                    <KeyboardArrowRightIcon />
-
-                </Box>
-
+                "& svg": {
+                  fontSize: 28,
+                },
+              }}
+            >
+              {item.icon}
             </Box>
 
-            <FooterNav />
-        </Box>
-    )
+            <Typography
+              sx={{
+                fontSize: 21,
+                fontWeight: 700,
+                color: "text.primary",
+              }}
+            >
+              {item.label}
+            </Typography>
+
+            <KeyboardArrowRightIcon
+              sx={{
+                color: "primary.main",
+                fontSize: 30,
+              }}
+            />
+          </Box>
+        ))}
+      </Box>
+
+      {/* ================= FOOTER ================= */}
+      <FooterNav />
+    </Box>
+  );
 }
 
-export default Accessibility
+export default Accessibility;
