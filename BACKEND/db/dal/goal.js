@@ -120,11 +120,13 @@ export async function editProgress(goal_id, postData) {
 
     const affectedRows = results[0].affectedRows;
 
+    const updatedGoal = await getGoalById(goal_id);
+
     if (affectedRows === 0) {
       return { success: false, message: "Goal not found" };
     }
 
-    return { success: true, goal_id };
+    return { success: true, goal: updatedGoal };
   } catch (err) {
     console.log(err);
     return { success: false };

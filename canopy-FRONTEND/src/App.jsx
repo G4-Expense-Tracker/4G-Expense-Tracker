@@ -24,6 +24,7 @@ import ExpensePage from "./components/pages/expenses/ExpensePage";
 import EditExpensePage from "./components/pages/expenses/EditExpensePage";
 import AddExpensePage from "./components/pages/expenses/AddExpensePage";
 import Insights from "./components/pages/insights_pages/Insight";
+import Top3 from "./components/pages/insights_pages/top3/Top3";
 
 
 function App() {

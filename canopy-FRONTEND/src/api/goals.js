@@ -114,14 +114,14 @@ export async function deleteGoal(goal_id) {
     return data;
 }
 
-export async function addGoalProgress(goal_id) {
+export async function addGoalProgress(goal_id, amount) {
     const res = await fetch(`${API}/goals/${goal_id}/progress/update`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({ uncleanProgress }),
+        body: JSON.stringify({ amount }),
     });
 
     const data = await res.json();

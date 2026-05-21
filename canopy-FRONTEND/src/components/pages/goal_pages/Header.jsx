@@ -3,10 +3,14 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 
-function Header({ name, previousGoal, nextGoal }) {
+function Header({ name, previousGoal, nextGoal, handleDots:handleDotsProp }) {
 
     const handleDots = () => {
         /* dot menu */
+        /* Using Ava's Pre existing Code add the additional functionalities by the Last Minutes request from Design Team */
+        if (typeof handleDotsProp === "function") {
+        handleDotsProp()
+        }
     }
 
 
@@ -26,14 +30,19 @@ function Header({ name, previousGoal, nextGoal }) {
             >
 
                 <Grid
-                    size={8}
+                    size={10}
                     sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        paddingLeft: "4rem"
 
                     }}>
 
                     <Typography variant="h4" component="h1"
                         sx={{
-                            textAlign: "center"
+                            textAlign: "center",
+                            fontWeight: "bold",
+                            width: "100%"
                         }}>
                         {name}
                     </Typography>
@@ -41,10 +50,12 @@ function Header({ name, previousGoal, nextGoal }) {
                 </Grid>
 
                 <Grid
-                    size={4}
+                    size={2}
                 >
                     <MoreHorizIcon
                     sx={{
+                        display: "flex",
+                        justifyContent: "flex-end",
                         fontSize:"2rem"
                     }}
                     onClick={handleDots}

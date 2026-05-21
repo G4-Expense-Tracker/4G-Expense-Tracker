@@ -9,6 +9,7 @@ import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import PersonIcon from "@mui/icons-material/Person";
 import AddIcon from "@mui/icons-material/Add";
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -82,8 +83,8 @@ export default function FooterNav() {
         >
           {/* HOME */}
           <BottomNavigationAction
-            label="Main"
-            value="/main"
+            label="Home"
+            value="/dashboard"
             icon={<HomeIcon />}
             onClick={() => navigate("/dashboard")}
             sx={{
@@ -93,10 +94,10 @@ export default function FooterNav() {
 
           {/* EXPENSE */}
           <BottomNavigationAction
-            label="Expenses"
-            value="/expenses"
+            label="Expense"
+            value="/expense"
             icon={<BarChartRoundedIcon />}
-            onClick={() => navigate("/expenses")}
+            onClick={() => navigate("/expense")}
             sx={{
               color: "#00503f",
             }}
@@ -105,9 +106,9 @@ export default function FooterNav() {
           {/* GOAL */}
           <BottomNavigationAction
             label="Goal"
-            value="/goal"
+            value="/goals"
             icon={<EmojiEventsIcon />}
-            onClick={() => navigate("/newgoal")}
+            onClick={() => navigate("/goals")}
             sx={{
               color: "#00503f",
             }}
