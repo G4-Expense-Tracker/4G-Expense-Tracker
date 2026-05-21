@@ -54,24 +54,6 @@ export default function ProfilePage() {
     getUser();
   }, []);
 
-  const [user, setUser] = useState(null);
-  const [loadingUser, setLoadingUser] = useState(true);
-
-  useEffect(() => {  
-    async function getUser() {
-      try {
-        const sessionData = await getUserSession();
-        setUser(sessionData.user);
-      } catch (err) {
-        console.error("Failed to fetch user session:", err);
-      } finally {
-        setLoadingUser(false);
-      }
-    }
-
-    getUser();
-  }, []);
-
   return (
     <Box
       sx={{

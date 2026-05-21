@@ -25,6 +25,7 @@ import phase4 from "../dashboard/plants/phase4.png";
 import { getAllGoals } from "../../../api/goals.js";
 import { getAllExpenses } from "../../../api/expenses.js";
 import { viewBudget } from "../../../api/budgets.js";
+import { getUserSession } from "../../../api/users.js";
 
 function getPlantImage(level) {
   if (level <= 0) return seed1;
