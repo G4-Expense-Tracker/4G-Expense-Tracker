@@ -15,6 +15,7 @@ import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import ExpenseHeader from "../../headers/ExpenseHeader.jsx";
 
 import { getAllExpenses, deleteExpense } from "../../../api/expenses.js";
 
@@ -30,7 +31,7 @@ import {
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 
 import FooterNav from "../../Footer/FooterNav.jsx";
-import ExpenseHeader from "../../headers/ExpenseHeader.jsx";
+
 
 
 setOptions({
@@ -278,7 +279,9 @@ export default function ExpensePage() {
             mb: "28px",
           }}
         >
-          <Box sx={{ textAlign: "center" }}>
+          <ExpenseHeader />
+        </Box>
+          {/* <Box sx={{ textAlign: "center" }}>
             <Typography
               sx={{
                 fontSize: { xs: "24px", sm: "26px" },
@@ -309,7 +312,7 @@ export default function ExpensePage() {
           >
             Insight
           </Typography>
-        </Box>
+        </Box> */}
 
         <Box
           onClick={() =>
