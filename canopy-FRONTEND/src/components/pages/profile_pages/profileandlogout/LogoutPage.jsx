@@ -66,7 +66,7 @@ export default function ProfilePage() {
         position: "relative",
       }}
     >
-      {/* ================= STATUS BAR ================= */}
+      {/* ================= STATUS BAR =================
       <Box
         sx={{
           height: 74,
@@ -115,7 +115,7 @@ export default function ProfilePage() {
             }}
           />
         </Box>
-      </Box>
+      </Box> */}
 
       {/* ================= MAIN CONTENT ================= */}
       <Box

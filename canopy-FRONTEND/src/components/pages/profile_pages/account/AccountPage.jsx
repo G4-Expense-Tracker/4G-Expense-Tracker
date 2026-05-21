@@ -134,7 +134,7 @@ export default function AccountPage() {
             alignItems: "center",
           }}
         >
-          <IconButton onClick={() => navigate("/dashboard")} sx={{ p: 0 }}>
+          <IconButton onClick={() => navigate("/profile")} sx={{ p: 0 }}>
             <ArrowBackIosNewIcon sx={{ fontSize: 31, color: "#344D59" }} />
           </IconButton>
 
