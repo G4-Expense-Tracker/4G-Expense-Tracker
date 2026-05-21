@@ -25,6 +25,7 @@ import phase4 from "../dashboard/plants/phase4.png";
 import { getAllGoals } from "../../../api/goals.js";
 import { getAllExpenses } from "../../../api/expenses.js";
 import { viewBudget } from "../../../api/budgets.js";
+import { getUserSession } from "../../../api/users.js";
 
 function getPlantImage(level) {
   if (level <= 0) return seed1;
@@ -293,6 +294,24 @@ export default function DashboardPage() {
   const [monthlyBudgetOpen, setMonthlyBudgetOpen] = useState(false);
   const [addCardOpen, setAddCardOpen] = useState(false);
 
+  const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {  
+    async function getUser() {
+      try {
+        const sessionData = await getUserSession();
+        setUser(sessionData.user);
+      } catch (err) {
+        console.error("Failed to fetch user session:", err);
+      } finally {
+        setLoadingUser(false);
+      }
+    }
+
+    getUser();
+  }, []);
+
   useEffect(() => {
     async function loadGoals() {
       try {
@@ -422,7 +441,7 @@ export default function DashboardPage() {
             color: "primary.main"
           }}
         >
-          Good Morning, Hye
+          {loadingUser ? "Good Morning..." : `Good Morning, ${user.first_name}`}
         </Typography>
 
         <Box
