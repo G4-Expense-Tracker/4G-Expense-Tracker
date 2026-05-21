@@ -8,7 +8,45 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 
 function Insights(){
     return(
-        <Box>
+        <Box
+            sx={{
+                width: "100%",
+                minHeight: "100vh",
+                backgroundColor: "background.default",
+                display: "flex",
+                justifyContent: "center",
+            }}
+            >
+                  <Box
+        sx={{
+          width: "100%",
+          maxWidth: 430,
+          minHeight: "100vh",
+          backgroundColor: "background.default",
+          position: "relative",
+          overflowX: "hidden",
+          px: { xs: "18px", sm: "24px" },
+          pt: "24px",
+          pb: "120px",
+        }}
+      >
+                <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: "40px",
+            px: "4px",
+          }}
+        ></Box>
+                <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            px: { xs: "28px", sm: "35px" },
+            mb: "28px",
+          }}
+        ></Box>
             <ExpenseHeader/>
 
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -35,6 +73,8 @@ function Insights(){
             <FooterNav/> 
 
         </Box>
+        </Box>
+
     )
 }
 
