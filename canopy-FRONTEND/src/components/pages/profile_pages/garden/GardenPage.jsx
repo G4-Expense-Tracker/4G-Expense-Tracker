@@ -17,7 +17,7 @@ import FooterNav from "../../../Footer/FooterNav.jsx";
 import { getAllTrees, getValidTreeYears } from "../../../../api/trees.js";
 
 import GardenIsland from "./GardenIsland.jsx";
-import ZoomedOutGarden from "./ZoomedOutIsland.jsx";
+import ZoomedOutGarden from "./ZoomedOutGarden.jsx";
 
 export default function GardenPage() {
   const [trees, setTrees] = useState([]);
@@ -123,34 +123,17 @@ export default function GardenPage() {
         </IconButton>
       </Box>
 
-      {/* VIEW TOGGLE */}
-      {/* <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          mb: 5,
-        }}
-      >
-        <ToggleButtonGroup
-          value={viewMode}
-          exclusive
-          onChange={(e, newValue) => {
-            if (newValue) {
-              setViewMode(newValue);
-            }
-          }}
-        >
-          <ToggleButton value="single">Single Island</ToggleButton>
-
-          <ToggleButton value="grid">Island Grid</ToggleButton>
-        </ToggleButtonGroup>
-      </Box> */}
-
-      {/* CONTENT */}
+      {/* GARDEN */}
       {viewMode === "single" ? (
-        <GardenIsland trees={treesForYear.slice(0, 4)} />
+        <GardenIsland
+          trees={treesForYear.slice(0, 4)}
+          onDoubleClick={toggleViewMode}
+        />
       ) : (
-        <ZoomedOutGarden trees={treesForYear} />
+        <ZoomedOutGarden
+          trees={treesForYear}
+          onIslandDoubleClick={toggleViewMode}
+        />
       )}
       <Box>
         <FooterNav />

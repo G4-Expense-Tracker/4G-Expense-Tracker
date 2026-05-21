@@ -12,10 +12,12 @@ export default function GardenIsland({
   trees,
   islandImage = "/public/islands/Land_Big.png",
   scale = 1,
+  onDoubleCLick,
 }) {
   return (
     <Box
       sx={{
+        onDoubleClick={onDoubleClick},
         position: "relative",
         width: 700 * scale,
         height: 550 * scale,
