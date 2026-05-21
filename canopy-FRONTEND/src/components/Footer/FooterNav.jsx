@@ -90,7 +90,7 @@ export default function FooterNav() {
             label="Expense"
             value="/expense"
             icon={<BarChartRoundedIcon />}
-            onClick={() => navigate("/expense")}
+            onClick={() => navigate("/expenses")}
             sx={{
               color: "primary.main",
             }}
