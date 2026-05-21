@@ -15,6 +15,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
+import theme from "../../../theme/theme.jsx";
+
 export default function AddExpensePage() {
   const navigate = useNavigate();
 
