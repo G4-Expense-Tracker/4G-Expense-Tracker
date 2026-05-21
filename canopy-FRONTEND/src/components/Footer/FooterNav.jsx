@@ -1,131 +1,163 @@
-import {
-  Box,
-  BottomNavigation,
-  BottomNavigationAction,
-} from "@mui/material";
-
-import HomeIcon from "@mui/icons-material/Home";
-import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import PersonIcon from "@mui/icons-material/Person";
-import AddIcon from "@mui/icons-material/Add";
-import BarChartIcon from '@mui/icons-material/BarChart';
-
+import { Box, Typography, IconButton } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 
-export default function FooterNav() {
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
+import PersonIcon from "@mui/icons-material/Person";
+import AddIcon from "@mui/icons-material/Add";
+
+function FooterNav() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const currentPath = location.pathname;
+
+  const navItems = [
+    {
+      label: "Home",
+      icon: <HomeOutlinedIcon />,
+      path: "/dashboard",
+    },
+    {
+      label: "Expense",
+      icon: <BarChartIcon />,
+      path: "/expenses",
+    },
+    {
+      label: "Goal",
+      icon: <EmojiEventsOutlinedIcon />,
+      path: "/goal",
+    },
+    {
+      label: "Profile",
+      icon: <PersonIcon />,
+      path: "/profile",
+    },
+  ];
 
   return (
     <Box
       sx={{
-        position: "fixed",
-        bottom: 0,
-        left: "50%",
-        transform: "translateX(-50%)",
         width: "100%",
-        maxWidth: "390px",
-        zIndex: 100,
+        height: 92,
+
+        // ================= REMOVE GAP =================
+        m: 0,
+        p: 0,
+
+        // ================= MUI THEME =================
+        bgcolor: "secondary.main",
+
+        borderTopLeftRadius: "18px",
+        borderTopRightRadius: "18px",
+
+        position: "relative",
+
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-around",
+
+        boxShadow: "0 -4px 15px rgba(0,0,0,0.08)",
       }}
     >
-      {/* Floating Add Button */}
+      {/* ================= PLUS BUTTON ================= */}
       <Box
         onClick={() => navigate("/add-expense")}
         sx={{
           position: "absolute",
-          top: "-28px",
+          top: -26,
           left: "50%",
           transform: "translateX(-50%)",
-          width: "58px",
-          height: "58px",
+          width: 72,
+          height: 72,
           borderRadius: "50%",
-          bgcolor: "#fff8cc",
-          border: "4px solid #9ab68c",
 
+          // ================= MUI THEME =================
+          bgcolor: "background.default",
+          border: "5px solid",
+          borderColor: "secondary.main",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-
-          cursor: "pointer",
           zIndex: 10,
-
-          boxShadow: "0px 4px 10px rgba(0,0,0,0.15)",
+          boxShadow: "0 4px 14px rgba(0,0,0,0.15)",
+          cursor: "pointer",
         }}
       >
         <AddIcon
           sx={{
-            color: "#00503f",
-            fontSize: 34,
+            fontSize: 42,
+
+            // ================= MUI THEME =================
+            color: "primary.main",
           }}
         />
       </Box>
 
-      {/* Footer Background */}
-      <Box
-        sx={{
-          bgcolor: "#c8d99d",
-          borderTopLeftRadius: "18px",
-          borderTopRightRadius: "18px",
+      {/* ================= NAVIGATION ITEMS ================= */}
+      {navItems.map((item, index) => {
+        const isActive = currentPath === item.path;
 
-          pt: 1,
-          pb: 1,
-
-          boxShadow: "0px -3px 10px rgba(0,0,0,0.08)",
-        }}
-      >
-        <BottomNavigation
-          value={location.pathname}
-          showLabels
-          sx={{
-            bgcolor: "transparent",
-          }}
-        >
-          {/* HOME */}
-          <BottomNavigationAction
-            label="Home"
-            value="/dashboard"
-            icon={<HomeIcon />}
-            onClick={() => navigate("/dashboard")}
+        return (
+          <Box
+            key={item.label}
+            onClick={() => navigate(item.path)}
             sx={{
-              color: "#00503f",
-            }}
-          />
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
 
-          {/* EXPENSE */}
-          <BottomNavigationAction
-            label="Expense"
-            value="/expense"
-            icon={<BarChartRoundedIcon />}
-            onClick={() => navigate("/expense")}
-            sx={{
-              color: "#00503f",
+              // Space for middle add button
+              ml: index === 2 ? "58px" : 0,
             }}
-          />
+          >
+            {/* ================= ICON ================= */}
+            <IconButton
+              disableRipple
+              sx={{
+                p: 0,
 
-          {/* GOAL */}
-          <BottomNavigationAction
-            label="Goal"
-            value="/goals"
-            icon={<EmojiEventsIcon />}
-            onClick={() => navigate("/goals")}
-            sx={{
-              color: "#00503f",
-            }}
-          />
+                // ================= MUI THEME =================
+                color: isActive
+                  ? "primary.main"
+                  : "primary.dark",
 
-          {/* PROFILE */}
-          <BottomNavigationAction
-            label="Profile"
-            value="/profile"
-            icon={<PersonIcon />}
-            onClick={() => navigate("/profile")}
-            sx={{
-              color: "#00503f",
-            }}
-          />
-        </BottomNavigation>
-      </Box>
+                "& svg": {
+                  fontSize: 28,
+                },
+
+                "&:hover": {
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              {item.icon}
+            </IconButton>
+
+            {/* ================= LABEL ================= */}
+            <Typography
+              sx={{
+                mt: "2px",
+                fontSize: 13,
+                fontWeight: isActive ? 700 : 500,
+
+                // ================= MUI THEME =================
+                color: isActive
+                  ? "primary.main"
+                  : "primary.dark",
+              }}
+            >
+              {item.label}
+            </Typography>
+          </Box>
+        );
+      })}
     </Box>
   );
 }
+
+export default FooterNav;
