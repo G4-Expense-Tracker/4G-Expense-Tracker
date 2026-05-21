@@ -64,11 +64,11 @@ export default function AddExpensePage() {
     }
 
     const newExpense = {
-      name:expenseName,
+      title: expenseName,
       amount: Number(amount),
-      category: category,
+      category_id: category,
       date: date,
-      quickExpense: quickExpense,
+      quick_expense: quickExpense,
     };
 
     // const savedExpenses = JSON.parse(localStorage.getItem("expenses")) || [];
