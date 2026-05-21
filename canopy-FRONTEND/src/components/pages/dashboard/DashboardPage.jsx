@@ -294,6 +294,24 @@ export default function DashboardPage() {
   const [monthlyBudgetOpen, setMonthlyBudgetOpen] = useState(false);
   const [addCardOpen, setAddCardOpen] = useState(false);
 
+  const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {  
+    async function getUser() {
+      try {
+        const sessionData = await getUserSession();
+        setUser(sessionData.user);
+      } catch (err) {
+        console.error("Failed to fetch user session:", err);
+      } finally {
+        setLoadingUser(false);
+      }
+    }
+
+    getUser();
+  }, []);
+
   useEffect(() => {
     async function loadGoals() {
       try {
@@ -423,7 +441,7 @@ export default function DashboardPage() {
             color: "primary.main"
           }}
         >
-          Good Morning, Hye
+          {loadingUser ? "Good Morning..." : `Good Morning, ${user.first_name}`}
         </Typography>
 
         <Box
