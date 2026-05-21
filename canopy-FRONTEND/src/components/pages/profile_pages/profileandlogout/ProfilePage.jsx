@@ -1,8 +1,8 @@
 import { Box, Typography, Switch } from "@mui/material";
 
-import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
-import WifiIcon from "@mui/icons-material/Wifi";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+// import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
+// import WifiIcon from "@mui/icons-material/Wifi";
+// import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 
 import ForestOutlinedIcon from "@mui/icons-material/ForestOutlined";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -31,10 +31,28 @@ export default function ProfilePage() {
   const [darkMode, setDarkMode] = useState(false);
 
   /* LIGHT / DARK COLORS */
-  const bg = darkMode ? "#16352C" : "#FAFCF4";
-  const cardBg = darkMode ? "#27463C" : "#EAF7D7";
-  const text = darkMode ? "#FFFFFF" : "#000000";
-  const green = darkMode ? "#D7F5E8" : "#005844";
+  const bg = darkMode ? "primary.dark" : "background.default";
+  const cardBg = darkMode ? "primary.main" : "secondary.light";
+  const text = darkMode ? "primary.contrastText" : "text.primary";
+  const green = darkMode ? "secondary.light" : "primary.main";
+
+  const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {  
+    async function getUser() {
+      try {
+        const sessionData = await getUserSession();
+        setUser(sessionData.user);
+      } catch (err) {
+        console.error("Failed to fetch user session:", err);
+      } finally {
+        setLoadingUser(false);
+      }
+    }
+
+    getUser();
+  }, []);
 
   const [user, setUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
@@ -77,7 +95,7 @@ export default function ProfilePage() {
           bgcolor: bg,
         }}
       >
-        <Typography
+        {/* <Typography
           sx={{
             fontWeight: 700,
             fontSize: 14,
@@ -97,7 +115,7 @@ export default function ProfilePage() {
           <SignalCellular4BarIcon sx={{ fontSize: 17, color: text }} />
           <WifiIcon sx={{ fontSize: 17, color: text }} />
           <BatteryFullIcon sx={{ fontSize: 21, color: text }} />
-        </Box>
+        </Box> */}
       </Box>
 
       {/* ================= MAIN CONTENT ================= */}
@@ -242,16 +260,16 @@ export default function ProfilePage() {
               ml: "auto",
 
               "& .MuiSwitch-switchBase.Mui-checked": {
-                color: "#EAF7D7",
+                color: "primary.contrastText",
               },
 
               "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
-                bgcolor: "#8FB35D",
+                bgcolor: "secondary.main",
                 opacity: 1,
               },
 
               "& .MuiSwitch-track": {
-                bgcolor: "#8FB35D",
+                bgcolor: "secondary.main",
                 opacity: 1,
               },
             }}

@@ -340,7 +340,6 @@ export default function ProfilePage() {
       <Box
         sx={{
           height: 90,
-          bgcolor: navBg,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-around",

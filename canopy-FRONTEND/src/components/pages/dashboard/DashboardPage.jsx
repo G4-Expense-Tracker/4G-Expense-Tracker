@@ -10,9 +10,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 
-import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
-import WifiIcon from "@mui/icons-material/Wifi";
-import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+// import SignalCellular4BarIcon from "@mui/icons-material/SignalCellular4Bar";
+// import WifiIcon from "@mui/icons-material/Wifi";
+// import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 
 import FooterNav from "../../Footer/FooterNav.jsx";
 
@@ -57,7 +57,7 @@ function CircularGoalProgress({ percent }) {
         cx={center}
         cy={center}
         r={radius}
-        stroke="#005242"
+        stroke="#005844"
         strokeWidth={stroke}
         fill="transparent"
         strokeLinecap="round"
@@ -79,25 +79,25 @@ function InsightCard({ title }) {
   return (
     <Box
       sx={{
-        backgroundColor: "#DDF2C4",
+        bgcolor: "background.lightGreen",
         borderRadius: "14px",
         p: "22px",
         mb: "24px",
         boxShadow: "0 6px 12px rgba(0,0,0,0.18)",
       }}
     >
-      <Typography sx={{ fontSize: "28px", fontWeight: 800, color: "#005242" }}>
+      <Typography sx={{ fontSize: "28px", fontWeight: 800, color: "primary.main" }}>
         {title}
       </Typography>
 
-      <Typography sx={{ fontSize: "20px", fontWeight: 800, color: "#005242", mb: 2 }}>
+      <Typography sx={{ fontSize: "20px", fontWeight: 800, color: "primary.main", mb: 2 }}>
         Top 3 changes
       </Typography>
 
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         {changes.map((item) => (
           <Box key={item.name} sx={{ textAlign: "center" }}>
-            <Typography sx={{ fontSize: "16px", fontWeight: 700, color: "#005242" }}>
+            <Typography sx={{ fontSize: "16px", fontWeight: 700, color: "primary.main" }}>
               {item.name}
             </Typography>
 
@@ -106,8 +106,8 @@ function InsightCard({ title }) {
                 width: 44,
                 height: 44,
                 borderRadius: "50%",
-                backgroundColor: item.type === "up" ? "#FFCF24" : "#289173",
-                color: "#fff",
+                bgcolor: item.type === "up" ? "#FFCF24" : "background.green",
+                color: "primary.contrastText",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -118,7 +118,7 @@ function InsightCard({ title }) {
               {item.type === "up" ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />}
             </Box>
 
-            <Typography sx={{ fontSize: "18px", fontWeight: 800, color: "#005242" }}>
+            <Typography sx={{ fontSize: "18px", fontWeight: 800, color: "primary.main" }}>
               {item.value}
             </Typography>
           </Box>
@@ -385,7 +385,7 @@ export default function DashboardPage() {
       sx={{
         width: "100%",
         minHeight: "100vh",
-        backgroundColor: "#FAFCF7",
+        backgroundColor: "background.default",
         display: "flex",
         justifyContent: "center",
       }}
@@ -402,7 +402,7 @@ export default function DashboardPage() {
           pb: "120px",
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: "24px" }}>
+        {/* <Box sx={{ display: "flex", justifyContent: "space-between", mb: "24px" }}>
           <Typography sx={{ fontSize: "20px", fontWeight: 700 }}>9:41</Typography>
 
           <Box sx={{ display: "flex", gap: 0.5, color: "#253527" }}>
@@ -410,7 +410,7 @@ export default function DashboardPage() {
             <WifiIcon />
             <BatteryFullIcon />
           </Box>
-        </Box>
+        </Box> */}
 
         <Typography
           sx={{
@@ -419,6 +419,7 @@ export default function DashboardPage() {
             textAlign: "center",
             fontFamily: "serif",
             mb: "18px",
+            color: "primary.main"
           }}
         >
           Good Morning, Hye
@@ -436,7 +437,7 @@ export default function DashboardPage() {
         >
           <IconButton
             onClick={handlePrevGoal}
-            sx={{ position: "absolute", left: 0, color: "#289173", zIndex: 5 }}
+            sx={{ position: "absolute", left: 0, color: "background.green", zIndex: 5 }}
           >
             <KeyboardArrowLeftIcon sx={{ fontSize: 40 }} />
           </IconButton>
@@ -462,8 +463,8 @@ export default function DashboardPage() {
                 width: 50,
                 height: 50,
                 borderRadius: "50%",
-                backgroundColor: "#005242",
-                color: "#fff",
+                bgcolor: "primary.main",
+                color: "primary.contrastText",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -508,7 +509,7 @@ export default function DashboardPage() {
                 sx={{
                   fontSize: "30px",
                   fontWeight: 900,
-                  color: "#005242",
+                  color: "primary.main",
                   lineHeight: 1,
                   mt: 1,
                 }}
@@ -520,7 +521,7 @@ export default function DashboardPage() {
                 sx={{
                   fontSize: "15px",
                   fontWeight: 700,
-                  color: "#005242",
+                  color: "primary.main",
                   mt: 0.3,
                 }}
               >
@@ -531,7 +532,7 @@ export default function DashboardPage() {
 
           <IconButton
             onClick={handleNextGoal}
-            sx={{ position: "absolute", right: 0, color: "#289173", zIndex: 5 }}
+            sx={{ position: "absolute", right: 0, color: "background.green", zIndex: 5 }}
           >
             <KeyboardArrowRightIcon sx={{ fontSize: 40 }} />
           </IconButton>
@@ -545,14 +546,14 @@ export default function DashboardPage() {
                 width: 10,
                 height: 10,
                 borderRadius: "50%",
-                backgroundColor: index === goalIndex ? "#289173" : "#A7BF75",
+                backgroundColor: index === goalIndex ? "background.green" : "secondary.main",
               }}
             />
           ))}
         </Box>
 
         <Box sx={{ display: "flex", justifyContent: "flex-start", mb: "16px" }}>
-          <Typography sx={{ fontSize: "30px", fontWeight: 800, color: "#005242" }}>
+          <Typography sx={{ fontSize: "30px", fontWeight: 800, color: "primary.main", mb: "16px", }}>
             Dashboard
           </Typography>
         </Box>
@@ -575,7 +576,7 @@ export default function DashboardPage() {
               onClick={() => handleCardClick(card)}
               sx={{
                 minWidth: 310,
-                backgroundColor: "#DDF2C4",
+                bgcolor: "background.lightGreen",
                 borderRadius: "14px",
                 p: "18px",
                 boxShadow: "0 6px 12px rgba(0,0,0,0.15)",
@@ -585,7 +586,7 @@ export default function DashboardPage() {
               }}
             >
               <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <Typography sx={{ fontSize: "24px", fontWeight: 800, color: "#005242" }}>
+                <Typography sx={{ fontSize: "24px", fontWeight: 800, color: "primary.main" }}>
                   {card.title}
                 </Typography>
 
@@ -596,7 +597,7 @@ export default function DashboardPage() {
                     setOpenCardMenu(openCardMenu === card.id ? null : card.id);
                   }}
                 >
-                  <MoreHorizIcon sx={{ color: "#289173" }} />
+                  <MoreHorizIcon sx={{ color: "background.green" }} />
                 </IconButton>
               </Box>
 
@@ -607,27 +608,27 @@ export default function DashboardPage() {
                     position: "absolute",
                     top: 52,
                     right: 16,
-                    backgroundColor: "#FAFCF7",
-                    border: "1px solid #1C9A72",
+                    bgcolor: "background.default",
+                    borderColor: "1px solid background.green",
                     borderRadius: "12px",
                     overflow: "hidden",
                     zIndex: 10,
                     boxShadow: "0 5px 12px rgba(0,0,0,0.15)",
                   }}
                 >
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 2, py: 1.2, color: "#005242" }}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 2, py: 1.2, color: "primary.main" }}>
                     <EditIcon sx={{ fontSize: 18 }} />
                     <Typography sx={{ fontWeight: 700 }}>Edit</Typography>
                   </Box>
 
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 2, py: 1.2, color: "#005242" }}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 2, py: 1.2, color: "primary.main" }}>
                     <DeleteOutlineOutlinedIcon sx={{ fontSize: 18 }} />
                     <Typography sx={{ fontWeight: 700 }}>Delete</Typography>
                   </Box>
                 </Box>
               )}
 
-              <Typography sx={{ fontSize: "38px", fontWeight: 800, color: "#000", mb: 1 }}>
+              <Typography sx={{ fontSize: "38px", fontWeight: 800, color: "text.primary", mb: 1 }}>
                 {card.amount}
               </Typography>
 
@@ -637,22 +638,22 @@ export default function DashboardPage() {
                 sx={{
                   height: 13,
                   borderRadius: 10,
-                  backgroundColor: "#FFF7D7",
-                  "& .MuiLinearProgress-bar": { backgroundColor: "#005242" },
+                  bgcolor: "text.cream",
+                  "& .MuiLinearProgress-bar": { bgcolor: "primary.main" },
                 }}
               />
 
               <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
                 <Box>
-                  <Typography sx={{ fontSize: 12, fontWeight: 700 }}>Used</Typography>
-                  <Typography sx={{ fontSize: "24px", fontWeight: 800, color: "#005242" }}>
+                  <Typography sx={{ fontSize: 12, fontWeight: 700, color: "text.primary" }}>Used</Typography>
+                  <Typography sx={{ fontSize: "24px", fontWeight: 800, color: "primary.main" }}>
                     {card.used}
                   </Typography>
                 </Box>
 
                 <Box sx={{ textAlign: "right" }}>
-                  <Typography sx={{ fontSize: 12, fontWeight: 700 }}>Remaining</Typography>
-                  <Typography sx={{ fontSize: "24px", fontWeight: 800, color: "#005242" }}>
+                  <Typography sx={{ fontSize: 12, fontWeight: 700, color:"text.primary" }}>Remaining</Typography>
+                  <Typography sx={{ fontSize: "24px", fontWeight: 800, color: "primary.main" }}>
                     {card.remaining}
                   </Typography>
                 </Box>
@@ -665,7 +666,7 @@ export default function DashboardPage() {
             sx={{
               minWidth: 310,
               height: 190,
-              backgroundColor: "#DDF2C4",
+              bgcolor: "background.lightGreen",
               borderRadius: "14px",
               p: "18px",
               boxShadow: "0 6px 12px rgba(0,0,0,0.15)",
@@ -682,19 +683,19 @@ export default function DashboardPage() {
                 width: 64,
                 height: 64,
                 borderRadius: "50%",
-                backgroundColor: "#FFFBD8",
+                backgroundColor: "text.cream",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: "44px",
-                color: "#005242",
+                color: "primary.main",
                 fontWeight: 800,
               }}
             >
               +
             </Box>
 
-            <Typography sx={{ fontSize: "28px", fontWeight: 800, color: "#005242" }}>
+            <Typography sx={{ fontSize: "28px", fontWeight: 800, color: "primary.main" }}>
               Add New Card
             </Typography>
           </Box>
@@ -742,7 +743,12 @@ export default function DashboardPage() {
                 maxHeight: "88vh",
                 overflowY: "auto",
                 borderRadius: "34px",
-                background: "linear-gradient(180deg, #289173 0%, #A7BF75 100%)",
+                background: (theme) =>
+                  `linear-gradient(
+                    180deg,
+                    ${theme.palette.background.green} 0%, 
+                    ${theme.palette.background.greenBottom} 100%
+                  )`,
                 p: "24px",
                 position: "relative",
                 "&::-webkit-scrollbar": { display: "none" },
@@ -753,7 +759,7 @@ export default function DashboardPage() {
                   width: 190,
                   height: 7,
                   borderRadius: 10,
-                  backgroundColor: "#fff",
+                  bgcolor: "background.paper",
                   mx: "auto",
                   mb: 4,
                 }}
@@ -765,12 +771,12 @@ export default function DashboardPage() {
                   position: "absolute",
                   top: 16,
                   right: 16,
-                  backgroundColor: "#F4F4F4",
+                  bgcolor: "background.paper",
                   width: 50,
                   height: 50,
                 }}
               >
-                <CloseIcon sx={{ fontSize: 32 }} />
+                <CloseIcon sx={{ fontSize: 32, color: "text.primary" }} />
               </IconButton>
 
               <InsightCard title="Weekly Insight" />

@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, TextField, IconButton } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  IconButton,
+} from "@mui/material";
+
+import { useTheme } from "@mui/material/styles";
 
 import {
   SignalCellular4Bar,
@@ -17,6 +24,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FlightIcon from "@mui/icons-material/Flight";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import ApartmentIcon from "@mui/icons-material/Apartment";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -29,53 +37,99 @@ import { iconList } from "./AddCategoryPage";
 export default function CategoryPage() {
   const navigate = useNavigate();
 
+  // ================= THEME =================
+  const theme = useTheme();
+
   // This tracks which category row is showing edit/delete buttons
-  const [activeMenu, setActiveMenu] = useState(null);
+  const [activeMenu, setActiveMenu] =
+    useState(null);
 
   // This stores the categories created by the user
-  const [customCategories, setCustomCategories] = useState([]);
+  const [customCategories, setCustomCategories] =
+    useState([]);
 
   // Load saved custom categories from localStorage when the page opens
   useEffect(() => {
     const saved =
-      JSON.parse(localStorage.getItem("customCategories")) || [];
+      JSON.parse(
+        localStorage.getItem(
+          "customCategories"
+        )
+      ) || [];
 
     setCustomCategories(saved);
   }, []);
 
   // These are fixed default categories
   const defaultCategories = [
-    { title: "Food", icon: RestaurantIcon },
-    { title: "Drink", icon: LocalDrinkIcon },
-    { title: "Health", icon: FitnessCenterIcon },
-    { title: "Groceries", icon: ShoppingCartIcon },
-    { title: "Travel", icon: FlightIcon },
-    { title: "Shopping", icon: ShoppingBagIcon },
-    { title: "Housing", icon: ApartmentIcon },
+    {
+      title: "Food",
+      icon: RestaurantIcon,
+    },
+
+    {
+      title: "Drink",
+      icon: LocalDrinkIcon,
+    },
+
+    {
+      title: "Health",
+      icon: FitnessCenterIcon,
+    },
+
+    {
+      title: "Groceries",
+      icon: ShoppingCartIcon,
+    },
+
+    {
+      title: "Travel",
+      icon: FlightIcon,
+    },
+
+    {
+      title: "Shopping",
+      icon: ShoppingBagIcon,
+    },
+
+    {
+      title: "Housing",
+      icon: ApartmentIcon,
+    },
   ];
 
   // Edit only custom categories
   function handleEdit(indexToEdit) {
     const customIndex =
-      indexToEdit - defaultCategories.length;
+      indexToEdit -
+      defaultCategories.length;
 
     if (customIndex < 0) {
-      alert("Default categories cannot be edited.");
+      alert(
+        "Default categories cannot be edited."
+      );
+
       setActiveMenu(null);
 
       return;
     }
 
-    navigate(`/add-category?editIndex=${customIndex}`);
+    navigate(
+      `/add-category?editIndex=${customIndex}`
+    );
   }
 
   // Delete only custom categories
   function handleDelete(indexToDelete) {
     const customIndex =
-      indexToDelete - defaultCategories.length;
+      indexToDelete -
+      defaultCategories.length;
 
     if (customIndex < 0) {
-      alert("Default categories cannot be deleted.");
+      alert(
+        "Default categories cannot be deleted."
+      );
+
       setActiveMenu(null);
 
       return;
@@ -83,33 +137,42 @@ export default function CategoryPage() {
 
     const updatedCategories =
       customCategories.filter(
-        (_, index) => index !== customIndex
+        (_, index) =>
+          index !== customIndex
       );
 
-    setCustomCategories(updatedCategories);
+    setCustomCategories(
+      updatedCategories
+    );
 
     localStorage.setItem(
       "customCategories",
-      JSON.stringify(updatedCategories)
+      JSON.stringify(
+        updatedCategories
+      )
     );
 
     setActiveMenu(null);
   }
 
   // Convert saved icon names back into actual MUI icons
-  const savedCategories = customCategories.map(
-    (category) => {
-      const matchedIcon =
-        iconList.find(
-          (item) => item.name === category.iconName
-        )?.icon || RestaurantIcon;
+  const savedCategories =
+    customCategories.map(
+      (category) => {
+        const matchedIcon =
+          iconList.find(
+            (item) =>
+              item.name ===
+              category.iconName
+          )?.icon ||
+          RestaurantIcon;
 
-      return {
-        title: category.title,
-        icon: matchedIcon,
-      };
-    }
-  );
+        return {
+          title: category.title,
+          icon: matchedIcon,
+        };
+      }
+    );
 
   // Combine default categories with user-created categories
   const categories = [
@@ -122,32 +185,50 @@ export default function CategoryPage() {
       sx={{
         width: "100%",
         maxWidth: 390,
+
         minHeight: "100svh",
+
         mx: "auto",
-        bgcolor: "#f8fbf2",
+
+        // ================= MUI THEME =================
+        bgcolor: "background.default",
+
         position: "relative",
+
         overflowX: "hidden",
+
         pb: 13,
       }}
     >
-      {/* Header */}
+      {/* ================= HEADER ================= */}
       <Box
         sx={{
-          bgcolor: "#a9c57b",
+          // ================= MUI THEME =================
+          bgcolor: "secondary.main",
+
           px: 3,
           pt: 2,
           pb: 5,
         }}
       >
-        {/* Status bar */}
+        {/* ================= STATUS BAR ================= */}
         <Box
           sx={{
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent:
+              "space-between",
+
             mb: 5,
           }}
         >
-          <Typography sx={{ fontWeight: 700 }}>
+          <Typography
+            sx={{
+              fontWeight: 700,
+
+              // ================= MUI THEME =================
+              color: "text.primary",
+            }}
+          >
             9:41
           </Typography>
 
@@ -157,62 +238,108 @@ export default function CategoryPage() {
               gap: 0.5,
             }}
           >
-            <SignalCellular4Bar sx={{ fontSize: 16 }} />
-            <Wifi sx={{ fontSize: 16 }} />
-            <BatteryFull sx={{ fontSize: 18 }} />
+            <SignalCellular4Bar
+              sx={{
+                fontSize: 16,
+
+                color: "text.primary",
+              }}
+            />
+
+            <Wifi
+              sx={{
+                fontSize: 16,
+
+                color: "text.primary",
+              }}
+            />
+
+            <BatteryFull
+              sx={{
+                fontSize: 18,
+
+                color: "text.primary",
+              }}
+            />
           </Box>
         </Box>
 
-        {/* Header row */}
+        {/* ================= HEADER ROW ================= */}
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent:
+              "space-between",
           }}
         >
+          {/* BACK BUTTON */}
           <IconButton
-            onClick={() => navigate("/expense")}
-            sx={{ color: "#004638" }}
+            onClick={() =>
+              navigate("/expense")
+            }
+            sx={{
+              color: "primary.main",
+            }}
           >
-            <ArrowBackIosNew sx={{ fontSize: 30 }} />
+            <ArrowBackIosNew
+              sx={{
+                fontSize: 30,
+              }}
+            />
           </IconButton>
 
+          {/* PAGE TITLE */}
           <Typography
             sx={{
               fontSize: 40,
               fontWeight: 800,
-              color: "#004638",
+
+              color: "primary.main",
             }}
           >
             Category
           </Typography>
 
+          {/* ADD BUTTON */}
           <IconButton
-            onClick={() => navigate("/add-category")}
-            sx={{ color: "#004638" }}
+            onClick={() =>
+              navigate("/add-category")
+            }
+            sx={{
+              color: "primary.main",
+            }}
           >
-            <Add sx={{ fontSize: 42 }} />
+            <Add
+              sx={{
+                fontSize: 42,
+              }}
+            />
           </IconButton>
         </Box>
       </Box>
 
-      {/* Main content */}
+      {/* ================= MAIN CONTENT ================= */}
       <Box
         sx={{
           px: 2.5,
           pt: 4,
         }}
       >
+        {/* SEARCH TITLE */}
         <Typography
           sx={{
             fontSize: 18,
+
             mb: 2,
+
+            color: "text.primary",
           }}
         >
           Search
         </Typography>
 
+        {/* SEARCH INPUT */}
         <TextField
           fullWidth
           sx={{
@@ -220,129 +347,212 @@ export default function CategoryPage() {
 
             "& .MuiOutlinedInput-root": {
               height: 54,
+
               borderRadius: 10,
-              bgcolor: "white",
+
+              // ================= MUI THEME =================
+              bgcolor:
+                "background.paper",
 
               "& fieldset": {
-                borderColor: "#97c596",
+                borderColor:
+                  "secondary.main",
               },
             },
           }}
         />
 
+        {/* CATEGORY TITLE */}
         <Typography
           sx={{
             fontSize: 18,
+
             mb: 3,
+
+            color: "text.primary",
           }}
         >
           Select categories
         </Typography>
 
-        {/* Category list */}
+        {/* ================= CATEGORY LIST ================= */}
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
+
             gap: 2.5,
           }}
         >
-          {categories.map((category, index) => {
-            const Icon = category.icon;
+          {categories.map(
+            (category, index) => {
+              const Icon =
+                category.icon;
 
-            return (
-              <Box
-                key={index}
-                sx={{
-                  minHeight: 74,
-                  borderRadius: 10,
-                  bgcolor: "white",
-                  border: "1px solid #97c596",
-                  px: 3,
-                  py: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                {/* Left side: icon and category name */}
+              return (
                 <Box
+                  key={index}
                   sx={{
+                    minHeight: 74,
+
+                    borderRadius: 10,
+
+                    // ================= MUI THEME =================
+                    bgcolor:
+                      "background.paper",
+
+                    border:
+                      "1px solid",
+
+                    borderColor:
+                      "secondary.main",
+
+                    px: 3,
+                    py: 1,
+
                     display: "flex",
-                    alignItems: "center",
-                    gap: 2,
+                    alignItems:
+                      "center",
+
+                    justifyContent:
+                      "space-between",
                   }}
                 >
-                  <Icon sx={{ color: "#004638" }} />
-
-                  <Typography
-                    sx={{
-                      fontSize: 18,
-                    }}
-                  >
-                    {category.title}
-                  </Typography>
-                </Box>
-
-                {/* Right side: three dots OR edit/delete buttons */}
-                {activeMenu === index ? (
+                  {/* ================= LEFT SIDE ================= */}
                   <Box
                     sx={{
                       display: "flex",
-                      alignItems: "center",
-                      gap: 1,
+                      alignItems:
+                        "center",
+
+                      gap: 2,
                     }}
                   >
-                    <IconButton
-                      onClick={() => handleEdit(index)}
-                    >
-                      <EditIcon
-                        sx={{
-                          color: "#004638",
-                          fontSize: 26,
-                        }}
-                      />
-                    </IconButton>
+                    {/* CATEGORY ICON */}
+                    <Icon
+                      sx={{
+                        color:
+                          "primary.main",
+                      }}
+                    />
 
+                    {/* CATEGORY NAME */}
+                    <Typography
+                      sx={{
+                        fontSize: 18,
+
+                        color:
+                          "text.primary",
+                      }}
+                    >
+                      {category.title}
+                    </Typography>
+                  </Box>
+
+                  {/* ================= RIGHT SIDE ================= */}
+                  {activeMenu ===
+                  index ? (
                     <Box
                       sx={{
-                        width: "1px",
-                        height: 32,
-                        bgcolor: "#aaa",
-                      }}
-                    />
+                        display: "flex",
+                        alignItems:
+                          "center",
 
-                    <IconButton
-                      onClick={() => handleDelete(index)}
+                        gap: 1,
+                      }}
                     >
-                      <DeleteIcon
+                      {/* EDIT BUTTON */}
+                      <IconButton
+                        onClick={() =>
+                          handleEdit(
+                            index
+                          )
+                        }
+                      >
+                        <EditIcon
+                          sx={{
+                            color:
+                              "primary.main",
+
+                            fontSize: 26,
+                          }}
+                        />
+                      </IconButton>
+
+                      {/* DIVIDER */}
+                      <Box
                         sx={{
-                          color: "#004638",
-                          fontSize: 28,
+                          width: "1px",
+
+                          height: 32,
+
+                          bgcolor:
+                            "secondary.main",
+                        }}
+                      />
+
+                      {/* DELETE BUTTON */}
+                      <IconButton
+                        onClick={() =>
+                          handleDelete(
+                            index
+                          )
+                        }
+                      >
+                        <DeleteIcon
+                          sx={{
+                            color:
+                              "primary.main",
+
+                            fontSize: 28,
+                          }}
+                        />
+                      </IconButton>
+                    </Box>
+                  ) : (
+                    <IconButton
+                      onClick={() =>
+                        setActiveMenu(
+                          index
+                        )
+                      }
+                    >
+                      <MoreHoriz
+                        sx={{
+                          color:
+                            "secondary.main",
+
+                          fontSize: 30,
                         }}
                       />
                     </IconButton>
-                  </Box>
-                ) : (
-                  <IconButton
-                    onClick={() => setActiveMenu(index)}
-                  >
-                    <MoreHoriz
-                      sx={{
-                        color: "#7ab07b",
-                        fontSize: 30,
-                      }}
-                    />
-                  </IconButton>
-                )}
-              </Box>
-            );
-          })}
+                  )}
+                </Box>
+              );
+            }
+          )}
         </Box>
       </Box>
 
-      {/* Shared Footer Navigation */}
-      <FooterNav />
+      {/* ================= FOOTER ================= */}
+      <Box
+        sx={{
+          position: "fixed",
+
+          bottom: 0,
+          left: "50%",
+
+          transform:
+            "translateX(-50%)",
+
+          width: "100%",
+          maxWidth: 390,
+
+          zIndex: 20,
+        }}
+      >
+        <FooterNav />
+      </Box>
     </Box>
   );
 }
