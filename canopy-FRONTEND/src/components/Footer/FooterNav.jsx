@@ -89,7 +89,7 @@ export default function FooterNav() {
 
           <BottomNavigationAction
             label="Expense"
-            value="/expense"
+            value="/expenses"
             icon={<BarChartRoundedIcon />}
             onClick={() => navigate("/expense")}
             sx={{
