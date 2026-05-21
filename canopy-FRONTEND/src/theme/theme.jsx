@@ -58,7 +58,7 @@ const theme = createTheme({
     h1: {
       fontSize: "48px",
       fontWeight: 700,
-      color: "#FFF2C7",
+      color: "#0a0a0a",
       fontFamily: "Georgia, serif",
     },
 
