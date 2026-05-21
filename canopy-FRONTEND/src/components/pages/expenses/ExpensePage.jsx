@@ -16,7 +16,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-import { getAllExpenses, deleteExpense } from "../../../api/expenses.js";
 
 
 // Running Calender file: npm install -g @mobiscroll/cli
@@ -32,6 +31,7 @@ import "@mobiscroll/react/dist/css/mobiscroll.min.css";
 import FooterNav from "../../Footer/FooterNav.jsx";
 import ExpenseHeader from "../../headers/ExpenseHeader.jsx";
 
+import { getAllExpenses, deleteExpense } from "../../../api/expenses";
 
 setOptions({
   theme: "ios",
@@ -79,6 +79,55 @@ export default function ExpensePage() {
     loadExpenses();
   }, []);
 
+  const sampleExpenses = [
+    {
+      id: "sample-1",
+      date: "2026-04-07",
+      time: "6:00am",
+      title: "Bus Fare",
+      category: "Transport",
+      amount: "$6.00",
+      iconType: "bus",
+    },
+    {
+      id: "sample-2",
+      date: "2026-04-07",
+      time: "7:15am",
+      title: "Starbucks",
+      category: "Drink",
+      amount: "$9.50",
+      iconType: "drink",
+    },
+    {
+      id: "sample-3",
+      date: "2026-04-07",
+      time: "3:45am",
+      title: "Save on Foods",
+      category: "Groceries",
+      amount: "$55.50",
+      iconType: "groceries",
+    },
+    {
+      id: "sample-4",
+      date: "2026-04-06",
+      time: "3:45am",
+      title: "Save on Foods",
+      category: "Groceries",
+      amount: "$55.50",
+      iconType: "groceries",
+    },
+    {
+      id: "sample-5",
+      date: "2026-04-05",
+      time: "5:35am",
+      title: "Yoga",
+      category: "Health",
+      amount: "$22.50",
+      iconType: "health",
+    },
+  ];
+
+  const allExpenses = [...sampleExpenses];
   // const sampleExpenses = [
   //   {
   //     id: "sample-1",
